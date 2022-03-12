@@ -46,7 +46,7 @@ function createScene() {
     
     createenv(scene);
 
-    BABYLON.SceneLoader.ImportMesh("", "", "picatchu4d.babylon", scene,  (newMeshes,particles,skeletons) => {
+    BABYLON.SceneLoader.ImportMesh("", "3dmodule/Picatchu/", "picatchu4d.babylon", scene,  (newMeshes,particles,skeletons) => {
         let picatchu = newMeshes[0];
         picatchu.position.x = salles[0].ox+50;
         picatchu.position.z = salles[0].oz+50;
