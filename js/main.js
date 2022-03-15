@@ -56,7 +56,7 @@ function createScene() {
         //console.log(newMeshes.length)
         let armature = skeletons[0];
         picatchu.name = "mypicatchu";
-        let hero = new Dude(picatchu,armature, 1,scene);
+        let hero = new Dude(picatchu,armature, 2,scene);
         let followCamera = createFollowCamera(scene, picatchu);
         scene.activeCamera = followCamera;
         hero.animation(scene,1);
@@ -67,7 +67,7 @@ function createScene() {
 
 function createenv(scene){
     let taille = 10;
-    let nbsalles = 8;
+    let nbsalles = 10;
     let found = false;
     for(let i = 0; i<nbsalles;i++){
         found = false;

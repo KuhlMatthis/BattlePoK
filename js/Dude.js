@@ -30,12 +30,12 @@ export default class Dude {
         }    
         if(inputStates.left) {
             //tank.moveWithCollisions(new BABYLON.Vector3(-1*tank.speed, 0, 0));
-            this.dudeMesh.rotation.y -= 0.02;
+            this.dudeMesh.rotation.y -= 0.06;
             this.dudeMesh.frontVector = new BABYLON.Vector3(Math.sin(this.dudeMesh.rotation.y), 0, Math.cos(this.dudeMesh.rotation.y));
         }    
         if(inputStates.right) {
             //tank.moveWithCollisions(new BABYLON.Vector3(1*tank.speed, 0, 0));
-            this.dudeMesh.rotation.y += 0.02;
+            this.dudeMesh.rotation.y += 0.06;
             this.dudeMesh.frontVector = new BABYLON.Vector3(Math.sin(this.dudeMesh.rotation.y), 0, Math.cos(this.dudeMesh.rotation.y));
         }
         if(inputStates.up || inputStates.down || inputStates.left || inputStates.right){
@@ -50,8 +50,7 @@ export default class Dude {
             this.animationstate = number;
             let myanimation = Object.values(this.allanymation)[number];
             this.anim = scene.beginAnimation(this.armature, myanimation.from, myanimation.to, true, 1);
-        } 
-        
+        }         
     }
 
 }
