@@ -6,6 +6,7 @@ export default class Chemin {
         var materialBox = new BABYLON.StandardMaterial("mat", scene);
         var texture = new BABYLON.Texture("img/sole2.jpg", scene);
         materialBox.diffuseTexture = texture;
+        materialBox.specularColor = new BABYLON.Color3(0, 0, 0);
         this.box.material = materialBox;
         this.box.position.y = 0;
         this.boxes = [];

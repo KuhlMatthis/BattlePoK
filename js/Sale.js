@@ -20,6 +20,7 @@ export default class Sale {
         box1.Color = new BABYLON.Color3(1, 0, 0);
         var materialBox = new BABYLON.StandardMaterial("mat", scene);
         var texture = new BABYLON.Texture("img/sole2.jpg", scene);
+        materialBox.specularColor = new BABYLON.Color3(0, 0, 0);
         materialBox.diffuseTexture = texture;
         box1.material = materialBox;
         box1.position.y= this.oy;
@@ -30,6 +31,7 @@ export default class Sale {
         var materialBox2 = new BABYLON.StandardMaterial("mat", scene);
         var texture2 = new BABYLON.Texture("img/mure.jpg", scene);
         materialBox2.diffuseTexture = texture2;
+        
         box2.material = materialBox2;
         box2.position.y= this.oy;
         box2.position.x= this.ox;
