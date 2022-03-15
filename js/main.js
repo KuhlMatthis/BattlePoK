@@ -52,6 +52,7 @@ function createScene() {
         let picatchu = newMeshes[0];
         picatchu.position.x = salles[0].ox+50;
         picatchu.position.z = salles[0].oz+50;
+        picatchu.position.y = 5;
         //console.log(newMeshes.length)
         let armature = skeletons[0];
         picatchu.name = "mypicatchu";
@@ -66,7 +67,7 @@ function createScene() {
 
 function createenv(scene){
     let taille = 10;
-    let nbsalles = 5;
+    let nbsalles = 8;
     let found = false;
     for(let i = 0; i<nbsalles;i++){
         found = false;
@@ -77,7 +78,7 @@ function createenv(scene){
             found = true;
             x = parseInt(Math.random()*100);
             z = parseInt(Math.random()*100);
-            y = -1;
+            y = 0;
             for(let icubes= 0; icubes<cubes.length; icubes++){
                 if(containe([x,z,x+20,z+20], cubes[icubes])){
                     found=false;
@@ -85,7 +86,7 @@ function createenv(scene){
             }
         }
         cubes[i] = [x,z,x+20,z+20];
-        salles[i] = new Sale(x,z,y,19,19,1,taille,scene);
+        salles[i] = new Sale(x,z,y,19,19,3,taille,scene);
         salles[i].create();
     }
       
@@ -171,9 +172,9 @@ function createFreeCamera(scene) {
 function createFollowCamera(scene, target) {
     let camera = new BABYLON.FollowCamera("picatchuFollowCamera", target.position, scene, target);
 
-    camera.radius = 40; // how far from the object to follow
+    camera.radius = 30; // how far from the object to follow
 	camera.heightOffset = 10; // how high above the object to place the camera
-	camera.rotationOffset = 160; // the viewing angle
+	camera.rotationOffset = 180; // the viewing angle
 	
     camera.cameraAcceleration = .1; // how fast to move
 	camera.maxCameraSpeed = 4; // speed limit

@@ -8,10 +8,10 @@ export default class Chemin {
         materialBox.diffuseColor = new BABYLON.Color3(1, 0, 0);
         materialBox.specularColor = new BABYLON.Color3(1, 0, 0);
         this.box.material = materialBox;
-        this.box.position.y = -10;
+        this.box.position.y = 0;
         this.boxes = [];
         this.pos = pos;
-        this.copyBox();
+        this.copyBox(pos);
         this.portefin = fin;
         this.chemin = chemin;
         this.createconnection();
@@ -40,8 +40,9 @@ export default class Chemin {
                         this.pos = [this.pos[0],this.pos[1]+opd, this.pos[2], this.pos[3]+opd];
                         lastmouve = this.pos;
                         decale[1]-=1;
-                        
-                        this.copyBox()
+                        this.copyBox([this.pos[0]+1,this.pos[1]]);
+                        this.copyBox([this.pos[0]-1,this.pos[1]]);
+                        this.copyBox(this.pos)
                     }
                 }
                 if(decale[0]==0){
@@ -51,19 +52,19 @@ export default class Chemin {
                         this.pos = [this.pos[0]+opd,this.pos[1], this.pos[2]+opd, this.pos[3]];
                         lastmouve = this.pos;
                         decale[0]-=1;
-                        this.copyBox()
+                        this.copyBox([this.pos[0],this.pos[1]+1]);
+                        this.copyBox([this.pos[0],this.pos[1]-1]);
+                        this.copyBox(this.pos)
                     }
                 }
             }
-            
         }
     }
 
-
-    copyBox(){
+    copyBox(mypos){
         this.boxes[this.boxes.length+1] = this.box.clone();
-        this.boxes[this.boxes.length-1].position.x = this.pos[0]*10;
-        this.boxes[this.boxes.length-1].position.z = this.pos[1]*10;
+        this.boxes[this.boxes.length-1].position.x = mypos[0]*10;
+        this.boxes[this.boxes.length-1].position.z = mypos[1]*10;
     }
 
     isNegatifd(decale){
@@ -79,7 +80,16 @@ export default class Chemin {
         if(found){
             lastmouve = this.pos;
             this.pos = interpos;
-            this.copyBox(pos);
+            this.copyBox(this.pos);
+            if(decalenb==0){
+                
+                this.copyBox([this.pos[0],this.pos[1]+1]);
+                this.copyBox([this.pos[0],this.pos[1]-1]);
+            }
+            if(decalenb==1){
+                this.copyBox([this.pos[0]+1,this.pos[1]]);
+                this.copyBox([this.pos[0]-1,this.pos[1]]);
+            }
             decale[decalenb]-=d;
             this.chemin[this.chemin.length] = pos;
         }
