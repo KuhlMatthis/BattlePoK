@@ -1,5 +1,8 @@
 export default class Sale {
     constructor(x,z,y,length,width,height,taille,scene) {
+        this.gx = x;
+        this.gy = y;
+        this.gz = z;
         this.ox = x*taille;
         this.oy = y*taille;
         this.oz = z*taille;
@@ -9,6 +12,7 @@ export default class Sale {
         this.taille = taille;
         this.t = 3;
         this.porte = this.createporte();
+        this.cub = [this.gx,this.gz,this.gx+this.length-1,this.gz+this.width-1];
     }
 
     create(scene) {
@@ -37,7 +41,7 @@ export default class Sale {
         for (let x = 0; x < this.length; x++) {
             for(let z = 0; z < this.width; z++){
                 if(x==0 || x==this.length-1 || z==0 || z==this.width-1){
-                    if(this.porte[0]<=x && x<=this.porte[1] && this.porte[2]<=z && z<=this.porte[3]){
+                    if(this.porte[0]<=x && x<=this.porte[2] && this.porte[1]<=z && z<=this.porte[3]){
                         boxes[nb] = box1.clone();
                         boxes[nb].position.x += x*this.taille;
                         boxes[nb].position.z += z*this.taille;
@@ -66,26 +70,26 @@ export default class Sale {
         if(val==0){
             let positionz = parseInt( Math.random ()*(this.length-this.t));
             descript[0] = 0; 
-            descript[1] = 0; 
-            descript[2] = positionz; 
+            descript[1] = positionz;
+            descript[2] = 0;
             descript[3] = positionz+this.t;
         }else if(val==1){
             let positionz = parseInt(Math.random ()*(this.length-this.t));
             descript[0] = this.length-1; 
-            descript[1] = this.length-1; 
-            descript[2] = positionz; 
+            descript[1] = positionz; 
+            descript[2] = this.length-1; 
             descript[3] = positionz+this.t;
         }else if(val==2){
             let positionx = parseInt(Math.random ()*(this.width-this.t));
             descript[0] = positionx; 
-            descript[1] = positionx+this.t;
-            descript[2] = 0;
+            descript[1] = 0;
+            descript[2] = positionx+this.t;
             descript[3] = 0;
         }else{
             let positionx = parseInt(Math.random ()*(this.width-this.t));
-            descript[0] = positionx; 
-            descript[1] = positionx; 
-            descript[2] = this.length-1; 
+            descript[0] = positionx;
+            descript[1] = this.length-1; 
+            descript[2] = positionx+this.t;
             descript[3] = this.length-1;
         }
         return descript;

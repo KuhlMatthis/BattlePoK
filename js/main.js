@@ -1,5 +1,6 @@
 import Dude from "./Dude.js";
 import Sale from "./Sale.js";
+import Chemin from "./Chemin.js";
 
 let canvas;
 let engine;
@@ -7,6 +8,7 @@ let scene;
 let camera;
 let inputStates = {};
 let salles = [];
+let chemin = [];
 let cubes = [];
     
 
@@ -77,50 +79,49 @@ function createenv(scene){
             z = parseInt(Math.random()*100);
             y = -1;
             for(let icubes= 0; icubes<cubes.length; icubes++){
-                if(containe([x,z,y,20,20,5], cubes[icubes])){
+                if(containe([x,z,x+20,z+20], cubes[icubes])){
                     found=false;
                 }
             }
         }
-        cubes[i] = [x,z,y,20,20,5];
-        salles[i] = new Sale(x,z,y,19,19,5,taille,scene);
+        cubes[i] = [x,z,x+20,z+20];
+        salles[i] = new Sale(x,z,y,19,19,1,taille,scene);
         salles[i].create();
     }
+      
     for(let isalle = 0; isalle<salles.length-1; isalle++){
         let debutsalle = salles[isalle];
-        let debut = [debutsalle.porte[0]+debutsalle.ox/taille,debutsalle.porte[1]+debutsalle.ox/taille,debutsalle.porte[2]+debutsalle.oz/taille,debutsalle.porte[3]+debutsalle.oz/taille]
+        let debut = [debutsalle.porte[0]+debutsalle.gx,debutsalle.porte[1]+debutsalle.gz,debutsalle.porte[0]+debutsalle.gx,debutsalle.porte[1]+debutsalle.gz]
         let endsalle = salles[isalle+1];
-        let fin = [endsalle.porte[0]+endsalle.ox/taille,endsalle.porte[1]+endsalle.ox/taille,endsalle.porte[2]+endsalle.oz/taille,endsalle.porte[3]+endsalle.oz/taille]
-        let chemin = createconnection([debut],debut,fin);
-        console.log(chemin, debut, fin)
+        let fin = [endsalle.porte[0]+endsalle.gx,endsalle.porte[1]+endsalle.gz,endsalle.porte[0]+endsalle.gx,endsalle.porte[1]+endsalle.gz]
+        debut = decalcub(debut, debutsalle);
+        fin  = decalcub(fin, endsalle);
+        chemin[isalle] = new Chemin([debut],debut,fin,salles);
     }
-    
-    
 }
 
-function createconnection(chemin,pos, portefin){
-    // les quatres decallages possible pour faire un for
-    let decalL = [[1,1,0,0],[-1,-1,0,0],[0,0,1,1],[0,0,-1,-1]];
-    for (let index = 0; index < decalL.length; index++) {
-        const decale = decalL[index];
-        let ncase = [pos[0]+decale[0], pos[1]+decale[1], pos[2]+decale[2],pos[3]+decale[3]]; 
-        if(containe2(ncase,portefin)){
-            console.log("find");
-            return chemin;
-        }
-        for (let index = 0; index < salles.length; index++) {
-            const salle = salles[index];
-            if(containe2(ncase, [salle.x,salle.x+salle.width, salle.z, salle.z + salle.length])){
-                return null;
+function decalcub(cube,salle){
+    let decaleb = [[1,0,1,0],[0,1,0,1],[-1,0,-1,0],[0,-1,0,-1]];
+    let sallecub = salle.cub;
+    if(containe(cube,sallecub)){
+        console.log("containe")
+        for (let index = 0; index < decaleb.length; index++) {
+            const d = decaleb[index];
+            console.log([cube[0]+d[0],cube[1]+d[1],cube[2]+d[2],cube[3]+d[3]])
+            console.log(sallecub)
+            if(!containe([cube[0]+d[0],cube[1]+d[1],cube[2]+d[2],cube[3]+d[3]],sallecub)){
+                console.log("found")
+                return [cube[0]+d[0],cube[1]+d[1],cube[2]+d[2],cube[3]+d[3]];
             }
-        }        
-        chemin[chemin.length+1] = ncase;
-        if(createconnection(chemin,ncase,portefin)!=null){
-            return chemin
         }
     }
-    return null;
+    return cube;
 }
+
+
+
+
+
 
 /**
  * forme x,y,x2,y2
@@ -129,29 +130,15 @@ function createconnection(chemin,pos, portefin){
  * @returns 
  */
 function containe(cube1, cube2){
-    if(cube2[0]+cube2[2] < cube1[0] || cube1[0]+cube1[2] < cube2[0]){
+    if(cube2[2] < cube1[0] || cube1[2] < cube2[0]){
         return false;
     }
-    if(cube2[1]+cube2[3] < cube1[1] || cube1[1]+cube1[3] < cube2[1]){
-        return false;
-    }
-    return true;
-}
-/**
- * forme x,x2,y,y2
- * @param {*} cube1 
- * @param {*} cube2 
- * @returns 
- */
-function containe2(cube1, cube2){
-    if(cube2[0]+cube2[1] < cube1[0] || cube1[0]+cube1[1] < cube2[0]){
-        return false;
-    }
-    if(cube2[2]+cube2[3] < cube1[2] || cube1[2]+cube1[3] < cube2[2]){
+    if(cube2[3] < cube1[1] || cube1[3] < cube2[1]){
         return false;
     }
     return true;
 }
+
 
 window.addEventListener("resize", () => {
     engine.resize()
