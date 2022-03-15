@@ -19,9 +19,8 @@ export default class Sale {
         var box1 = BABYLON.Mesh.CreateBox("Box1", this.taille, scene);
         box1.Color = new BABYLON.Color3(1, 0, 0);
         var materialBox = new BABYLON.StandardMaterial("mat", scene);
-        materialBox.ambiantColor = new BABYLON.Color3(0, 1, 0);
-        materialBox.diffuseColor = new BABYLON.Color3(0, 1, 0);
-        materialBox.specularColor = new BABYLON.Color3(0, 0, 0);
+        var texture = new BABYLON.Texture("img/sole2.jpg", scene);
+        materialBox.diffuseTexture = texture;
         box1.material = materialBox;
         box1.position.y= this.oy;
         box1.position.x= this.ox;
@@ -29,9 +28,8 @@ export default class Sale {
         var box2 = BABYLON.Mesh.CreateBox("Box1", this.taille, scene);
         box2.Color = new BABYLON.Color3(1, 0, 0);
         var materialBox2 = new BABYLON.StandardMaterial("mat", scene);
-        materialBox2.ambiantColor = new BABYLON.Color3(0, 0, 1);
-        materialBox2.diffuseColor = new BABYLON.Color3(0, 0, 1);
-        materialBox2.specularColor = new BABYLON.Color3(0, 0, 0);
+        var texture2 = new BABYLON.Texture("img/mure.jpg", scene);
+        materialBox2.diffuseTexture = texture2;
         box2.material = materialBox2;
         box2.position.y= this.oy;
         box2.position.x= this.ox;

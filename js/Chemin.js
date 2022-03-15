@@ -4,9 +4,8 @@ export default class Chemin {
         this.box = BABYLON.Mesh.CreateBox("Box1", 10, scene);
         this.box.Color = new BABYLON.Color3(1, 0, 0);
         var materialBox = new BABYLON.StandardMaterial("mat", scene);
-        materialBox.ambiantColor = new BABYLON.Color3(1, 0, 0);
-        materialBox.diffuseColor = new BABYLON.Color3(1, 0, 0);
-        materialBox.specularColor = new BABYLON.Color3(1, 0, 0);
+        var texture = new BABYLON.Texture("img/sole2.jpg", scene);
+        materialBox.diffuseTexture = texture;
         this.box.material = materialBox;
         this.box.position.y = 0;
         this.boxes = [];
@@ -18,6 +17,8 @@ export default class Chemin {
     }
 
     createconnection(){
+        
+    
         let decale = [this.portefin[0]-this.pos[0],this.portefin[1]-this.pos[1]];
         let found;
         let lastmouve = [this.pos[0],this.pos[1]];

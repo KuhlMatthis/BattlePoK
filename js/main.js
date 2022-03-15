@@ -30,10 +30,21 @@ function startGame() {
 
 function createScene() {
     let scene = new BABYLON.Scene(engine);
-
+    let ground = BABYLON.MeshBuilder.CreateGround("myGround", {width: 10000, height: 10000, segments:1}, scene);
+    let groundMatrial = new BABYLON.StandardMaterial("mat", scene);
+    var texture = new BABYLON.Texture("img/sole1.jpg", scene);
+    groundMatrial.diffuseTexture = texture;
     
+    ground.material = groundMatrial;
+    //var skybox = BABYLON.Mesh.CreateBox("BackgroundSkybox", 500, scene, undefined, BABYLON.Mesh.BACKSIDE);
+    
+    // Create and tweak the background material.
+    /*var backgroundMaterial = new BABYLON.BackgroundMaterial("backgroundMaterial", scene);
+    backgroundMaterial.reflectionTexture = new BABYLON.CubeTexture("textures/TropicalSunnyDay", scene);
+    backgroundMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+    skybox.material = backgroundMaterial;
+    */
     // background
-    scene.clearColor = new BABYLON.Color3(1, 0, 1);
 
     //let ground = BABYLON.MeshBuilder.CreateGround("myGround", {width: 60, height: 60}, scene);
     //console.log(ground.name);
