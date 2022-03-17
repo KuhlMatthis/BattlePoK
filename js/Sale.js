@@ -31,20 +31,26 @@ export default class Sale {
         var materialBox2 = new BABYLON.StandardMaterial("mat", scene);
         var texture2 = new BABYLON.Texture("img/mure.jpg", scene);
         materialBox2.diffuseTexture = texture2;
-        
+        // to be taken into account by collision detection
+        box1.checkCollisions = true;
+
         box2.material = materialBox2;
         box2.position.y= this.oy;
         box2.position.x= this.ox;
         box2.position.z= this.oz;
+        // to be taken into account by collision detection
+        box2.checkCollisions = true;
         let boxes = [];
         let nb = 0
         for (let x = 0; x < this.length; x++) {
             for(let z = 0; z < this.width; z++){
                 if(x==0 || x==this.length-1 || z==0 || z==this.width-1){
                     if(this.porte[0]<=x && x<=this.porte[2] && this.porte[1]<=z && z<=this.porte[3]){
-                        boxes[nb] = box1.createInstance("copySalebox"+nb);
+                        boxes[nb] = box1.clone();
                         boxes[nb].position.x += x*this.taille;
                         boxes[nb].position.z += z*this.taille;
+                        //collision
+                        boxes[nb].checkCollisions = true;
                         nb+=1;
                     }else{
                         for(let y = 0; y < this.height; y++){
@@ -52,6 +58,7 @@ export default class Sale {
                             boxes[nb].position.x += x*this.taille;
                             boxes[nb].position.z += z*this.taille;
                             boxes[nb].position.y += y*this.taille;
+                            boxes[nb].checkCollisions = true;
                             nb+=1;  
                         }
                     }
@@ -59,6 +66,7 @@ export default class Sale {
                     boxes[nb] = box1.createInstance("copySalebox"+nb);
                     boxes[nb].position.x += x*this.taille;
                     boxes[nb].position.z += z*this.taille;
+                    boxes[nb].checkCollisions = true;
                     nb+=1;
                 }
             }    
