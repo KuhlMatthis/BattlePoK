@@ -19,6 +19,7 @@ function startGame() {
     engine = new BABYLON.Engine(canvas, true);
     scene = createScene();
     modifySettings();
+
     // main animation loop 60 times/s
     engine.runRenderLoop(() => {
         let picatchu = scene.getMeshByName("mypicatchu");
@@ -34,8 +35,11 @@ function createScene() {
     let groundMatrial = new BABYLON.StandardMaterial("mat", scene);
     var texture = new BABYLON.Texture("img/sole1.jpg", scene);
     groundMatrial.diffuseTexture = texture;
-    
     ground.material = groundMatrial;
+    scene.fogMode = BABYLON.Scene.FOGMODE_EXP;
+    scene.fogColor = new BABYLON.Color3(0, 0, 0);
+    scene.fogDensity = 0.01;
+
     //var skybox = BABYLON.Mesh.CreateBox("BackgroundSkybox", 500, scene, undefined, BABYLON.Mesh.BACKSIDE);
     
     // Create and tweak the background material.
@@ -232,7 +236,14 @@ function modifySettings() {
            inputStates.right = true;
         } else if ((event.key === "ArrowDown")|| (event.key === "s")|| (event.key === "S")) {
            inputStates.down = true;
-        }  else if (event.key === " ") {
+        }else if (event.key === "f") {
+            inputStates.fire1 = true;
+        }else if (event.key === "g"){
+            inputStates.fire2 = true;
+        }else if(event.key === "h"){
+            inputStates.fight = true;
+        }
+        else if (event.key === " ") {
            inputStates.space = true;
         }
     }, false);
@@ -247,7 +258,15 @@ function modifySettings() {
            inputStates.right = false;
         } else if ((event.key === "ArrowDown")|| (event.key === "s")|| (event.key === "S")) {
            inputStates.down = false;
-        }  else if (event.key === " ") {
+        }else if (event.key === "f") {
+            inputStates.fire1 = false;
+        }else if (event.key === "g"){
+            inputStates.fire2 = false;
+        }else if(event.key === "h"){
+            inputStates.fight = false;
+        }else if (event.key === " ") {
+           inputStates.space = false;
+        }else if (event.key === " ") {
            inputStates.space = false;
         }
     }, false);

@@ -38,6 +38,8 @@ export default class Dude {
             this.dudeMesh.rotation.y += 0.06;
             this.dudeMesh.frontVector = new BABYLON.Vector3(Math.sin(this.dudeMesh.rotation.y), 0, Math.cos(this.dudeMesh.rotation.y));
         }
+        
+
         if(inputStates.up || inputStates.down || inputStates.left || inputStates.right){
             this.animation(scene,1);
         }else{

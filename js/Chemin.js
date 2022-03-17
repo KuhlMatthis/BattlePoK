@@ -64,7 +64,7 @@ export default class Chemin {
     }
 
     copyBox(mypos){
-        this.boxes[this.boxes.length+1] = this.box.clone();
+        this.boxes[this.boxes.length+1] = this.box.createInstance("copyCheminbox");
         this.boxes[this.boxes.length-1].position.x = mypos[0]*10;
         this.boxes[this.boxes.length-1].position.z = mypos[1]*10;
     }
