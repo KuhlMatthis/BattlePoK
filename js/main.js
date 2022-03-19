@@ -1,3 +1,4 @@
+//import * as BABYLON from "@babylonjs/core";
 import Dude from "./Dude.js";
 import Sale from "./Sale.js";
 import Chemin from "./Chemin.js";
@@ -37,8 +38,8 @@ function createScene() {
     groundMatrial.diffuseTexture = texture;
     ground.material = groundMatrial;
     scene.fogMode = BABYLON.Scene.FOGMODE_EXP;
-    scene.fogColor = new BABYLON.Color3(0, 0, 0);
-    scene.fogDensity = 0.01;
+    scene.fogColor = new BABYLON.Color3(0.5, 0.5, 0.5);
+    scene.fogDensity = 0.001;
 
     //var skybox = BABYLON.Mesh.CreateBox("BackgroundSkybox", 500, scene, undefined, BABYLON.Mesh.BACKSIDE);
     
@@ -51,38 +52,63 @@ function createScene() {
     // background
 
     //let ground = BABYLON.MeshBuilder.CreateGround("myGround", {width: 60, height: 60}, scene);
-    //console.log(ground.name);
+    
+    scene.collisionsEnabled = true;
     camera = new BABYLON.FreeCamera("myCamera", new BABYLON.Vector3(0, 5, 10), scene);
     // This targets the camera to scene origin
     camera.attachControl(canvas);
-   
-    let light = new BABYLON.HemisphericLight("myLight", new BABYLON.Vector3(1, 1, 1), scene);
-    light.intensity = 1;
+    /*camera.checkCollisions = true;
+    camera.collisionRadius = new BABYLON.Vector3(10, 10, 10);
+    camera.inputs.removeByType("FreeCameraKeyboardMoveInput");
+    */
+    
+    let alllight = new BABYLON.HemisphericLight("myLight", new BABYLON.Vector3(1, 1, 1), scene);
+    alllight.intensity = 0.3;
     // color of the light
-    light.diffuse = new BABYLON.Color3(1, 1, 1);
+    alllight.diffuse = new BABYLON.Color3(1, 1, 1);
     
     createenv(scene);
 
-    BABYLON.SceneLoader.ImportMesh("", "3dmodule/Picatchu/", "picatchu4d.babylon", scene,  (newMeshes,particles,skeletons) => {
+    BABYLON.SceneLoader.ImportMesh("", "3dmodule/Picatchu/", "picatchu4d.babylon", scene,  (newMeshes,particles,skeletons,) => {
         let picatchu = newMeshes[0];
         picatchu.position.x = salles[0].ox+50;
         picatchu.position.z = salles[0].oz+50;
-        picatchu.position.y = 5;
-        //console.log(newMeshes.length)
+        picatchu.position.y = 7;
+        camera.position = new BABYLON.Vector3(picatchu.position.x-10,picatchu.position.y+3, picatchu.position.z);
+        
+
         let armature = skeletons[0];
         picatchu.name = "mypicatchu";
         let hero = new Dude(picatchu,armature, 2,scene);
-        let followCamera = createFollowCamera(scene, picatchu);
+        let  followCamera = createFollowCamera(scene, picatchu);
         scene.activeCamera = followCamera;
+        
+        
         hero.animation(scene,1);
 
     });
+    BABYLON.SceneLoader.ImportMesh("", "3dmodule/light/", "light.babylon", scene, newScene => {
+        let light = newScene[0];
+        light.position = new BABYLON.Vector3(salles[0].ox+70,  20, salles[0].oz+70,);
+        console.log(newScene);
+        var clowlayer = new BABYLON.GlowLayer("lightglow",scene,{mainTextureRatio: 1});
+        clowlayer.intensity = 4;
+        clowlayer.addIncludedOnlyMesh(light)
+        
+        //light.diffuseColor = new BABYLON.Color3(0, 1, 1);
+        //light.animations.push(light.animations[0])
+        //scene.beginAnimation(light.animations[0], 0, 16,true);
+    });
+    let light2 = new BABYLON.PointLight("myLight", new BABYLON.Vector3(salles[0].ox+70,  7, salles[0].oz+70,), scene);
+    light2.intensity = 1;
+    light2.diffuse = new BABYLON.Color3(0.97, 0.45, 0.8);
+    light2.range = 100;
     return scene;
 }
 
 function createenv(scene){
     let taille = 10;
-    let nbsalles = 10;
+    let nbsalles = 5;
     let found = false;
     for(let i = 0; i<nbsalles;i++){
         found = false;
@@ -101,7 +127,7 @@ function createenv(scene){
             }
         }
         cubes[i] = [x,z,x+20,z+20];
-        salles[i] = new Sale(x,z,y,19,19,3,taille,scene);
+        salles[i] = new Sale(x,z,y,19,19,5,taille,scene);
         salles[i].create();
     }
       
@@ -120,13 +146,9 @@ function decalcub(cube,salle){
     let decaleb = [[1,0,1,0],[0,1,0,1],[-1,0,-1,0],[0,-1,0,-1]];
     let sallecub = salle.cub;
     if(containe(cube,sallecub)){
-        console.log("containe")
         for (let index = 0; index < decaleb.length; index++) {
-            const d = decaleb[index];
-            console.log([cube[0]+d[0],cube[1]+d[1],cube[2]+d[2],cube[3]+d[3]])
-            console.log(sallecub)
+            const d = decaleb[index];  
             if(!containe([cube[0]+d[0],cube[1]+d[1],cube[2]+d[2],cube[3]+d[3]],sallecub)){
-                console.log("found")
                 return [cube[0]+d[0],cube[1]+d[1],cube[2]+d[2],cube[3]+d[3]];
             }
         }
@@ -170,6 +192,7 @@ function createFreeCamera(scene) {
     // avoid flying with the camera
     camera.applyGravity = true;
 
+
     // Add extra keys for camera movements
     // Need the ascii code of the extra key(s). We use a string method here to get the ascii code
     camera.keysUp.push('z'.charCodeAt(0));
@@ -185,14 +208,17 @@ function createFreeCamera(scene) {
 }
 
 function createFollowCamera(scene, target) {
+    //let camera = new BABYLON.ArcFollowCamera("picatchuFollowCamera", target.position, scene)
     let camera = new BABYLON.FollowCamera("picatchuFollowCamera", target.position, scene, target);
-
+    //camera.setMeshTarget(target);
     camera.radius = 30; // how far from the object to follow
 	camera.heightOffset = 10; // how high above the object to place the camera
 	camera.rotationOffset = 180; // the viewing angle
 	
     camera.cameraAcceleration = .1; // how fast to move
 	camera.maxCameraSpeed = 4; // speed limit
+    //camera.minZ = 10;
+    camera.maxZ = 800;
 
     return camera;
 }

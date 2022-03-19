@@ -1,3 +1,4 @@
+//import * as BABYLON from "@babylonjs/core";
 export default class Sale {
     constructor(x,z,y,length,width,height,taille,scene) {
         this.gx = x;

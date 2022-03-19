@@ -1,3 +1,5 @@
+//import * as BABYLON from "@babylonjs/core";
+
 export default class Dude {
     constructor(dudeMesh, armature , speed,scene) {
         this.dudeMesh = dudeMesh;

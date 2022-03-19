@@ -1,3 +1,5 @@
+//import * as BABYLON from "@babylonjs/core";
+
 export default class Chemin {
     constructor(chemin, pos, fin,salles,scene) {
         this.salles = salles;
@@ -18,13 +20,11 @@ export default class Chemin {
     }
 
     createconnection(){
-        
-    
         let decale = [this.portefin[0]-this.pos[0],this.portefin[1]-this.pos[1]];
         let found;
         let lastmouve = [this.pos[0],this.pos[1]];
         while(decale[0]!=0||decale[1]!=0){
-            console.log("while1");
+            
             found = true;
             if(decale[0]!=0){
                 let d = this.isNegatifd(decale[0]);
@@ -77,7 +77,6 @@ export default class Chemin {
     }
 
     cheminMove(pos,interpos,decale,decalenb,lastmouve,d){
-        //console.log(this.isCheminMove(interpos,lastmouve),interpos);
         let found = this.isCheminMove(interpos,lastmouve);
         if(found){
             lastmouve = this.pos;
