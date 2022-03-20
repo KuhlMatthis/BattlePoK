@@ -18,28 +18,35 @@ window.onload = startGame;
 function startGame() {
     canvas = document.querySelector("#myCanvas");
     engine = new BABYLON.Engine(canvas, true);
-    scene = createScene();
+    engine.displayLoadingUI();
+    const promise = createScene();
+    promise.then(() => {
+        setTimeout(() => {engine.hideLoadingUI()}, 2000);
+    });
+    console.log(scene);
     modifySettings();
-
+    
     // main animation loop 60 times/s
     engine.runRenderLoop(() => {
         let picatchu = scene.getMeshByName("mypicatchu");
         if(picatchu)
             picatchu.Dude.move(scene,inputStates);
+            
         scene.render();
+        
     });
 }
 
-function createScene() {
-    let scene = new BABYLON.Scene(engine);
-    let ground = BABYLON.MeshBuilder.CreateGround("myGround", {width: 10000, height: 10000, segments:1}, scene);
+async function createScene () {
+    scene = new BABYLON.Scene(engine);
+    let ground = BABYLON.MeshBuilder.CreateGround("myGround", {width: 4000, height: 4000, segments:1}, scene);
     let groundMatrial = new BABYLON.StandardMaterial("mat", scene);
     var texture = new BABYLON.Texture("img/sole1.jpg", scene);
     groundMatrial.diffuseTexture = texture;
     ground.material = groundMatrial;
     scene.fogMode = BABYLON.Scene.FOGMODE_EXP;
-    scene.fogColor = new BABYLON.Color3(0.5, 0.5, 0.5);
-    scene.fogDensity = 0.001;
+    scene.fogColor = new BABYLON.Color3(0.2, 0.2, 0.2);
+    scene.fogDensity = 0.005;
 
     //var skybox = BABYLON.Mesh.CreateBox("BackgroundSkybox", 500, scene, undefined, BABYLON.Mesh.BACKSIDE);
     
@@ -69,40 +76,37 @@ function createScene() {
     
     createenv(scene);
 
-    BABYLON.SceneLoader.ImportMesh("", "3dmodule/Picatchu/", "picatchu4d.babylon", scene,  (newMeshes,particles,skeletons,) => {
-        let picatchu = newMeshes[0];
-        picatchu.position.x = salles[0].ox+50;
-        picatchu.position.z = salles[0].oz+50;
-        picatchu.position.y = 7;
-        camera.position = new BABYLON.Vector3(picatchu.position.x-10,picatchu.position.y+3, picatchu.position.z);
-        
+    const picamesh = await BABYLON.SceneLoader.ImportMeshAsync("", "3dmodule/Picatchu/", "picatchu4d.babylon", scene);
+    let picatchu = picamesh.meshes[0];
+    picatchu.position.x = salles[0].ox+50;
+    picatchu.position.z = salles[0].oz+50;
+    picatchu.position.y = 7;
+    camera.position = new BABYLON.Vector3(picatchu.position.x-10,picatchu.position.y+3, picatchu.position.z);
+    let armature = picamesh.skeletons[0];
+    picatchu.name = "mypicatchu";
+    let hero = new Dude(picatchu,armature, 2,scene);
+    let  followCamera = createFollowCamera(scene, picatchu);
+    scene.activeCamera = followCamera;
+    
+    
+    hero.animation(scene,1);
 
-        let armature = skeletons[0];
-        picatchu.name = "mypicatchu";
-        let hero = new Dude(picatchu,armature, 2,scene);
-        let  followCamera = createFollowCamera(scene, picatchu);
-        scene.activeCamera = followCamera;
-        
-        
-        hero.animation(scene,1);
+    var clowlayer = new BABYLON.GlowLayer("lightglow",scene);
 
-    });
-    BABYLON.SceneLoader.ImportMesh("", "3dmodule/light/", "light.babylon", scene, newScene => {
-        let light = newScene[0];
-        light.position = new BABYLON.Vector3(salles[0].ox+70,  20, salles[0].oz+70,);
-        console.log(newScene);
-        var clowlayer = new BABYLON.GlowLayer("lightglow",scene,{mainTextureRatio: 1});
-        clowlayer.intensity = 4;
-        clowlayer.addIncludedOnlyMesh(light)
-        
-        //light.diffuseColor = new BABYLON.Color3(0, 1, 1);
-        //light.animations.push(light.animations[0])
-        //scene.beginAnimation(light.animations[0], 0, 16,true);
-    });
+    const vlightmesh = await BABYLON.SceneLoader.ImportMeshAsync("", "3dmodule/light/", "light.babylon", scene);
+    let vlight = vlightmesh.meshes[0];
+    vlight.name = "vlight"
+    console.log(vlightmesh)
+    vlight.position = new BABYLON.Vector3(salles[0].ox+70,  20, salles[0].oz+70,);
+    clowlayer.intensity = 4;
+    clowlayer.addIncludedOnlyMesh(vlight)
     let light2 = new BABYLON.PointLight("myLight", new BABYLON.Vector3(salles[0].ox+70,  7, salles[0].oz+70,), scene);
     light2.intensity = 1;
     light2.diffuse = new BABYLON.Color3(0.97, 0.45, 0.8);
     light2.range = 100;
+    let mylight = scene.getMeshByName("vlight");
+    console.log(vlightmesh)
+    
     return scene;
 }
 

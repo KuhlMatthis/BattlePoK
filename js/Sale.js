@@ -28,8 +28,9 @@ export default class Sale {
         box1.position.x= this.ox;
         box1.position.z= this.oz;
         var box2 = BABYLON.Mesh.CreateBox("Box1", this.taille, scene);
-        box2.Color = new BABYLON.Color3(1, 0, 0);
+        
         var materialBox2 = new BABYLON.StandardMaterial("mat", scene);
+        materialBox2.specularColor = new BABYLON.Color3(0, 0, 0);
         var texture2 = new BABYLON.Texture("img/mure.jpg", scene);
         materialBox2.diffuseTexture = texture2;
         // to be taken into account by collision detection
