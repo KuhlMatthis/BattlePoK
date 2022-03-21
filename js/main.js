@@ -23,14 +23,14 @@ function startGame() {
     promise.then(() => {
         setTimeout(() => {engine.hideLoadingUI()}, 2000);
     });
-    console.log(scene);
     modifySettings();
     
     // main animation loop 60 times/s
     engine.runRenderLoop(() => {
         let picatchu = scene.getMeshByName("mypicatchu");
-        if(picatchu)
+        if(picatchu){
             picatchu.Dude.move(scene,inputStates);
+        }
             
         scene.render();
         
@@ -73,8 +73,24 @@ async function createScene () {
     alllight.intensity = 0.3;
     // color of the light
     alllight.diffuse = new BABYLON.Color3(1, 1, 1);
+
+    //var clowlayer = new BABYLON.GlowLayer("lightglow",scene);
+    //clowlayer.intensity = 1;
     
-    createenv(scene);
+    const vlightmesh = await BABYLON.SceneLoader.ImportMeshAsync("", "3dmodule/light/", "light.babylon", scene);
+    let vlight = vlightmesh.meshes[0];
+    console.log(vlightmesh)
+    let larmature = vlightmesh.skeletons[0];
+    scene.beginAnimation(larmature, 0, 16, true, 1);
+    vlight.name = "vlight"
+    vlight.scaling = new BABYLON.Vector3(1, 1, 1)
+    //clowlayer.addIncludedOnlyMesh(vlight)
+    //vlight.diffuseColor = new BABYLON.Color3(Math.random(), Math.random(), Math.random());
+    
+    
+
+    
+    createenv(vlight, scene);
 
     const picamesh = await BABYLON.SceneLoader.ImportMeshAsync("", "3dmodule/Picatchu/", "picatchu4d.babylon", scene);
     let picatchu = picamesh.meshes[0];
@@ -85,34 +101,20 @@ async function createScene () {
     let armature = picamesh.skeletons[0];
     picatchu.name = "mypicatchu";
     let hero = new Dude(picatchu,armature, 2,scene);
-    let  followCamera = createFollowCamera(scene, picatchu);
-    scene.activeCamera = followCamera;
+    scene.activeCamera = createFollowCamera(scene, picatchu);
+    
     
     
     hero.animation(scene,1);
 
-    var clowlayer = new BABYLON.GlowLayer("lightglow",scene);
-
-    const vlightmesh = await BABYLON.SceneLoader.ImportMeshAsync("", "3dmodule/light/", "light.babylon", scene);
-    let vlight = vlightmesh.meshes[0];
-    vlight.name = "vlight"
-    console.log(vlightmesh)
-    vlight.position = new BABYLON.Vector3(salles[0].ox+70,  20, salles[0].oz+70,);
-    clowlayer.intensity = 4;
-    clowlayer.addIncludedOnlyMesh(vlight)
-    let light2 = new BABYLON.PointLight("myLight", new BABYLON.Vector3(salles[0].ox+70,  7, salles[0].oz+70,), scene);
-    light2.intensity = 1;
-    light2.diffuse = new BABYLON.Color3(0.97, 0.45, 0.8);
-    light2.range = 100;
-    let mylight = scene.getMeshByName("vlight");
-    console.log(vlightmesh)
+    
     
     return scene;
 }
 
-function createenv(scene){
+function createenv(vlight,scene){
     let taille = 10;
-    let nbsalles = 5;
+    let nbsalles = 4;
     let found = false;
     for(let i = 0; i<nbsalles;i++){
         found = false;
@@ -121,8 +123,8 @@ function createenv(scene){
         let z;
         while(!found){
             found = true;
-            x = parseInt(Math.random()*100);
-            z = parseInt(Math.random()*100);
+            x = parseInt(Math.random()*50);
+            z = parseInt(Math.random()*50);
             y = 0;
             for(let icubes= 0; icubes<cubes.length; icubes++){
                 if(containe([x,z,x+20,z+20], cubes[icubes])){
@@ -131,8 +133,9 @@ function createenv(scene){
             }
         }
         cubes[i] = [x,z,x+20,z+20];
-        salles[i] = new Sale(x,z,y,19,19,5,taille,scene);
-        salles[i].create();
+        salles[i] = new Sale(x,z,y,19,19,5,taille, scene);
+        salles[i].create(vlight,scene);
+        
     }
       
     for(let isalle = 0; isalle<salles.length-1; isalle++){
@@ -222,7 +225,7 @@ function createFollowCamera(scene, target) {
     camera.cameraAcceleration = .1; // how fast to move
 	camera.maxCameraSpeed = 4; // speed limit
     //camera.minZ = 10;
-    camera.maxZ = 800;
+    camera.maxZ = 500;
 
     return camera;
 }
