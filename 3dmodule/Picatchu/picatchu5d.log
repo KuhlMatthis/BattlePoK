@@ -30,16 +30,18 @@ Exporter version: 2.93.5, Blender version: 2.93.3
 		processing begun of bone:  tete, index:  14
 		processing begun of bone:  oreilleg, index:  15
 		processing begun of bone:  oreilled, index:  16
-		processing action down:  in[1 - 16], out[0 - 16]
-		processing action jump:  in[1 - 32], out[30 - 62]
-		processing action run:  in[1 - 16], out[70 - 86]
-		processing action stande:  in[1 - 32], out[100 - 132]
-		processing action staydown:  in[1 - 32], out[140 - 172]
-		processing action up:  in[1 - 15], out[180 - 195]
-		processing action walk:  in[1 - 32], out[200 - 232]
+		processing action 1stande:  in[1 - 32], out[0 - 32]
+		processing action 2staydown:  in[1 - 32], out[40 - 72]
+		processing action 3down:  in[1 - 16], out[80 - 96]
+		processing action 4up:  in[1 - 15], out[110 - 125]
+		processing action 5walk:  in[1 - 32], out[130 - 162]
+		processing action 6run:  in[1 - 16], out[170 - 186]
+		processing action 7jump:  in[1 - 32], out[200 - 232]
+		processing action 8attaque1:  in[1 - 28], out[240 - 268]
+		processing action 8attaque2:  in[1 - 29], out[280 - 309]
 	processing begun of mesh:  Corp
 		animation processing begun
-			processing action up:  in[1 - 15], out[0 - 15]
+			processing action 4up:  in[1 - 15], out[0 - 15]
 		processing begun of material:  picatchujellow
 			processing texture pikatchuf
 				texture type:  diffuseTexture, mapped using: "UVMap"
@@ -58,22 +60,22 @@ Exporter version: 2.93.5, Blender version: 2.93.3
 			num skeletonWeights and skeletonIndices:  29912
 	processing begun of mesh:  Tete
 		animation processing begun
-			processing action down:  in[1 - 16], out[0 - 16]
+			processing action 3down:  in[1 - 16], out[0 - 16]
 		processing begun of material:  picatchujellow
 		registered as also a user of material:  picatchujellow
-		num positions      :  5403
-		num normals        :  5403
+		num positions      :  5402
+		num normals        :  5402
 		num tangents       :  0
-		num uvs            :  10806
+		num uvs            :  10804
 		num uvs2           :  0
 		num colors         :  0
 		num triangles      :  8190
 		Skeleton stats:  
-			Total Influencers:  11210
-			Avg # of influencers per vertex:  2.0748
+			Total Influencers:  11203
+			Avg # of influencers per vertex:  2.0739
 			Highest # of influencers observed:  4, num vertices with this:  2
 			exported as 4 influencers
-			num skeletonWeights and skeletonIndices:  21612
+			num skeletonWeights and skeletonIndices:  21608
 	processing begun of mesh:  Oreilleg
 		processing begun of material:  picatchujellow
 		registered as also a user of material:  picatchujellow
@@ -181,4 +183,4 @@ Exporter version: 2.93.5, Blender version: 2.93.3
 	writing mesh:  Queue
 ========= Writing of JSON file completed =========
 ========= end of processing =========
-elapsed time:  0 min, 43.0637 secs
+elapsed time:  0 min, 26.3162 secs

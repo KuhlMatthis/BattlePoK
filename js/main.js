@@ -75,7 +75,7 @@ async function createScene () {
     alllight.diffuse = new BABYLON.Color3(1, 1, 1);
 
     var clowlayer = new BABYLON.GlowLayer("lightglow",scene);
-    clowlayer.intensity = 1;
+    clowlayer.intensity = 5;
     
     const vlightmesh = await BABYLON.SceneLoader.ImportMeshAsync("", "3dmodule/light/", "light.babylon", scene);
     let vlight = vlightmesh.meshes[0];
@@ -255,6 +255,8 @@ function modifySettings() {
     inputStates.down = false;
     inputStates.space = false;
     inputStates.run = false;
+    inputStates.fight = false;
+    inputStates.fight2 = false;
     
     //add the listener to the main, window object, and update the states
     window.addEventListener('keydown', (event) => {
@@ -272,7 +274,9 @@ function modifySettings() {
             inputStates.fire2 = true;
         } else if(event.key === "h"){
             inputStates.fight = true;
-        } else if (event.key === "j") {
+        } else if(event.key === "j"){
+            inputStates.fight2 = true;
+        } else if (event.key === " ") {
            inputStates.space = true;
         } else if (event.key === "r") {
             inputStates.run = true;
@@ -295,7 +299,9 @@ function modifySettings() {
             inputStates.fire2 = false;
         }else if(event.key === "h"){
             inputStates.fight = false;
-        }else if (event.key === "j") {
+        }else if(event.key === "j"){
+            inputStates.fight2 = false;
+        }else if (event.key === " ") {
            inputStates.space = false;
         }else if (event.key === "r") {
            inputStates.run = false;

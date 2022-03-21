@@ -56,42 +56,47 @@ export default class Dude {
         if(this.notbloque){
             if(inputStates.space){
                 if(this.isrunning){
-                    this.animation(scene,1)
+                    this.animation(scene,6)
                 }
             }else if(inputStates.run){
                 if(this.isrunning){
                     this.isrunning=false;
-                    this.animation(scene,5) 
+                    this.animation(scene,3) 
                 }else{
                     this.isrunning=true;
-                    this.animation(scene,0)
+                    this.animation(scene,2)
                 }
+            }else if(inputStates.fight){
+                this.animation(scene,7)
+            }else if(inputStates.fight2){
+                this.animation(scene,8)
             }else if(inputStates.up || inputStates.down || inputStates.left || inputStates.right){
                 if(this.isrunning){
-                    this.animation(scene,2);
+                    this.animation(scene,5);
                 }else{
-                    this.animation(scene,6);
+                    this.animation(scene,4);
                 } 
             }else{
                 if(this.isrunning){
-                    this.animation(scene,4); 
+                    this.animation(scene,1); 
                 }else{
-                    this.animation(scene,3); 
+                    this.animation(scene,0); 
                 }
             } 
         }
     }
 
-    //0 down 1 jump 2 run 3 stand 4 staydown 5 up 6 walk 
+    //0 stand 1 staydown 2 up 3 down 4 walk 5 run  6 jump 7 .. attaque 
     animation(scene,number){
         if(this.animationstate!==number){
             //await this.anim.waitAsync();
             this.animationstate = number;
             let myanimation = Object.values(this.allanymation)[number];
-            if(number==0 || number == 5 || number == 1){
+            //wait end animation
+            if(number==2 || number == 3 || number == 6 || number == 7 || number == 8){
                 this.notbloque = false;
                 setTimeout(async () => {
-                    this.anim = scene.beginAnimation(this.armature, myanimation.from+1, myanimation.to, false);
+                    this.anim = scene.beginAnimation(this.armature, myanimation.from+2, myanimation.to, false);
                     await this.anim.waitAsync();
                     this.notbloque = true;
                 });
