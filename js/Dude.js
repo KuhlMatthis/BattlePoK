@@ -123,6 +123,7 @@ export default class Dude {
         // it after a scene.getMeshByName that would return the Mesh
         // SEE IN RENDER LOOP !
         dudeMesh.Dude = this;
+        this.boolincrenergie = true;
     }
 
     incrlevel(){
@@ -130,23 +131,38 @@ export default class Dude {
         this.dynamicTexture.drawText(""+this.level, null, null, "bold " + 16 + "px Arial", "#000000", "#ffffff", true);
     }
 
-    increxperience(){
-        this.experience+=1;
-        if(this.experience>= this.nextlevelexperience){
-            this.incrlevel();
-            this.modifiemaxbar(this.experiencebar,-this.experiencebar.scaling.x);
-            this.experience=0;
-        }else{
-            this.modifiemaxbar(this.experiencebar,+1);
+    increxperience(val){
+        if(this.level<this.maxlevel){
+            this.experience+=val;
+            if(this.experience>= this.nextlevelexperience){
+                this.incrlevel();
+                this.modifiemaxbar(this.experiencebar,-this.experiencebar.scaling.x);
+                this.experience=0;
+            }else{
+                this.modifiemaxbar(this.experiencebar,val);
+            }
         }
+        
     }
 
     modifiemaxbar(bar,incr){
         bar.scaling.x +=incr;
         bar.position.x+=incr/2;
     }
-
+    
     move(scene,inputStates) {
+        if(this.boolincrenergie){
+            this.boolincrenergie = false;
+            if(this.energie<this.maxenergie){
+                this.energie += 1;
+                this.modifiemaxbar(this.energiebar,1);
+            }
+            setTimeout(() => {
+                this.boolincrenergie=true;   
+            }, 1000 * 5)
+        }
+            
+
         if(inputStates.up) {
             if(this.isrunning){
                 this.dudeMesh.moveWithCollisions(this.dudeMesh.frontVector.multiplyByFloats(this.runspeed, this.runspeed, this.runspeed));
@@ -179,7 +195,7 @@ export default class Dude {
         if(this.notbloque){
             if(inputStates.space){
                 if(this.isrunning){
-                    this.increxperience();
+                    this.increxperience(1);
                     this.animation(scene,6)
                 }
             }else if(inputStates.run){
@@ -191,16 +207,19 @@ export default class Dude {
                     this.animation(scene,2)
                 }
             }else if(inputStates.fight){
-                if(this.energie!=0){
+                if(this.energie>0){
+                    
                     this.energie-=1;
                     this.modifiemaxbar(this.energiebar,-1);
                     this.animation(scene,7)
                 }
             }else if(inputStates.fight2){
-                if(this.life!=0){
-                    this.life-=1;
-                    this.modifiemaxbar(this.lifebar,-1);    
-                    this.animation(scene,8)
+                if(this.energie>0){
+                    
+                    this.animation(scene,8);
+                    
+                    this.energie-=1;
+                    this.modifiemaxbar(this.energiebar,-1); 
                 }
             }else if(inputStates.up || inputStates.down || inputStates.left || inputStates.right){
                 if(this.isrunning){
