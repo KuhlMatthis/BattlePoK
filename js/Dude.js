@@ -26,7 +26,6 @@ export default class Dude {
         this.lifebar = new BABYLON.MeshBuilder.CreateBox("picalivebar", {height: 0.2, width: 1},scene);
         this.lifebar.parent = this.dudeMesh;
         this.lifebar.position.y += 11;
-        this.lifebar.position.x -= 2;
         this.lifebar.scaling.x = this.life;
 
         const lifemat = new BABYLON.StandardMaterial("mat");
@@ -39,7 +38,6 @@ export default class Dude {
         this.lifeblackbar.parent = this.dudeMesh;
         this.lifeblackbar.position.y += 11;
         this.lifeblackbar.position.z -=0.1;
-        this.lifeblackbar.position.x -= 2;
         this.lifeblackbar.material = blackmat;
         this.lifeblackbar.scaling.x = this.maxlife;
 
@@ -49,7 +47,7 @@ export default class Dude {
         this.experiencebar = new BABYLON.MeshBuilder.CreateBox("picalivebar", {height: 0.05, width: 1},scene);
         this.experiencebar.parent = this.dudeMesh;
         this.experiencebar.position.y += 10.7;
-        this.experiencebar.position.x -= 4.5;
+        this.experiencebar.position.x -= 2.5;
         this.experiencebar.scaling.x = 0;
 
         const experiencemat = new BABYLON.StandardMaterial("mat");
@@ -62,7 +60,6 @@ export default class Dude {
         this.expblackbar.parent = this.dudeMesh;
         this.expblackbar.position.y += 10.7;
         this.expblackbar.position.z +=0.1;
-        this.expblackbar.position.x -= 2;
         this.expblackbar.material = blackmat;
         this.expblackbar.scaling.x = this.nextlevelexperience;
 
@@ -73,7 +70,6 @@ export default class Dude {
         this.energiebar = new BABYLON.MeshBuilder.CreateBox("picalivebar", {height: 0.08, width: 1},scene);
         this.energiebar.parent = this.dudeMesh;
         this.energiebar.position.y += 10.4;
-        this.energiebar.position.x -= 2;
         this.energiebar.scaling.x = this.energie;
 
         const energiemat = new BABYLON.StandardMaterial("mat");
@@ -86,11 +82,29 @@ export default class Dude {
         this.energieblackbar.parent = this.dudeMesh;
         this.energieblackbar.position.y += 10.4;
         this.energieblackbar.position.z -=0.1;
-        this.energieblackbar.position.x -= 2;
         this.energieblackbar.material = blackmat;
         this.energieblackbar.scaling.x = this.maxenergie;
 
+
+
+        this.level = 1;
+        this.maxlevel = 15;
+        this.dynamicTexture = new BABYLON.DynamicTexture("DynamicTexture", {width:30, height:30}, scene, false);
+        var mat = new BABYLON.StandardMaterial("mat", scene);
+        mat.diffuseTexture = this.dynamicTexture;
+        //Set font
+	    
+        this.dynamicTexture.drawText(""+this.level, null, null, "bold " + 16 + "px Arial", "#000000", "#ffffff", true);
         
+    
+        //Create plane and set dynamic texture as material
+        this.planelevel = BABYLON.MeshBuilder.CreatePlane("plane", {width:1, height:1}, scene);
+        this.planelevel.parent = this.dudeMesh;
+        this.planelevel.position.y += 10.7;
+        this.planelevel.position.x -= 3.5;
+        this.planelevel.material = mat;
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////
         
 
         this.animationstate = 0;
@@ -109,6 +123,22 @@ export default class Dude {
         // it after a scene.getMeshByName that would return the Mesh
         // SEE IN RENDER LOOP !
         dudeMesh.Dude = this;
+    }
+
+    incrlevel(){
+        this.level+=1;
+        this.dynamicTexture.drawText(""+this.level, null, null, "bold " + 16 + "px Arial", "#000000", "#ffffff", true);
+    }
+
+    increxperience(){
+        this.experience+=1;
+        if(this.experience>= this.nextlevelexperience){
+            this.incrlevel();
+            this.modifiemaxbar(this.experiencebar,-this.experiencebar.scaling.x);
+            this.experience=0;
+        }else{
+            this.modifiemaxbar(this.experiencebar,+1);
+        }
     }
 
     modifiemaxbar(bar,incr){
@@ -149,7 +179,7 @@ export default class Dude {
         if(this.notbloque){
             if(inputStates.space){
                 if(this.isrunning){
-                    this.modifiemaxbar(this.experiencebar,+1); 
+                    this.increxperience();
                     this.animation(scene,6)
                 }
             }else if(inputStates.run){
