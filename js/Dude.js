@@ -7,6 +7,13 @@ export default class Dude {
         this.allanymation = armature._ranges;
         console.log(this.allanymation)
         this.dudeMesh.frontVector = new BABYLON.Vector3(0, 0, 1);
+        //initialiser la vision with a cube in front of the player
+        this.vuecube = new BABYLON.Mesh.CreateBox("picavue",2,scene);
+        this.vuecube.parent = this.dudeMesh;
+        this.vuecube.position.y += 8;
+        this.vuecube.position.z += 5;
+        this.vuecube.visibility = 0;
+
         this.animationstate = 0;
         this.anim;
         this.isrunning = false;
@@ -44,11 +51,13 @@ export default class Dude {
         if(inputStates.left) {
             //tank.moveWithCollisions(new BABYLON.Vector3(-1*tank.speed, 0, 0));
             this.dudeMesh.rotation.y -= 0.06;
+            this.vuecube.rotation.y -= 0.06;
             this.dudeMesh.frontVector = new BABYLON.Vector3(Math.sin(this.dudeMesh.rotation.y), 0, Math.cos(this.dudeMesh.rotation.y));
         }    
         if(inputStates.right) {
             //tank.moveWithCollisions(new BABYLON.Vector3(1*tank.speed, 0, 0));
             this.dudeMesh.rotation.y += 0.06;
+            this.vuecube.rotation.y += 0.06;
             this.dudeMesh.frontVector = new BABYLON.Vector3(Math.sin(this.dudeMesh.rotation.y), 0, Math.cos(this.dudeMesh.rotation.y));
         }
         

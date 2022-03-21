@@ -100,8 +100,8 @@ async function createScene () {
     camera.position = new BABYLON.Vector3(picatchu.position.x-10,picatchu.position.y+3, picatchu.position.z);
     let armature = picamesh.skeletons[0];
     picatchu.name = "mypicatchu";
-    new Dude(picatchu,armature, 2,scene);
-    scene.activeCamera = createFollowCamera(scene, picatchu);
+    let pica = new Dude(picatchu,armature, 2,scene);
+    scene.activeCamera = createFollowCamera(scene, pica.vuecube);
 
     
     
@@ -110,7 +110,7 @@ async function createScene () {
 
 function createenv(vlight,scene){
     let taille = 10;
-    let nbsalles = 10;
+    let nbsalles = 3;
     let found = false;
     for(let i = 0; i<nbsalles;i++){
         found = false;
@@ -119,8 +119,8 @@ function createenv(vlight,scene){
         let z;
         while(!found){
             found = true;
-            x = parseInt(Math.random()*100);
-            z = parseInt(Math.random()*100);
+            x = parseInt(Math.random()*50);
+            z = parseInt(Math.random()*50);
             y = 0;
             for(let icubes= 0; icubes<cubes.length; icubes++){
                 if(containe([x,z,x+20,z+20], cubes[icubes])){
@@ -215,11 +215,11 @@ function createFollowCamera(scene, target) {
     let camera = new BABYLON.FollowCamera("picatchuFollowCamera", target.position, scene, target);
     //camera.setMeshTarget(target);
     camera.radius = 30; // how far from the object to follow
-	camera.heightOffset = 10; // how high above the object to place the camera
+	camera.heightOffset = 5; // how high above the object to place the camera
 	camera.rotationOffset = 180; // the viewing angle
 	
-    camera.cameraAcceleration = .1; // how fast to move
-	camera.maxCameraSpeed = 4; // speed limit
+    camera.cameraAcceleration = .2; // how fast to move
+	camera.maxCameraSpeed = 6; // speed limit
     //camera.minZ = 10;
     
 
