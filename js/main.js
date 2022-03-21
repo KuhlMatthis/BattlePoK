@@ -74,8 +74,8 @@ async function createScene () {
     // color of the light
     alllight.diffuse = new BABYLON.Color3(1, 1, 1);
 
-    //var clowlayer = new BABYLON.GlowLayer("lightglow",scene);
-    //clowlayer.intensity = 1;
+    var clowlayer = new BABYLON.GlowLayer("lightglow",scene);
+    clowlayer.intensity = 1;
     
     const vlightmesh = await BABYLON.SceneLoader.ImportMeshAsync("", "3dmodule/light/", "light.babylon", scene);
     let vlight = vlightmesh.meshes[0];
@@ -83,7 +83,7 @@ async function createScene () {
     let larmature = vlightmesh.skeletons[0];
     scene.beginAnimation(larmature, 0, 16, true, 1);
     vlight.name = "vlight"
-    vlight.scaling = new BABYLON.Vector3(1, 1, 1)
+    vlight.scaling = new BABYLON.Vector3(0.5, 0.5, 0.5)
     //clowlayer.addIncludedOnlyMesh(vlight)
     //vlight.diffuseColor = new BABYLON.Color3(Math.random(), Math.random(), Math.random());
     
@@ -92,7 +92,7 @@ async function createScene () {
     
     createenv(vlight, scene);
 
-    const picamesh = await BABYLON.SceneLoader.ImportMeshAsync("", "3dmodule/Picatchu/", "picatchu4d.babylon", scene);
+    const picamesh = await BABYLON.SceneLoader.ImportMeshAsync("", "3dmodule/Picatchu/", "picatchu5d.babylon", scene);
     let picatchu = picamesh.meshes[0];
     picatchu.position.x = salles[0].ox+50;
     picatchu.position.z = salles[0].oz+50;
@@ -100,12 +100,8 @@ async function createScene () {
     camera.position = new BABYLON.Vector3(picatchu.position.x-10,picatchu.position.y+3, picatchu.position.z);
     let armature = picamesh.skeletons[0];
     picatchu.name = "mypicatchu";
-    let hero = new Dude(picatchu,armature, 2,scene);
+    new Dude(picatchu,armature, 2,scene);
     scene.activeCamera = createFollowCamera(scene, picatchu);
-    
-    
-    
-    hero.animation(scene,1);
 
     
     
@@ -114,7 +110,7 @@ async function createScene () {
 
 function createenv(vlight,scene){
     let taille = 10;
-    let nbsalles = 4;
+    let nbsalles = 10;
     let found = false;
     for(let i = 0; i<nbsalles;i++){
         found = false;
@@ -123,8 +119,8 @@ function createenv(vlight,scene){
         let z;
         while(!found){
             found = true;
-            x = parseInt(Math.random()*50);
-            z = parseInt(Math.random()*50);
+            x = parseInt(Math.random()*100);
+            z = parseInt(Math.random()*100);
             y = 0;
             for(let icubes= 0; icubes<cubes.length; icubes++){
                 if(containe([x,z,x+20,z+20], cubes[icubes])){
@@ -225,7 +221,7 @@ function createFollowCamera(scene, target) {
     camera.cameraAcceleration = .1; // how fast to move
 	camera.maxCameraSpeed = 4; // speed limit
     //camera.minZ = 10;
-    camera.maxZ = 500;
+    
 
     return camera;
 }
@@ -258,6 +254,7 @@ function modifySettings() {
     inputStates.up = false;
     inputStates.down = false;
     inputStates.space = false;
+    inputStates.run = false;
     
     //add the listener to the main, window object, and update the states
     window.addEventListener('keydown', (event) => {
@@ -269,16 +266,17 @@ function modifySettings() {
            inputStates.right = true;
         } else if ((event.key === "ArrowDown")|| (event.key === "s")|| (event.key === "S")) {
            inputStates.down = true;
-        }else if (event.key === "f") {
+        } else if (event.key === "f") {
             inputStates.fire1 = true;
-        }else if (event.key === "g"){
+        } else if (event.key === "g"){
             inputStates.fire2 = true;
-        }else if(event.key === "h"){
+        } else if(event.key === "h"){
             inputStates.fight = true;
-        }
-        else if (event.key === " ") {
+        } else if (event.key === "j") {
            inputStates.space = true;
-        }
+        } else if (event.key === "r") {
+            inputStates.run = true;
+         }
     }, false);
 
     //if the key will be released, change the states object 
@@ -297,10 +295,10 @@ function modifySettings() {
             inputStates.fire2 = false;
         }else if(event.key === "h"){
             inputStates.fight = false;
-        }else if (event.key === " ") {
+        }else if (event.key === "j") {
            inputStates.space = false;
-        }else if (event.key === " ") {
-           inputStates.space = false;
+        }else if (event.key === "r") {
+           inputStates.run = false;
         }
     }, false);
 }
