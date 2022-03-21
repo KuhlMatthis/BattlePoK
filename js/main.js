@@ -69,8 +69,8 @@ async function createScene () {
     camera.inputs.removeByType("FreeCameraKeyboardMoveInput");
     */
     
-    let alllight = new BABYLON.HemisphericLight("myLight", new BABYLON.Vector3(1, 1, 1), scene);
-    alllight.intensity = 0.3;
+    let alllight = new BABYLON.HemisphericLight("myLight", new BABYLON.Vector3(1, 100, 1), scene);
+    alllight.intensity = 0.5;
     // color of the light
     alllight.diffuse = new BABYLON.Color3(1, 1, 1);
 

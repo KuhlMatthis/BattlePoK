@@ -14,6 +14,85 @@ export default class Dude {
         this.vuecube.position.z += 5;
         this.vuecube.visibility = 0;
 
+        ///////////////////////         creer les affichage statistique       //////////////////////
+
+        const blackmat = new BABYLON.StandardMaterial("mat");
+        blackmat.Color = new BABYLON.Color3(0, 0, 0);
+        blackmat.diffuseColor = new BABYLON.Color3(0, 0, 0);
+        blackmat.specularColor  = new BABYLON.Color3(0, 0, 0);
+
+        this.life = 5;
+        this.maxlife=5;
+        this.lifebar = new BABYLON.MeshBuilder.CreateBox("picalivebar", {height: 0.2, width: 1},scene);
+        this.lifebar.parent = this.dudeMesh;
+        this.lifebar.position.y += 11;
+        this.lifebar.position.x -= 2;
+        this.lifebar.scaling.x = this.life;
+
+        const lifemat = new BABYLON.StandardMaterial("mat");
+        lifemat.Color = new BABYLON.Color3(1, 0, 0);
+        lifemat.diffuseColor = new BABYLON.Color3(1, 0, 0);
+        lifemat.specularColor  = new BABYLON.Color3(0, 0, 0);
+        this.lifebar.material = lifemat;
+
+        this.lifeblackbar = new BABYLON.MeshBuilder.CreatePlane("picablackbar", {height: 0.2, width: 1},scene);
+        this.lifeblackbar.parent = this.dudeMesh;
+        this.lifeblackbar.position.y += 11;
+        this.lifeblackbar.position.z -=0.1;
+        this.lifeblackbar.position.x -= 2;
+        this.lifeblackbar.material = blackmat;
+        this.lifeblackbar.scaling.x = this.maxlife;
+
+
+        this.nextlevelexperience = 5;
+        this.experience = 0;
+        this.experiencebar = new BABYLON.MeshBuilder.CreateBox("picalivebar", {height: 0.05, width: 1},scene);
+        this.experiencebar.parent = this.dudeMesh;
+        this.experiencebar.position.y += 10.7;
+        this.experiencebar.position.x -= 4.5;
+        this.experiencebar.scaling.x = 0;
+
+        const experiencemat = new BABYLON.StandardMaterial("mat");
+        experiencemat.Color = new BABYLON.Color3(0, 1, 0);
+        experiencemat.diffuseColor = new BABYLON.Color3(0, 1, 0);
+        experiencemat.specularColor  = new BABYLON.Color3(0, 0, 0);
+        this.experiencebar.material = experiencemat;
+
+        this.expblackbar = new BABYLON.MeshBuilder.CreatePlane("picablackbar", {height: 0.05, width: 1},scene);
+        this.expblackbar.parent = this.dudeMesh;
+        this.expblackbar.position.y += 10.7;
+        this.expblackbar.position.z +=0.1;
+        this.expblackbar.position.x -= 2;
+        this.expblackbar.material = blackmat;
+        this.expblackbar.scaling.x = this.nextlevelexperience;
+
+
+        //creer bar d'energie
+        this.maxenergie=5;
+        this.energie = 5;
+        this.energiebar = new BABYLON.MeshBuilder.CreateBox("picalivebar", {height: 0.08, width: 1},scene);
+        this.energiebar.parent = this.dudeMesh;
+        this.energiebar.position.y += 10.4;
+        this.energiebar.position.x -= 2;
+        this.energiebar.scaling.x = this.energie;
+
+        const energiemat = new BABYLON.StandardMaterial("mat");
+        energiemat.Color = new BABYLON.Color3(0, 1, 1);
+        energiemat.diffuseColor = new BABYLON.Color3(0, 1, 1);
+        energiemat.specularColor  = new BABYLON.Color3(0, 0, 0);
+        this.energiebar.material = energiemat;
+
+        this.energieblackbar = new BABYLON.MeshBuilder.CreatePlane("picablackbar", {height: 0.08, width: 1},scene);
+        this.energieblackbar.parent = this.dudeMesh;
+        this.energieblackbar.position.y += 10.4;
+        this.energieblackbar.position.z -=0.1;
+        this.energieblackbar.position.x -= 2;
+        this.energieblackbar.material = blackmat;
+        this.energieblackbar.scaling.x = this.maxenergie;
+
+        
+        
+
         this.animationstate = 0;
         this.anim;
         this.isrunning = false;
@@ -30,6 +109,11 @@ export default class Dude {
         // it after a scene.getMeshByName that would return the Mesh
         // SEE IN RENDER LOOP !
         dudeMesh.Dude = this;
+    }
+
+    modifiemaxbar(bar,incr){
+        bar.scaling.x +=incr;
+        bar.position.x+=incr/2;
     }
 
     move(scene,inputStates) {
@@ -65,6 +149,7 @@ export default class Dude {
         if(this.notbloque){
             if(inputStates.space){
                 if(this.isrunning){
+                    this.modifiemaxbar(this.experiencebar,+1); 
                     this.animation(scene,6)
                 }
             }else if(inputStates.run){
@@ -76,9 +161,17 @@ export default class Dude {
                     this.animation(scene,2)
                 }
             }else if(inputStates.fight){
-                this.animation(scene,7)
+                if(this.energie!=0){
+                    this.energie-=1;
+                    this.modifiemaxbar(this.energiebar,-1);
+                    this.animation(scene,7)
+                }
             }else if(inputStates.fight2){
-                this.animation(scene,8)
+                if(this.life!=0){
+                    this.life-=1;
+                    this.modifiemaxbar(this.lifebar,-1);    
+                    this.animation(scene,8)
+                }
             }else if(inputStates.up || inputStates.down || inputStates.left || inputStates.right){
                 if(this.isrunning){
                     this.animation(scene,5);
