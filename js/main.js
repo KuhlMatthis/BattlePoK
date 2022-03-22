@@ -32,7 +32,7 @@ function startGame() {
         if(picatchu){
             picatchu.Pica.move(scene,inputStates);
         }
-            
+        actionEnemies();    
         scene.render();
         
     });
@@ -116,15 +116,19 @@ async function createScene () {
     let pica = new Pica(picatchu,armature, 2,scene);
     scene.activeCamera = createFollowCamera(scene, pica.vuecube);
     
+
+    scene.enemies = [];
+
     const marowakobj = await BABYLON.SceneLoader.ImportMeshAsync("", "3dmodule/Marowak/", "marowak.babylon", scene);
     let marowakmesh = marowakobj.meshes[0];
     let marowakarmature = marowakobj.skeletons[0];
     marowakmesh.position.x = salles[0].ox+100;
     marowakmesh.position.z = salles[0].oz+50;
-    marowakmesh.position.y = 6;
+    marowakmesh.position.y = 10;
+    marowakmesh.name = "marowakmesh";
     scene.beginAnimation(marowakarmature, 0, 32, true,1);
     let marowak = new Enemi(marowakmesh,marowakarmature,1,7,scene);
-    
+    scene.enemies.push(marowakmesh);
     return scene;
 }
 
@@ -180,7 +184,15 @@ function decalcub(cube,salle){
 }
 
 
-
+function actionEnemies() {
+    if(scene.enemies) {
+        
+        scene.enemies.forEach(enemi => {
+            
+            enemi.Enemi.action(scene);
+        });
+    }    
+}
 
 
 

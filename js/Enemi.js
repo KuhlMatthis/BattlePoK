@@ -9,8 +9,8 @@ export default class Enemi {
         if (speed) this.speed = speed;
         else this.speed = 1;
         enemiMesh.Enemi = this;
-
-
+        this.height = height;
+        
 
 
         ///////////////////////         creer les affichage statistique       //////////////////////
@@ -63,5 +63,62 @@ export default class Enemi {
         this.planelevel.position.x -= 3.5;
         this.planelevel.material = mat;
 
+        /////////////////////////                 coloision controle           /////////////
+
+        this.bounder = this.createBoundingBox();
+        this.bounder.ellipsoid = new BABYLON.Vector3(4, 5, 4);
+    
+        this.bounder.enemiMesh = this.enemiMesh;
+        this.enemiMesh.showBoundingBox = true;
+
     }
+
+
+    action(scene){
+        if (!this.bounder) return;
+        this.bounder.moveWithCollisions(new BABYLON.Vector3(0,-1,0));
+        this.enemiMesh.position = new BABYLON.Vector3(
+        this.bounder.position.x,
+        this.bounder.position.y-this.height/2,
+        this.bounder.position.z
+        );
+        let player = scene.getMeshByName("mypicatchu");
+        let direction = player.position.subtract(this.enemiMesh.position);
+        let distance = direction.length();
+        let dir = direction.normalize();
+        let alpha = Math.atan2(-dir.x, -dir.z);
+        this.enemiMesh.rotation.y = alpha;
+        if (distance > 30) {
+            this.bounder.moveWithCollisions(
+                dir.multiplyByFloats(this.speed, 0, this.speed)
+            );
+        } else {
+            //a.pause();
+        }
+    }
+    createBoundingBox() {
+        // Create a box as BoundingBox of the enemi
+        let bounder = new BABYLON.Mesh.CreateBox(
+          "enemymarak"+1 ,
+          1,
+          this.scene
+        );
+        let bounderMaterial = new BABYLON.StandardMaterial(
+          "bounderMaterial",
+          this.scene
+        );
+        bounderMaterial.alpha = 0.4;
+        bounder.material = bounderMaterial;
+        bounder.checkCollisions = true;
+    
+        bounder.position = this.enemiMesh.position.clone();
+    
+        bounder.scaling.x =  10;
+        bounder.scaling.y =  this.height;
+        bounder.scaling.z =  10;
+    
+        //bounder.isVisible = false;
+    
+        return bounder;
+      }
 }
