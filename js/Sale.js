@@ -77,8 +77,10 @@ export default class Sale {
         box1.position.y= this.oy;
         box1.position.x= this.ox;
         box1.position.z= this.oz;
+        box1.checkCollisions = true;
+        box1.computeWorldMatrix();
         var box2 = BABYLON.Mesh.CreateBox("Box1", this.taille, scene);
-
+        
         // light only
         cplight2.includedOnlyMeshes.push(box2);
         cplight.includedOnlyMeshes.push(box1);
@@ -88,14 +90,16 @@ export default class Sale {
         var texture2 = new BABYLON.Texture("img/mure.jpg", scene);
         materialBox2.diffuseTexture = texture2;
         // to be taken into account by collision detection
-        box1.checkCollisions = true;
+        //box1.checkCollisions = true;
 
         box2.material = materialBox2;
         box2.position.y= this.oy;
         box2.position.x= this.ox;
         box2.position.z= this.oz;
-        // to be taken into account by collision detection
         box2.checkCollisions = true;
+        box2.physicsImpostor = new BABYLON.PhysicsImpostor(box2, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 1 }, scene);
+        // to be taken into account by collision detection
+        //
         let boxes = [];
         let nb = 0
         for (let x = 0; x < this.length; x++) {
@@ -107,6 +111,7 @@ export default class Sale {
                         boxes[nb].position.z += z*this.taille;
                         //collision
                         boxes[nb].checkCollisions = true;
+                        //boxes[nb].physicsImpostor = new BABYLON.PhysicsImpostor(boxes[nb], BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0 }, scene);
                         nb+=1;
                     }else{
                         for(let y = 0; y < this.height; y++){
@@ -114,6 +119,7 @@ export default class Sale {
                             boxes[nb].position.x += x*this.taille;
                             boxes[nb].position.z += z*this.taille;
                             boxes[nb].position.y += y*this.taille;
+                            //boxes[nb].physicsImpostor = new BABYLON.PhysicsImpostor(boxes[nb], BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 1 }, scene);
                             boxes[nb].checkCollisions = true;
                             nb+=1;  
                         }
@@ -122,6 +128,7 @@ export default class Sale {
                     boxes[nb] = box1.createInstance("copySalebox"+nb);
                     boxes[nb].position.x += x*this.taille;
                     boxes[nb].position.z += z*this.taille;
+                    //boxes[nb].physicsImpostor = new BABYLON.PhysicsImpostor(boxes[nb], BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0 }, scene);
                     boxes[nb].checkCollisions = true;
                     nb+=1;
                 }

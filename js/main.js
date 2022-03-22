@@ -7,6 +7,7 @@ let canvas;
 let engine;
 let scene;
 let camera;
+
 let inputStates = {};
 let salles = [];
 let chemin = [];
@@ -21,10 +22,9 @@ function startGame() {
     engine.displayLoadingUI();
     const promise = createScene();
     promise.then(() => {
-        setTimeout(() => {engine.hideLoadingUI()}, 2000);
+        setTimeout(() => {engine.hideLoadingUI()}, 4000);
     });
     modifySettings();
-    
     // main animation loop 60 times/s
     engine.runRenderLoop(() => {
         let picatchu = scene.getMeshByName("mypicatchu");
@@ -38,8 +38,20 @@ function startGame() {
 }
 
 async function createScene () {
+
     scene = new BABYLON.Scene(engine);
+    canvas = document.querySelector("#myCanvas");
+    scene.enablePhysics();
+    var physicsEngine =  scene.getPhysicsEngine();
+    //Get gravity
+    var gravity = physicsEngine.gravity;
+
+    //Set gravity
+    physicsEngine.setGravity(new BABYLON.Vector3(0, 0, 0))
+    
     let ground = BABYLON.MeshBuilder.CreateGround("myGround", {width: 4000, height: 4000, segments:1}, scene);
+    ground.checkCollisions = true;
+    //ground.physicsImpostor = new BABYLON.PhysicsImpostor(ground, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, friction: 0.5, restitution: 0.7 }, scene);
     let groundMatrial = new BABYLON.StandardMaterial("mat", scene);
     var texture = new BABYLON.Texture("img/sole1.jpg", scene);
     groundMatrial.diffuseTexture = texture;
@@ -60,7 +72,7 @@ async function createScene () {
 
     //let ground = BABYLON.MeshBuilder.CreateGround("myGround", {width: 60, height: 60}, scene);
     
-    scene.collisionsEnabled = true;
+    //scene.collisionsEnabled = true;
     camera = new BABYLON.FreeCamera("myCamera", new BABYLON.Vector3(0, 5, 10), scene);
     // This targets the camera to scene origin
     camera.attachControl(canvas);

@@ -122,8 +122,43 @@ export default class Dude {
         // in case, attach the instance to the mesh itself, in case we need to retrieve
         // it after a scene.getMeshByName that would return the Mesh
         // SEE IN RENDER LOOP !
-        dudeMesh.Dude = this;
+        
+
         this.boolincrenergie = true;
+        this.jump = -2;
+        
+        dudeMesh.Dude = this;
+
+        //bounder to controle colision
+        
+        this.bounder = new BABYLON.Mesh.CreateBox("bounderpica", 1, scene);
+        let bounderMaterial = new BABYLON.StandardMaterial("mat", scene);;
+        bounderMaterial.alpha = .4;
+        this.bounder.material = bounderMaterial;
+        this.bounder.checkCollisions = true;
+        this.bounder.ellipsoid = new BABYLON.Vector3(4, 5, 4);
+        
+        this.bounder.position = this.dudeMesh.position.clone();
+        this.bounder.position.y +=6;
+        this.bounder.scaling.x = 10;
+        this.bounder.scaling.y = 10;
+        this.bounder.scaling.z = 10;
+        
+        this.bounder.physicsImpostor = new BABYLON.PhysicsImpostor(this.bounder, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 10 }, scene);
+        
+
+        this.bounder.isVisible = false;
+        //this.dudeMesh.showBoundingBox = true;
+        this.dudeMesh.checkCollisions = false;
+        
+        
+        //this.dudeMesh.showSubMeshesBoundingBox = true;
+        //this.dudeMesh.setBoundingInfo(this.bounder.getBoundingInfo());
+        /*this.dudeMesh.bounder.scaling.x = 3;
+        this.dudeMesh.bounder.scaling.y = 2;
+        this.dudeMesh.bounder.scaling.z = 1.3;
+        */
+        //this.bounder.dudeMesh = this.dudeMesh;
     }
 
     incrlevel(){
@@ -151,6 +186,16 @@ export default class Dude {
     }
     
     move(scene,inputStates) {
+        
+        // bloque mouvement si bounder not ready
+        if (!this.bounder) return;
+        this.bounder.computeWorldMatrix();
+        this.dudeMesh.position = new BABYLON.Vector3(this.bounder.position.x,
+            this.bounder.position.y-5, this.bounder.position.z);
+        this.bounder.moveWithCollisions(new BABYLON.Vector3(0,this.jump,0));
+        if(this.jump>-2){
+            this.jump-=0.5;
+        }
         if(this.boolincrenergie){
             this.boolincrenergie = false;
             if(this.energie<this.maxenergie){
@@ -165,17 +210,18 @@ export default class Dude {
 
         if(inputStates.up) {
             if(this.isrunning){
-                this.dudeMesh.moveWithCollisions(this.dudeMesh.frontVector.multiplyByFloats(this.runspeed, this.runspeed, this.runspeed));
+                
+                this.bounder.moveWithCollisions(this.dudeMesh.frontVector.multiplyByFloats(this.runspeed, this.runspeed, this.runspeed));
             }else{
-                this.dudeMesh.moveWithCollisions(this.dudeMesh.frontVector.multiplyByFloats(this.speed,this.speed,this.speed));
+                this.bounder.moveWithCollisions(this.dudeMesh.frontVector.multiplyByFloats(this.speed,this.speed,this.speed));
             }
         }    
         if(inputStates.down) {
             //tank.moveWithCollisions(new BABYLON.Vector3(0, 0, -1*tank.speed));
             if(this.isrunning){
-                this.dudeMesh.moveWithCollisions(this.dudeMesh.frontVector.multiplyByFloats(-this.runspeed, -this.runspeed, -this.runspeed));
+                this.bounder.moveWithCollisions(this.dudeMesh.frontVector.multiplyByFloats(-this.runspeed, -this.runspeed, -this.runspeed));
             }else{
-                this.dudeMesh.moveWithCollisions(this.dudeMesh.frontVector.multiplyByFloats(-this.speed, -this.speed, -this.speed));
+                this.bounder.moveWithCollisions(this.dudeMesh.frontVector.multiplyByFloats(-this.speed, -this.speed, -this.speed));
             }
         }    
         if(inputStates.left) {
@@ -195,6 +241,7 @@ export default class Dude {
         if(this.notbloque){
             if(inputStates.space){
                 if(this.isrunning){
+                    this.jump=4;
                     this.increxperience(1);
                     this.animation(scene,6)
                 }

@@ -17,6 +17,7 @@ export default class Chemin {
         this.portefin = fin;
         this.chemin = chemin;
         this.createconnection();
+        this.scene = scene;
     }
 
     createconnection(){
@@ -67,6 +68,8 @@ export default class Chemin {
         this.boxes[this.boxes.length+1] = this.box.createInstance("copyCheminbox");
         this.boxes[this.boxes.length-1].position.x = mypos[0]*10;
         this.boxes[this.boxes.length-1].position.z = mypos[1]*10;
+        this.boxes[this.boxes.length-1].checkCollisions = true;
+        //this.boxes[this.boxes.length-1].physicsImpostor = new BABYLON.PhysicsImpostor(this.boxes[this.boxes.length-1], BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0 }, this.scene );
     }
 
     isNegatifd(decale){
