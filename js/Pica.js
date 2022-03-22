@@ -1,15 +1,15 @@
 //import * as BABYLON from "@babylonjs/core";
 
-export default class Dude {
-    constructor(dudeMesh, armature , speed,scene) {
-        this.dudeMesh = dudeMesh;
+export default class Pica {
+    constructor(picaMesh, armature , speed,scene) {
+        this.picaMesh = picaMesh;
         this.armature = armature;
         this.allanymation = armature._ranges;
         console.log(this.allanymation)
-        this.dudeMesh.frontVector = new BABYLON.Vector3(0, 0, 1);
+        this.picaMesh.frontVector = new BABYLON.Vector3(0, 0, 1);
         //initialiser la vision with a cube in front of the player
         this.vuecube = new BABYLON.Mesh.CreateBox("picavue",2,scene);
-        this.vuecube.parent = this.dudeMesh;
+        this.vuecube.parent = this.picaMesh;
         this.vuecube.position.y += 8;
         this.vuecube.position.z += 5;
         this.vuecube.visibility = 0;
@@ -24,7 +24,7 @@ export default class Dude {
         this.life = 5;
         this.maxlife=5;
         this.lifebar = new BABYLON.MeshBuilder.CreateBox("picalivebar", {height: 0.2, width: 1},scene);
-        this.lifebar.parent = this.dudeMesh;
+        this.lifebar.parent = this.picaMesh;
         this.lifebar.position.y += 11;
         this.lifebar.scaling.x = this.life;
 
@@ -35,7 +35,7 @@ export default class Dude {
         this.lifebar.material = lifemat;
 
         this.lifeblackbar = new BABYLON.MeshBuilder.CreatePlane("picablackbar", {height: 0.2, width: 1},scene);
-        this.lifeblackbar.parent = this.dudeMesh;
+        this.lifeblackbar.parent = this.picaMesh;
         this.lifeblackbar.position.y += 11;
         this.lifeblackbar.position.z -=0.1;
         this.lifeblackbar.material = blackmat;
@@ -45,7 +45,7 @@ export default class Dude {
         this.nextlevelexperience = 5;
         this.experience = 0;
         this.experiencebar = new BABYLON.MeshBuilder.CreateBox("picalivebar", {height: 0.05, width: 1},scene);
-        this.experiencebar.parent = this.dudeMesh;
+        this.experiencebar.parent = this.picaMesh;
         this.experiencebar.position.y += 10.7;
         this.experiencebar.position.x -= 2.5;
         this.experiencebar.scaling.x = 0;
@@ -57,7 +57,7 @@ export default class Dude {
         this.experiencebar.material = experiencemat;
 
         this.expblackbar = new BABYLON.MeshBuilder.CreatePlane("picablackbar", {height: 0.05, width: 1},scene);
-        this.expblackbar.parent = this.dudeMesh;
+        this.expblackbar.parent = this.picaMesh;
         this.expblackbar.position.y += 10.7;
         this.expblackbar.position.z +=0.1;
         this.expblackbar.material = blackmat;
@@ -68,7 +68,7 @@ export default class Dude {
         this.maxenergie=5;
         this.energie = 5;
         this.energiebar = new BABYLON.MeshBuilder.CreateBox("picalivebar", {height: 0.08, width: 1},scene);
-        this.energiebar.parent = this.dudeMesh;
+        this.energiebar.parent = this.picaMesh;
         this.energiebar.position.y += 10.4;
         this.energiebar.scaling.x = this.energie;
 
@@ -79,7 +79,7 @@ export default class Dude {
         this.energiebar.material = energiemat;
 
         this.energieblackbar = new BABYLON.MeshBuilder.CreatePlane("picablackbar", {height: 0.08, width: 1},scene);
-        this.energieblackbar.parent = this.dudeMesh;
+        this.energieblackbar.parent = this.picaMesh;
         this.energieblackbar.position.y += 10.4;
         this.energieblackbar.position.z -=0.1;
         this.energieblackbar.material = blackmat;
@@ -99,7 +99,7 @@ export default class Dude {
     
         //Create plane and set dynamic texture as material
         this.planelevel = BABYLON.MeshBuilder.CreatePlane("plane", {width:1, height:1}, scene);
-        this.planelevel.parent = this.dudeMesh;
+        this.planelevel.parent = this.picaMesh;
         this.planelevel.position.y += 10.7;
         this.planelevel.position.x -= 3.5;
         this.planelevel.material = mat;
@@ -127,7 +127,7 @@ export default class Dude {
         this.boolincrenergie = true;
         this.jump = -2;
         
-        dudeMesh.Dude = this;
+        picaMesh.Pica = this;
 
         //bounder to controle colision
         
@@ -138,7 +138,7 @@ export default class Dude {
         this.bounder.checkCollisions = true;
         this.bounder.ellipsoid = new BABYLON.Vector3(4, 5, 4);
         
-        this.bounder.position = this.dudeMesh.position.clone();
+        this.bounder.position = this.picaMesh.position.clone();
         this.bounder.position.y +=6;
         this.bounder.scaling.x = 10;
         this.bounder.scaling.y = 10;
@@ -148,17 +148,17 @@ export default class Dude {
         
 
         this.bounder.isVisible = false;
-        //this.dudeMesh.showBoundingBox = true;
-        this.dudeMesh.checkCollisions = false;
+        //this.picaMesh.showBoundingBox = true;
+        this.picaMesh.checkCollisions = false;
         
         
-        //this.dudeMesh.showSubMeshesBoundingBox = true;
-        //this.dudeMesh.setBoundingInfo(this.bounder.getBoundingInfo());
-        /*this.dudeMesh.bounder.scaling.x = 3;
-        this.dudeMesh.bounder.scaling.y = 2;
-        this.dudeMesh.bounder.scaling.z = 1.3;
+        //this.picaMesh.showSubMeshesBoundingBox = true;
+        //this.picaMesh.setBoundingInfo(this.bounder.getBoundingInfo());
+        /*this.picaMesh.bounder.scaling.x = 3;
+        this.picaMesh.bounder.scaling.y = 2;
+        this.picaMesh.bounder.scaling.z = 1.3;
         */
-        //this.bounder.dudeMesh = this.dudeMesh;
+        //this.bounder.picaMesh = this.picaMesh;
     }
 
     incrlevel(){
@@ -190,7 +190,7 @@ export default class Dude {
         // bloque mouvement si bounder not ready
         if (!this.bounder) return;
         this.bounder.computeWorldMatrix();
-        this.dudeMesh.position = new BABYLON.Vector3(this.bounder.position.x,
+        this.picaMesh.position = new BABYLON.Vector3(this.bounder.position.x,
             this.bounder.position.y-5, this.bounder.position.z);
         this.bounder.moveWithCollisions(new BABYLON.Vector3(0,this.jump,0));
         if(this.jump>-2){
@@ -211,30 +211,30 @@ export default class Dude {
         if(inputStates.up) {
             if(this.isrunning){
                 
-                this.bounder.moveWithCollisions(this.dudeMesh.frontVector.multiplyByFloats(this.runspeed, this.runspeed, this.runspeed));
+                this.bounder.moveWithCollisions(this.picaMesh.frontVector.multiplyByFloats(this.runspeed, this.runspeed, this.runspeed));
             }else{
-                this.bounder.moveWithCollisions(this.dudeMesh.frontVector.multiplyByFloats(this.speed,this.speed,this.speed));
+                this.bounder.moveWithCollisions(this.picaMesh.frontVector.multiplyByFloats(this.speed,this.speed,this.speed));
             }
         }    
         if(inputStates.down) {
             //tank.moveWithCollisions(new BABYLON.Vector3(0, 0, -1*tank.speed));
             if(this.isrunning){
-                this.bounder.moveWithCollisions(this.dudeMesh.frontVector.multiplyByFloats(-this.runspeed, -this.runspeed, -this.runspeed));
+                this.bounder.moveWithCollisions(this.picaMesh.frontVector.multiplyByFloats(-this.runspeed, -this.runspeed, -this.runspeed));
             }else{
-                this.bounder.moveWithCollisions(this.dudeMesh.frontVector.multiplyByFloats(-this.speed, -this.speed, -this.speed));
+                this.bounder.moveWithCollisions(this.picaMesh.frontVector.multiplyByFloats(-this.speed, -this.speed, -this.speed));
             }
         }    
         if(inputStates.left) {
             //tank.moveWithCollisions(new BABYLON.Vector3(-1*tank.speed, 0, 0));
-            this.dudeMesh.rotation.y -= 0.06;
+            this.picaMesh.rotation.y -= 0.06;
             this.vuecube.rotation.y -= 0.06;
-            this.dudeMesh.frontVector = new BABYLON.Vector3(Math.sin(this.dudeMesh.rotation.y), 0, Math.cos(this.dudeMesh.rotation.y));
+            this.picaMesh.frontVector = new BABYLON.Vector3(Math.sin(this.picaMesh.rotation.y), 0, Math.cos(this.picaMesh.rotation.y));
         }    
         if(inputStates.right) {
             //tank.moveWithCollisions(new BABYLON.Vector3(1*tank.speed, 0, 0));
-            this.dudeMesh.rotation.y += 0.06;
+            this.picaMesh.rotation.y += 0.06;
             this.vuecube.rotation.y += 0.06;
-            this.dudeMesh.frontVector = new BABYLON.Vector3(Math.sin(this.dudeMesh.rotation.y), 0, Math.cos(this.dudeMesh.rotation.y));
+            this.picaMesh.frontVector = new BABYLON.Vector3(Math.sin(this.picaMesh.rotation.y), 0, Math.cos(this.picaMesh.rotation.y));
         }
         
         

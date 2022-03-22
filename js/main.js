@@ -1,7 +1,8 @@
 //import * as BABYLON from "@babylonjs/core";
-import Dude from "./Dude.js";
+import Pica from "./Pica.js";
 import Sale from "./Sale.js";
 import Chemin from "./Chemin.js";
+import Enemi from "./Enemi.js";
 
 let canvas;
 let engine;
@@ -29,7 +30,7 @@ function startGame() {
     engine.runRenderLoop(() => {
         let picatchu = scene.getMeshByName("mypicatchu");
         if(picatchu){
-            picatchu.Dude.move(scene,inputStates);
+            picatchu.Pica.move(scene,inputStates);
         }
             
         scene.render();
@@ -112,13 +113,17 @@ async function createScene () {
     camera.position = new BABYLON.Vector3(picatchu.position.x-10,picatchu.position.y+3, picatchu.position.z);
     let armature = picamesh.skeletons[0];
     picatchu.name = "mypicatchu";
-    let pica = new Dude(picatchu,armature, 2,scene);
+    let pica = new Pica(picatchu,armature, 2,scene);
     scene.activeCamera = createFollowCamera(scene, pica.vuecube);
+    
     const marowakobj = await BABYLON.SceneLoader.ImportMeshAsync("", "3dmodule/Marowak/", "marowak.babylon", scene);
     let marowakmesh = marowakobj.meshes[0];
+    let marowakarmature = marowakobj.skeletons[0];
     marowakmesh.position.x = salles[0].ox+100;
     marowakmesh.position.z = salles[0].oz+50;
-    marowakmesh.position.y = 7;
+    marowakmesh.position.y = 6;
+    scene.beginAnimation(marowakarmature, 0, 32, true,1);
+    let marowak = new Enemi(marowakmesh,marowakarmature,1,7,scene);
     
     return scene;
 }
