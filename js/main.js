@@ -114,8 +114,11 @@ async function createScene () {
     picatchu.name = "mypicatchu";
     let pica = new Dude(picatchu,armature, 2,scene);
     scene.activeCamera = createFollowCamera(scene, pica.vuecube);
-
-    
+    const marowakobj = await BABYLON.SceneLoader.ImportMeshAsync("", "3dmodule/Marowak/", "marowak.babylon", scene);
+    let marowakmesh = marowakobj.meshes[0];
+    marowakmesh.position.x = salles[0].ox+100;
+    marowakmesh.position.z = salles[0].oz+50;
+    marowakmesh.position.y = 7;
     
     return scene;
 }

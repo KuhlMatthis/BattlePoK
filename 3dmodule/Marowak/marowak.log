@@ -1,0 +1,50 @@
+Exporter version: 2.93.5, Blender version: 2.93.3
+========= Conversion from Blender to Babylon.js =========
+	Scene settings used :
+		Inline textures     :  false
+		Material Type       :  PBR
+		Positions Precision :  4
+		Normals Precision   :  3
+		UVs Precision       :  3
+		Vert Color Precision:  3
+		Mat Weight Precision:  2
+		Keep Z-up r-handed  :  no
+		Texture directory   :  C:\Users\Matth\Documents\GitHub\BattlePoc\3dmodule\marowak\
+	Python World class constructor completed
+	WARNING: No active camera has been assigned, or is not in a currently enabled collection
+	processing begun of skeleton:  Armature, id:  0
+		processing begun of bone:  corp, index:  0
+		processing begun of bone:  corp2, index:  1
+		processing begun of bone:  queue, index:  2
+		processing begun of bone:  jambR, index:  3
+		processing begun of bone:  jambL, index:  4
+		processing begun of bone:  brasR, index:  5
+		processing begun of bone:  Bone, index:  6
+		processing begun of bone:  brasL, index:  7
+		processing begun of bone:  Tete, index:  8
+		processing action stand:  in[1 - 32], out[0 - 32]
+	processing begun of mesh:  marowak
+		processing begun of material:  marowakmesh
+			processing texture marrowakimage
+				texture type:  diffuseTexture, mapped using: "UVMap"
+		Custom split normals with tangents being used
+		num positions      :  16221
+		num normals        :  16221
+		num tangents       :  64884
+		num uvs            :  32442
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  5432
+		Skeleton stats:  
+			Total Influencers:  36722
+			Avg # of influencers per vertex:  2.2639
+			Highest # of influencers observed:  7, num vertices with this:  311
+			exported as 7 influencers
+			num skeletonWeights and skeletonIndices:  129768
+	processing begun of light (DIRECTIONAL):  Sun
+	processing begun of light (DIRECTIONAL):  Sun.001
+========= Writing of JSON file started =========
+	writing mesh:  marowak
+========= Writing of JSON file completed =========
+========= end of processing =========
+elapsed time:  0 min, 2.028 secs
