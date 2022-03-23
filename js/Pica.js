@@ -1,7 +1,7 @@
 //import * as BABYLON from "@babylonjs/core";
 
 export default class Pica {
-    constructor(picaMesh, armature , speed,scene) {
+    constructor(picaMesh, armature ,picaeclaireobj, speed,scene) {
         this.picaMesh = picaMesh;
         this.armature = armature;
         this.allanymation = armature._ranges;
@@ -159,6 +159,28 @@ export default class Pica {
         this.picaMesh.bounder.scaling.z = 1.3;
         */
         //this.bounder.picaMesh = this.picaMesh;
+
+        this.picaeclairemesh = picaeclaireobj.meshes[0];
+        this.picaeclairemeshes = picaeclaireobj.meshes;
+        this.picaeclairemesh.scaling = new BABYLON.Vector3(7,7,20);
+        this.picaeclairemesh.position.y +=2;
+        this.picaeclairemesh.position.x +=2;
+        this.picaeclairemesh.position.z +=11;
+        this.picaeclairemesh.parent = picaMesh;
+        this.picaatarmature = picaeclaireobj.skeletons[0];
+        this.picaeclairemesh.name = "picaeclaire";
+        this.picaeclairemeshes.forEach(picaeclairemesh => {
+            picaeclairemesh.material.alpha = .1;
+            picaeclairemesh.visibility= 0.9;
+        });
+        this. visibilityeclairemesh(false);
+    }
+
+
+    visibilityeclairemesh(visible){
+        this.picaeclairemeshes.forEach(picaeclairemesh => {
+            picaeclairemesh.isVisible = visible;
+        });
     }
 
     incrlevel(){
@@ -210,7 +232,6 @@ export default class Pica {
 
         if(inputStates.up) {
             if(this.isrunning){
-                
                 this.bounder.moveWithCollisions(this.picaMesh.frontVector.multiplyByFloats(this.runspeed, this.runspeed, this.runspeed));
             }else{
                 this.bounder.moveWithCollisions(this.picaMesh.frontVector.multiplyByFloats(this.speed,this.speed,this.speed));
@@ -254,15 +275,26 @@ export default class Pica {
                 }
             }else if(inputStates.fight){
                 if(this.energie>0){
-                    this.aplyshortataccolision(scene,1)
+                    this.aplyshortataccolision(scene,1,10)
                     this.energie-=1;
                     this.modifiemaxbar(this.energiebar,-1);
                     this.animation(scene,7)
                 }
             }else if(inputStates.fight2){
                 if(this.energie>0){
-                    this.aplyshortataccolision(scene,1);
+                    this.aplyshortataccolision(scene,1,10);
                     this.animation(scene,8);
+                    this.energie-=1;
+                    this.modifiemaxbar(this.energiebar,-1); 
+                }
+            }else if(inputStates.fire2){
+                if(this.energie>0){
+                    this.visibilityeclairemesh(true);
+                    scene.beginAnimation(this.picaatarmature, 0, 32, false);
+                    setTimeout(() => { this.visibilityeclairemesh(false);  
+                    }, 1000 * 1.5)
+                    this.aplyshortataccolision(scene,1,40);
+                    //this.animation(scene,8);
                     this.energie-=1;
                     this.modifiemaxbar(this.energiebar,-1); 
                 }
@@ -302,14 +334,13 @@ export default class Pica {
         }         
     }
 
-    aplyshortataccolision(scene,hitpoint){
+    aplyshortataccolision(scene,hitpoint,length){
         let origin = new BABYLON.Vector3(this.picaMesh.position.x,this.picaMesh.position.y+4,this.picaMesh.position.z);
-        //let origin = this.position.add(this.frontVector);
+        //let origin = this.position.add(this.frontVector);10
 
         // Looks a little up (0.1 in y) 
         let direction = new BABYLON.Vector3(this.picaMesh.frontVector.x, this.picaMesh.frontVector.y, this.picaMesh.frontVector.z);
-        let length = 10;
-        let ray = new BABYLON.Ray(origin, direction, length)
+        let ray = new BABYLON.Ray(origin, direction, length);
 
         // to make the ray visible :
         //let rayHelper = new BABYLON.RayHelper(ray);
@@ -324,6 +355,7 @@ export default class Pica {
                 console.log(enemi.life);
                 enemi.degat(hitpoint);
             }
+            
 	    }
         
         

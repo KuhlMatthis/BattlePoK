@@ -106,7 +106,7 @@ export default class Sale {
             for(let z = 0; z < this.width; z++){
                 if(x==0 || x==this.length-1 || z==0 || z==this.width-1){
                     if(this.porte[0]<=x && x<=this.porte[2] && this.porte[1]<=z && z<=this.porte[3]){
-                        boxes[nb] = box1.createInstance("copySalebox"+nb);
+                        boxes[nb] = box1.createInstance("copySaleSolebox"+nb);
                         boxes[nb].position.x += x*this.taille;
                         boxes[nb].position.z += z*this.taille;
                         //collision
@@ -115,7 +115,7 @@ export default class Sale {
                         nb+=1;
                     }else{
                         for(let y = 0; y < this.height; y++){
-                            boxes[nb] = box2.createInstance("copySalebox"+nb);
+                            boxes[nb] = box2.createInstance("copySaleMurebox"+nb);
                             boxes[nb].position.x += x*this.taille;
                             boxes[nb].position.z += z*this.taille;
                             boxes[nb].position.y += y*this.taille;
@@ -125,7 +125,7 @@ export default class Sale {
                         }
                     }
                 }else{
-                    boxes[nb] = box1.createInstance("copySalebox"+nb);
+                    boxes[nb] = box1.createInstance("copySaleSolebox"+nb);
                     boxes[nb].position.x += x*this.taille;
                     boxes[nb].position.z += z*this.taille;
                     //boxes[nb].physicsImpostor = new BABYLON.PhysicsImpostor(boxes[nb], BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0 }, scene);

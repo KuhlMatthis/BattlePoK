@@ -104,17 +104,20 @@ async function createScene () {
 
     
     createenv(vlight, scene);
-
+    const picaeclaireobj = await BABYLON.SceneLoader.ImportMeshAsync("", "3dmodule/Picatchu/Picalightatac/", "picalightatc.babylon", scene);
+        
     const picamesh = await BABYLON.SceneLoader.ImportMeshAsync("", "3dmodule/Picatchu/", "picatchu5d.babylon", scene);
     let picatchu = picamesh.meshes[0];
     picatchu.position.x = salles[0].ox+50;
     picatchu.position.z = salles[0].oz+50;
     picatchu.position.y = 7;
-    camera.position = new BABYLON.Vector3(picatchu.position.x-10,picatchu.position.y+3, picatchu.position.z);
+    //camera.position = new BABYLON.Vector3(picatchu.position.x-10,picatchu.position.y+3, picatchu.position.z);
     let armature = picamesh.skeletons[0];
     picatchu.name = "mypicatchu";
-    let pica = new Pica(picatchu,armature, 2,scene);
+    let pica = new Pica(picatchu,armature,picaeclaireobj, 2,scene);
     scene.activeCamera = createFollowCamera(scene, pica.vuecube);
+
+    
     
 
     scene.enemies = [];
@@ -289,6 +292,7 @@ function modifySettings() {
     inputStates.run = false;
     inputStates.fight = false;
     inputStates.fight2 = false;
+    inputStates.fire2 = false;
     
     //add the listener to the main, window object, and update the states
     window.addEventListener('keydown', (event) => {
