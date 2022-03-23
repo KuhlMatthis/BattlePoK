@@ -242,7 +242,6 @@ export default class Pica {
             if(inputStates.space){
                 if(this.isrunning){
                     this.jump=4;
-                    this.increxperience(1);
                     this.animation(scene,6)
                 }
             }else if(inputStates.run){
@@ -255,16 +254,15 @@ export default class Pica {
                 }
             }else if(inputStates.fight){
                 if(this.energie>0){
-                    
+                    this.aplyshortataccolision(scene,1)
                     this.energie-=1;
                     this.modifiemaxbar(this.energiebar,-1);
                     this.animation(scene,7)
                 }
             }else if(inputStates.fight2){
                 if(this.energie>0){
-                    
+                    this.aplyshortataccolision(scene,1);
                     this.animation(scene,8);
-                    
                     this.energie-=1;
                     this.modifiemaxbar(this.energiebar,-1); 
                 }
@@ -303,5 +301,33 @@ export default class Pica {
             }
         }         
     }
+
+    aplyshortataccolision(scene,hitpoint){
+        let origin = new BABYLON.Vector3(this.picaMesh.position.x,this.picaMesh.position.y+4,this.picaMesh.position.z);
+        //let origin = this.position.add(this.frontVector);
+
+        // Looks a little up (0.1 in y) 
+        let direction = new BABYLON.Vector3(this.picaMesh.frontVector.x, this.picaMesh.frontVector.y, this.picaMesh.frontVector.z);
+        let length = 10;
+        let ray = new BABYLON.Ray(origin, direction, length)
+
+        // to make the ray visible :
+        //let rayHelper = new BABYLON.RayHelper(ray);
+        //rayHelper.show(scene, new BABYLON.Color3.Red);
+    
+        var hit = scene.pickWithRay(ray);
+
+        if (hit.pickedMesh){
+            if(hit.pickedMesh.name.startsWith("enemy")){
+                let enemibounder = hit.pickedMesh;
+                let enemi = enemibounder.enemiMesh.Enemi;
+                console.log(enemi.life);
+                enemi.degat(hitpoint);
+            }
+	    }
+        
+        
+    }
+        
 
 }

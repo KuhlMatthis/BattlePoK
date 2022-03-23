@@ -10,6 +10,7 @@ export default class Enemi {
         else this.speed = 1;
         enemiMesh.Enemi = this;
         this.height = height;
+        this.scene = scene;
         
 
 
@@ -67,9 +68,11 @@ export default class Enemi {
 
         this.bounder = this.createBoundingBox();
         this.bounder.ellipsoid = new BABYLON.Vector3(4, 5, 4);
+        this.bounder.checkCollisions = true;
+        //this.bounder.isVisible = false; not good because block raycasting
     
         this.bounder.enemiMesh = this.enemiMesh;
-        this.enemiMesh.showBoundingBox = true;
+        //this.enemiMesh.showBoundingBox = true;
 
     }
 
@@ -96,6 +99,7 @@ export default class Enemi {
             //a.pause();
         }
     }
+
     createBoundingBox() {
         // Create a box as BoundingBox of the enemi
         let bounder = new BABYLON.Mesh.CreateBox(
@@ -107,7 +111,7 @@ export default class Enemi {
           "bounderMaterial",
           this.scene
         );
-        bounderMaterial.alpha = 0.4;
+        bounderMaterial.alpha = 0;
         bounder.material = bounderMaterial;
         bounder.checkCollisions = true;
     
@@ -117,8 +121,23 @@ export default class Enemi {
         bounder.scaling.y =  this.height;
         bounder.scaling.z =  10;
     
-        //bounder.isVisible = false;
-    
         return bounder;
       }
+
+      degat(degat){
+        this.life-=degat;
+        if(this.life<0){
+            let player = this.scene.getMeshByName("mypicatchu");
+            player.Pica.increxperience(1);
+            this.enemiMesh.dispose();
+            this.bounder.dispose();
+        }else{
+            this.modifiemaxbar(this.lifebar,-degat);
+        }  
+      }
+
+      modifiemaxbar(bar,incr){
+        bar.scaling.x +=incr;
+        bar.position.x+=incr/2;
+    }
 }
