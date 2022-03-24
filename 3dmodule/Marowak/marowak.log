@@ -9,7 +9,7 @@ Exporter version: 2.93.5, Blender version: 2.93.3
 		Vert Color Precision:  3
 		Mat Weight Precision:  2
 		Keep Z-up r-handed  :  no
-		Texture directory   :  C:\Users\Matth\Documents\GitHub\BattlePoc\3dmodule\marowak\
+		Texture directory   :  C:\Users\Matth\Documents\GitHub\BattlePoc\3dmodule\Marowak\
 	Python World class constructor completed
 	WARNING: No active camera has been assigned, or is not in a currently enabled collection
 	processing begun of skeleton:  Armature, id:  0
@@ -22,29 +22,31 @@ Exporter version: 2.93.5, Blender version: 2.93.3
 		processing begun of bone:  Bone, index:  6
 		processing begun of bone:  brasL, index:  7
 		processing begun of bone:  Tete, index:  8
-		processing action stand:  in[1 - 32], out[0 - 32]
+		processing action 1stand:  in[1 - 32], out[0 - 32]
+		processing action 2walk:  in[1 - 32], out[40 - 72]
+		processing action 3attac:  in[1 - 32], out[80 - 112]
 	processing begun of mesh:  marowak
 		processing begun of material:  marowakmesh
 			processing texture marrowakimage
 				texture type:  diffuseTexture, mapped using: "UVMap"
 		Custom split normals with tangents being used
-		num positions      :  16221
-		num normals        :  16221
-		num tangents       :  64884
-		num uvs            :  32442
+		num positions      :  16224
+		num normals        :  16224
+		num tangents       :  64896
+		num uvs            :  32448
 		num uvs2           :  0
 		num colors         :  0
 		num triangles      :  5432
 		Skeleton stats:  
-			Total Influencers:  36722
+			Total Influencers:  36729
 			Avg # of influencers per vertex:  2.2639
-			Highest # of influencers observed:  7, num vertices with this:  311
+			Highest # of influencers observed:  7, num vertices with this:  312
 			exported as 7 influencers
-			num skeletonWeights and skeletonIndices:  129768
+			num skeletonWeights and skeletonIndices:  129792
 	processing begun of light (DIRECTIONAL):  Sun
 	processing begun of light (DIRECTIONAL):  Sun.001
 ========= Writing of JSON file started =========
 	writing mesh:  marowak
 ========= Writing of JSON file completed =========
 ========= end of processing =========
-elapsed time:  0 min, 2.028 secs
+elapsed time:  0 min, 5.1712 secs

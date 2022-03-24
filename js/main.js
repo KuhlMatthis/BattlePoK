@@ -43,6 +43,7 @@ async function createScene () {
     scene = new BABYLON.Scene(engine);
     canvas = document.querySelector("#myCanvas");
     scene.enablePhysics();
+    scene.enemies = [];
     var physicsEngine =  scene.getPhysicsEngine();
     //Get gravity
     var gravity = physicsEngine.gravity;
@@ -92,22 +93,23 @@ async function createScene () {
     
     const vlightmesh = await BABYLON.SceneLoader.ImportMeshAsync("", "3dmodule/light/", "light.babylon", scene);
     let vlight = vlightmesh.meshes[0];
-    console.log(vlightmesh)
     let larmature = vlightmesh.skeletons[0];
     scene.beginAnimation(larmature, 0, 16, true, 1);
     vlight.name = "vlight"
     vlight.scaling = new BABYLON.Vector3(0.5, 0.5, 0.5)
+
+    
     //clowlayer.addIncludedOnlyMesh(vlight)
     //vlight.diffuseColor = new BABYLON.Color3(Math.random(), Math.random(), Math.random());
     
-    
-
-    
-    createenv(vlight, scene);
-    const picaeclaireobj = await BABYLON.SceneLoader.ImportMeshAsync("", "3dmodule/Picatchu/Picalightatac/", "picalightatc.babylon", scene);
-        
+    const marowakobj = await BABYLON.SceneLoader.ImportMeshAsync("", "3dmodule/Marowak/", "marowak.babylon", scene);
+    const picaeclaireobj = await BABYLON.SceneLoader.ImportMeshAsync("", "3dmodule/Picatchu/Picalightatac/", "picalightatc.babylon", scene); 
     const picamesh = await BABYLON.SceneLoader.ImportMeshAsync("", "3dmodule/Picatchu/", "picatchu5d.babylon", scene);
     let picatchu = picamesh.meshes[0];
+
+    
+    createenv(vlight,marowakobj,scene);
+    
     picatchu.position.x = salles[0].ox+50;
     picatchu.position.z = salles[0].oz+50;
     picatchu.position.y = 7;
@@ -120,22 +122,23 @@ async function createScene () {
     
     
 
-    scene.enemies = [];
+    
 
-    const marowakobj = await BABYLON.SceneLoader.ImportMeshAsync("", "3dmodule/Marowak/", "marowak.babylon", scene);
-    let marowakmesh = marowakobj.meshes[0];
+    
+    /*let marowakmesh = marowakobj.meshes[0];
     let marowakarmature = marowakobj.skeletons[0];
     marowakmesh.position.x = salles[0].ox+100;
     marowakmesh.position.z = salles[0].oz+50;
     marowakmesh.position.y = 10;
     marowakmesh.name = "marowakmesh";
-    scene.beginAnimation(marowakarmature, 0, 32, true,1);
     let marowak = new Enemi(marowakmesh,marowakarmature,1,7,scene);
     scene.enemies.push(marowakmesh);
+    */
+
     return scene;
 }
 
-function createenv(vlight,scene){
+function createenv(vlight,marowakobj,scene){
     let taille = 10;
     let nbsalles = 3;
     let found = false;
@@ -157,7 +160,7 @@ function createenv(vlight,scene){
         }
         cubes[i] = [x,z,x+20,z+20];
         salles[i] = new Sale(x,z,y,19,19,5,taille, scene);
-        salles[i].create(vlight,scene);
+        salles[i].create(vlight, marowakobj, scene);
         
     }
       
@@ -193,7 +196,13 @@ function actionEnemies() {
         scene.enemies.forEach(enemi => {
             
             enemi.Enemi.action(scene);
+            //remove dead enemi from enemies list
+            if(enemi.Enemi.life<0){
+                var enemiIndex = scene.enemies.indexOf(enemi);
+                scene.enemies.splice(enemiIndex, 1);
+            }
         });
+
     }    
 }
 

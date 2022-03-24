@@ -133,7 +133,7 @@ export default class Pica {
         
         this.bounder = new BABYLON.Mesh.CreateBox("bounderpica", 1, scene);
         let bounderMaterial = new BABYLON.StandardMaterial("mat", scene);;
-        bounderMaterial.alpha = .4;
+        bounderMaterial.alpha = 0;
         this.bounder.material = bounderMaterial;
         this.bounder.checkCollisions = true;
         this.bounder.ellipsoid = new BABYLON.Vector3(4, 5, 4);
@@ -144,10 +144,10 @@ export default class Pica {
         this.bounder.scaling.y = 10;
         this.bounder.scaling.z = 10;
         
-        this.bounder.physicsImpostor = new BABYLON.PhysicsImpostor(this.bounder, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 10 }, scene);
+        this.bounder.physicsImpostor = new BABYLON.PhysicsImpostor(this.bounder, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0 }, scene);
         
 
-        this.bounder.isVisible = false;
+        this.bounder.isVisible = true;
         //this.picaMesh.showBoundingBox = true;
         this.picaMesh.checkCollisions = false;
         
@@ -158,7 +158,7 @@ export default class Pica {
         this.picaMesh.bounder.scaling.y = 2;
         this.picaMesh.bounder.scaling.z = 1.3;
         */
-        //this.bounder.picaMesh = this.picaMesh;
+        this.bounder.picaMesh = this.picaMesh;
 
         this.picaeclairemesh = picaeclaireobj.meshes[0];
         this.picaeclairemeshes = picaeclaireobj.meshes;
@@ -173,7 +173,7 @@ export default class Pica {
             picaeclairemesh.material.alpha = .1;
             picaeclairemesh.visibility= 0.9;
         });
-        this. visibilityeclairemesh(false);
+        this.visibilityeclairemesh(false);
     }
 
 
@@ -202,10 +202,23 @@ export default class Pica {
         
     }
 
+
+    degat(degat){
+        this.life-=degat;
+        if(this.life<0){
+            //restart game
+        }else{
+            this.modifiemaxbar(this.lifebar,-degat);
+        }  
+    }
+
+
     modifiemaxbar(bar,incr){
         bar.scaling.x +=incr;
         bar.position.x+=incr/2;
     }
+
+
     
     move(scene,inputStates) {
         
@@ -354,11 +367,8 @@ export default class Pica {
                 let enemi = enemibounder.enemiMesh.Enemi;
                 console.log(enemi.life);
                 enemi.degat(hitpoint);
-            }
-            
+            }  
 	    }
-        
-        
     }
         
 

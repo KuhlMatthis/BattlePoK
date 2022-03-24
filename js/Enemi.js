@@ -6,11 +6,13 @@ export default class Enemi {
         this.enemiMesh = enemiMesh;
         this.armature = armature;
         this.allanymation = armature._ranges;
+        console.log(this.allanymation)
         if (speed) this.speed = speed;
         else this.speed = 1;
         enemiMesh.Enemi = this;
         this.height = height;
         this.scene = scene;
+        this.animationstate;
         
 
 
@@ -72,12 +74,18 @@ export default class Enemi {
         //this.bounder.isVisible = false; not good because block raycasting
     
         this.bounder.enemiMesh = this.enemiMesh;
+        this.anim;
+
+        this.fight=true;
+        this.notbloque=true;
         //this.enemiMesh.showBoundingBox = true;
 
     }
 
 
     action(scene){
+
+
         if (!this.bounder) return;
         this.bounder.moveWithCollisions(new BABYLON.Vector3(0,-1,0));
         this.enemiMesh.position = new BABYLON.Vector3(
@@ -91,14 +99,64 @@ export default class Enemi {
         let dir = direction.normalize();
         let alpha = Math.atan2(-dir.x, -dir.z);
         this.enemiMesh.rotation.y = alpha;
-        if (distance > 30) {
-            this.bounder.moveWithCollisions(
-                dir.multiplyByFloats(this.speed, 0, this.speed)
-            );
-        } else {
-            //a.pause();
+        if(this.notbloque){
+            if (distance > 50) {
+                this.animation(scene,0);
+            } else if(distance > 10) {
+                this.animation(scene,1);
+                this.bounder.moveWithCollisions(
+                    dir.multiplyByFloats(this.speed, 0, this.speed)
+                );
+            }else{
+                if(this.fight){
+                    this.animation(scene,2);
+                    this.fight = false;
+                    setTimeout(() => {
+                        this.aplyataccolision(scene,1,10,dir);   
+                    }, 1000 * 1)
+                    
+                    setTimeout(() => {
+                        this.fight = true;   
+                    }, 1000 * 4)
+                }else{
+                    this.animation(scene,0);
+                }
+            }
         }
     }
+
+    /*
+    //peut etre util rajouter un evenement en physic a l'animation a une frame
+    var event1 = new BABYLON.AnimationEvent(
+        50,
+        function () {
+          console.log("Yeah!");
+        },
+        true,
+      );
+      // Attach your event to your animation
+      animation.addEvent(event1);
+    */
+
+    animation(scene,number){
+        if(this.animationstate!==number){
+            //await this.anim.waitAsync();
+            this.animationstate = number;
+            let myanimation = Object.values(this.allanymation)[number];
+            //wait end animation
+            if(number==2){
+                this.notbloque =false;
+                setTimeout(async () => {
+                    this.anim = scene.beginAnimation(this.armature, myanimation.from, myanimation.to, false);
+                    await this.anim.waitAsync();
+                    this.notbloque = true;
+                });
+            }else{
+                this.anim = scene.beginAnimation(this.armature, myanimation.from, myanimation.to, true,1);
+            }
+        }         
+    }
+
 
     createBoundingBox() {
         // Create a box as BoundingBox of the enemi
@@ -139,5 +197,31 @@ export default class Enemi {
       modifiemaxbar(bar,incr){
         bar.scaling.x +=incr;
         bar.position.x+=incr/2;
+    }
+
+    aplyataccolision(scene,hitpoint,length,direct){
+        let origin = new BABYLON.Vector3(this.enemiMesh.position.x,this.enemiMesh.position.y+4,this.enemiMesh.position.z);
+        //let origin = this.position.add(this.frontVector);10
+
+        // Looks a little up (0.1 in y) 
+        let direction = direct;
+        let ray = new BABYLON.Ray(origin, direction, length);
+
+        // to make the ray visible :
+        //let rayHelper = new BABYLON.RayHelper(ray);
+        //rayHelper.show(scene, new BABYLON.Color3.Red);
+    
+        var hit = scene.pickWithRay(ray);
+
+        if (hit.pickedMesh){
+            console.log(hit.pickedMesh.name);
+            if(hit.pickedMesh.name == "bounderpica"){
+                console.log(hit.pickedMesh.name);
+                let enemibounder = hit.pickedMesh;
+                let player = enemibounder.picaMesh.Pica;
+                //console.log(enemi.life);
+                player.degat(hitpoint);
+            } 
+	    }
     }
 }

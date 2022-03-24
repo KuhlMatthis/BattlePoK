@@ -1,4 +1,6 @@
 //import * as BABYLON from "@babylonjs/core";
+import Enemi from "./Enemi.js";
+
 export default class Sale {
     constructor(x,z,y,length,width,height,taille,scene) {
         this.gx = x;
@@ -16,7 +18,12 @@ export default class Sale {
         this.cub = [this.gx,this.gz,this.gx+this.length-1,this.gz+this.width-1];
     }
 
-    create(vlight,scene) {
+    create(vlight,marowakobj,scene) {
+        let marowakmesh = this.doClone(marowakobj.meshes[0],  marowakobj.skeletons,1)
+        marowakmesh.position = new BABYLON.Vector3(this.ox+100, 8, this.oz+100)
+        let marowak = new Enemi(marowakmesh,marowakmesh.skeleton,1,7,scene);
+        scene.enemies.push(marowakmesh);
+
         let posx = parseInt(this.ox+Math.random()*60+80);
         let posz = parseInt(this.oz+Math.random()*60+80);
         let cvlight = vlight.createInstance("vlight1")
@@ -166,5 +173,36 @@ export default class Sale {
         
         return descript;
     }
+
+
+    doClone(originalMesh, skeletons,id) {
+        let myClone;
     
+        myClone = originalMesh.clone("enemimarowak");
+        if(!skeletons) return myClone;
+    
+        // The mesh has at least one skeleton
+        if(!originalMesh.getChildren()) {
+            myClone.skeleton = skeletons[0].clone("clone_" + id + "_skeleton");
+            return myClone;
+        } else {
+            if(skeletons.length === 1) {
+                // the skeleton controls/animates all children, like in the Dude model
+                let clonedSkeleton = skeletons[0].clone("clone_" + id + "_skeleton");
+                myClone.skeleton = clonedSkeleton;
+                let nbChildren = myClone.getChildren().length;
+    
+                for(let i = 0; i < nbChildren;  i++) {
+                    myClone.getChildren()[i].skeleton = clonedSkeleton
+                }
+                return myClone;
+            } else if(skeletons.length === originalMesh.getChildren().length) {
+                // each child has its own skeleton
+                for(let i = 0; i < myClone.getChildren().length;  i++) {
+                    myClone.getChildren()[i].skeleton = skeletons[i].clone("clone_" + id + "_skeleton_" + i);
+                }
+                return myClone;
+            }
+        }
+    }
 }
