@@ -140,7 +140,7 @@ async function createScene () {
 
 function createenv(vlight,marowakobj,scene){
     let taille = 10;
-    let nbsalles = 3;
+    let nbsalles = 4;
     let found = false;
     for(let i = 0; i<nbsalles;i++){
         found = false;

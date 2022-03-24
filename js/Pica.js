@@ -304,9 +304,12 @@ export default class Pica {
                 if(this.energie>0){
                     this.visibilityeclairemesh(true);
                     scene.beginAnimation(this.picaatarmature, 0, 32, false);
-                    setTimeout(() => { this.visibilityeclairemesh(false);  
+                    this.notbloque = false;
+                    setTimeout(() => { 
+                        this.visibilityeclairemesh(false);
+                        this.notbloque = true;  
                     }, 1000 * 1.5)
-                    this.aplyshortataccolision(scene,1,40);
+                    this.aplyshortataccolision(scene,1,100);
                     //this.animation(scene,8);
                     this.energie-=1;
                     this.modifiemaxbar(this.energiebar,-1); 
@@ -359,13 +362,16 @@ export default class Pica {
         //let rayHelper = new BABYLON.RayHelper(ray);
         //rayHelper.show(scene, new BABYLON.Color3.Red);
     
-        var hit = scene.pickWithRay(ray);
+        var hit = scene.pickWithRay(ray, (mesh) => {
+           return (mesh.name.startsWith("enemy"));
+        });
 
         if (hit.pickedMesh){
+            console.log(hit.pickedMesh.name)
             if(hit.pickedMesh.name.startsWith("enemy")){
                 let enemibounder = hit.pickedMesh;
                 let enemi = enemibounder.enemiMesh.Enemi;
-                console.log(enemi.life);
+
                 enemi.degat(hitpoint);
             }  
 	    }

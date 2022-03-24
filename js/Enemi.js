@@ -186,7 +186,7 @@ export default class Enemi {
         this.life-=degat;
         if(this.life<0){
             let player = this.scene.getMeshByName("mypicatchu");
-            player.Pica.increxperience(1);
+            player.Pica.increxperience(2);
             this.enemiMesh.dispose();
             this.bounder.dispose();
         }else{
