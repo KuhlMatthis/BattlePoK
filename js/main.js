@@ -33,9 +33,10 @@ function startGame() {
             picatchu.Pica.move(scene,inputStates);
         }
         // when the picka is not on the ground he dies
-        if (picatchu.position.y <=0.1){
+        setTimeout(() => {
+            if (picatchu.position.y <=0.1){
             setTimeout(() => {picatchu.Pica.degat(0.5)},2000);
-        }
+        }},5000);
         actionEnemies();    
         scene.render();
         

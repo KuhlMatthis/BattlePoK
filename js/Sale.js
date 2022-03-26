@@ -108,6 +108,7 @@ export default class Sale {
         // to be taken into account by collision detection
         //
         let boxes = [];
+let boxs = [];
         let nb = 0
         for (let x = 0; x < this.length; x++) {
             for(let z = 0; z < this.width; z++){
@@ -116,6 +117,20 @@ export default class Sale {
                         boxes[nb] = box1.createInstance("copySaleSolebox"+nb);
                         boxes[nb].position.x += x*this.taille;
                         boxes[nb].position.z += z*this.taille;
+                        if(nb==10 || nb == 20 || nb==15 || nb == 25 || nb==35 || nb == 45){
+                            for(let j = 0; j< 5 ; j++){
+                                boxs[nb] = box2.createInstance("objet"+nb);
+                                boxs[nb].position.x = boxes[nb].position.x + 30 + 10;
+                                boxs[nb].position.z = boxes[nb].position.z + 10 + 10;
+                                boxs[nb].position.y =  10 + (j*10);
+                                if(nb==60){
+                                    boxs[nb].position.x = boxes[nb].position.x + 30 + 10;
+                                    boxs[nb].position.z = boxes[nb].position.z + 10 ;
+                                    boxs[nb].position.y = 10 + (j*10);
+                                }
+                                boxs[nb].checkCollisions=true;
+                            }
+                        }
                         //collision
                         boxes[nb].checkCollisions = true;
                         //boxes[nb].physicsImpostor = new BABYLON.PhysicsImpostor(boxes[nb], BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0 }, scene);
@@ -126,6 +141,20 @@ export default class Sale {
                             boxes[nb].position.x += x*this.taille;
                             boxes[nb].position.z += z*this.taille;
                             boxes[nb].position.y += y*this.taille;
+                            if(nb==60 || nb == 70 || nb==65 || nb == 85 || nb==75 || nb == 45 ){
+                                for(let j = 0; j< 5 ; j++){
+                                    boxs[nb] = box2.createInstance("objet"+nb);
+                                    boxs[nb].position.x = boxes[nb].position.x + 30 + 10;
+                                    boxs[nb].position.z = boxes[nb].position.z + 10 + 10;
+                                    if(nb==60){
+                                        boxs[nb].position.x = boxes[nb].position.x + 30 + 10;
+                                        boxs[nb].position.z = boxes[nb].position.z + 10 ;
+                                        boxs[nb].position.y = 10 + (j*10);
+                                    }
+                                    boxs[nb].position.y = 10 + (j*10);
+                                    boxs[nb].checkCollisions=true;
+                                }
+                            }
                             //boxes[nb].physicsImpostor = new BABYLON.PhysicsImpostor(boxes[nb], BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 1 }, scene);
                             boxes[nb].checkCollisions = true;
                             nb+=1;  
@@ -135,6 +164,20 @@ export default class Sale {
                     boxes[nb] = box1.createInstance("copySaleSolebox"+nb);
                     boxes[nb].position.x += x*this.taille;
                     boxes[nb].position.z += z*this.taille;
+                    if(nb==10 || nb == 20 || nb==15 || nb == 25 || nb==35 || nb == 45){
+                        for(let j = 0; j< 5 ; j++){
+                            boxs[nb] = box2.createInstance("objet"+nb);
+                            boxs[nb].position.x = boxes[nb].position.x + 30 + (j*10);
+                            boxs[nb].position.z = boxes[nb].position.z + 10 + 10;
+                            boxs[nb].position.y = 10 + (j*10);
+                            if(nb==60){
+                                boxs[nb].position.x = boxes[nb].position.x + 30 + 10;
+                                boxs[nb].position.z = boxes[nb].position.z + 10 ;
+                                boxs[nb].position.y = 10 + (j*10);
+                            }
+                            boxs[nb].checkCollisions=true;
+                        }
+                    }
                     //boxes[nb].physicsImpostor = new BABYLON.PhysicsImpostor(boxes[nb], BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0 }, scene);
                     boxes[nb].checkCollisions = true;
                     nb+=1;
