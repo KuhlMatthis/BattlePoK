@@ -88,6 +88,9 @@ export default class Sale {
         box1.computeWorldMatrix();
         var box2 = BABYLON.Mesh.CreateBox("Box1", this.taille, scene);
         
+        //creating spher
+        const sphere = BABYLON.MeshBuilder.CreateSphere("sphere", {diameterX: 5, diameterY: 5, diameterZ: 1});
+
         // light only
         cplight2.includedOnlyMeshes.push(box2);
         cplight.includedOnlyMeshes.push(box1);
@@ -118,6 +121,9 @@ let boxs = [];
                         boxes[nb].position.x += x*this.taille;
                         boxes[nb].position.z += z*this.taille;
                         if(nb==10 || nb == 20 || nb==15 || nb == 25 || nb==35 || nb == 45){
+                            sphere.position.x = boxes[nb].position.x ;
+                            sphere.position.y = 12;
+                            sphere.position.z = boxes[nb].position.z -100;
                             for(let j = 0; j< 5 ; j++){
                                 boxs[nb] = box2.createInstance("objet"+nb);
                                 boxs[nb].position.x = boxes[nb].position.x + 30 + 10;
@@ -142,6 +148,9 @@ let boxs = [];
                             boxes[nb].position.z += z*this.taille;
                             boxes[nb].position.y += y*this.taille;
                             if(nb==60 || nb == 70 || nb==65 || nb == 85 || nb==75 || nb == 45 ){
+                                sphere.position.x = boxes[nb].position.x +30;
+                            sphere.position.y = 12;
+                            sphere.position.z = boxes[nb].position.z -100 ;
                                 for(let j = 0; j< 5 ; j++){
                                     boxs[nb] = box2.createInstance("objet"+nb);
                                     boxs[nb].position.x = boxes[nb].position.x + 30 + 10;
@@ -165,12 +174,15 @@ let boxs = [];
                     boxes[nb].position.x += x*this.taille;
                     boxes[nb].position.z += z*this.taille;
                     if(nb==10 || nb == 20 || nb==15 || nb == 25 || nb==35 || nb == 45){
+                        sphere.position.x = boxes[nb].position.x+20 ;
+                            sphere.position.y = 12;
+                            sphere.position.z = boxes[nb].position.z -100;
                         for(let j = 0; j< 5 ; j++){
                             boxs[nb] = box2.createInstance("objet"+nb);
                             boxs[nb].position.x = boxes[nb].position.x + 30 + (j*10);
                             boxs[nb].position.z = boxes[nb].position.z + 10 + 10;
                             boxs[nb].position.y = 10 + (j*10);
-                            if(nb==60){
+                            if(nb==60 || nb == 70 || nb==65 || nb == 85 || nb==75 || nb == 45){
                                 boxs[nb].position.x = boxes[nb].position.x + 30 + 10;
                                 boxs[nb].position.z = boxes[nb].position.z + 10 ;
                                 boxs[nb].position.y = 10 + (j*10);
