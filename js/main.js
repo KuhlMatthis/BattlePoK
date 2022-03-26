@@ -36,6 +36,7 @@ function startGame() {
         setTimeout(() => {
             if (picatchu.position.y <=0.1){
             setTimeout(() => {picatchu.Pica.degat(0.5)},2000);
+            scene.actionManager.registerAction(new BABYLON.ExecuteCodeAction({},clear));
         }},5000);
         actionEnemies();    
         scene.render();
@@ -359,4 +360,10 @@ function modifySettings() {
     }, false);
 
     
+}
+
+function clear() {
+  
+  scene.actionManager.registerAction(new BABYLON.ExecuteCodeAction({
+  }, clear));
 }
