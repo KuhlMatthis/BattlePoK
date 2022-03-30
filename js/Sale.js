@@ -16,13 +16,11 @@ export default class Sale {
         this.t = 3;
         this.porte = this.createporte();
         this.cub = [this.gx,this.gz,this.gx+this.length-1,this.gz+this.width-1];
+        this.loaded = 0;
     }
 
     create(vlight,marowakobj,scene) {
-        let marowakmesh = this.doClone(marowakobj.meshes[0],  marowakobj.skeletons,1)
-        marowakmesh.position = new BABYLON.Vector3(this.ox+100, 8, this.oz+100)
-        let marowak = new Enemi(marowakmesh,marowakmesh.skeleton,1,7,scene);
-        scene.enemies.push(marowakmesh);
+        
 
         let posx = parseInt(this.ox+Math.random()*60+80);
         let posz = parseInt(this.oz+Math.random()*60+80);
@@ -80,12 +78,18 @@ export default class Sale {
         var texture = new BABYLON.Texture("img/sole2.jpg", scene);
         materialBox.specularColor = new BABYLON.Color3(0, 0, 0);
         materialBox.diffuseTexture = texture;
+        materialBox.freeze();
         box1.material = materialBox;
         box1.position.y= this.oy;
         box1.position.x= this.ox;
         box1.position.z= this.oz;
         box1.checkCollisions = true;
+        box1.setEnabled(false);
+        box1.addLODLevel(500, null);
         box1.computeWorldMatrix();
+        box1.freezeWorldMatrix();
+        box1.convertToUnIndexedMesh();
+        
         var box2 = BABYLON.Mesh.CreateBox("Box1", this.taille, scene);
         
         // light only
@@ -96,6 +100,7 @@ export default class Sale {
         materialBox2.specularColor = new BABYLON.Color3(0, 0, 0);
         var texture2 = new BABYLON.Texture("img/mure.jpg", scene);
         materialBox2.diffuseTexture = texture2;
+        materialBox2.freeze()
         // to be taken into account by collision detection
         //box1.checkCollisions = true;
 
@@ -103,8 +108,12 @@ export default class Sale {
         box2.position.y= this.oy;
         box2.position.x= this.ox;
         box2.position.z= this.oz;
+        box2.setEnabled(false);
+        box2.addLODLevel(500, null);
         box2.checkCollisions = true;
-        box2.physicsImpostor = new BABYLON.PhysicsImpostor(box2, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 1 }, scene);
+        box2.computeWorldMatrix();
+        box2.freezeWorldMatrix();
+        box2.convertToUnIndexedMesh();
         // to be taken into account by collision detection
         //
         let boxes = [];
@@ -116,6 +125,7 @@ export default class Sale {
                         boxes[nb] = box1.createInstance("copySaleSolebox"+nb);
                         boxes[nb].position.x += x*this.taille;
                         boxes[nb].position.z += z*this.taille;
+                        boxes[nb].freezeWorldMatrix();
                         //collision
                         boxes[nb].checkCollisions = true;
                         //boxes[nb].physicsImpostor = new BABYLON.PhysicsImpostor(boxes[nb], BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0 }, scene);
@@ -126,6 +136,7 @@ export default class Sale {
                             boxes[nb].position.x += x*this.taille;
                             boxes[nb].position.z += z*this.taille;
                             boxes[nb].position.y += y*this.taille;
+                            boxes[nb].freezeWorldMatrix();
                             //boxes[nb].physicsImpostor = new BABYLON.PhysicsImpostor(boxes[nb], BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 1 }, scene);
                             boxes[nb].checkCollisions = true;
                             nb+=1;  
@@ -135,6 +146,7 @@ export default class Sale {
                     boxes[nb] = box1.createInstance("copySaleSolebox"+nb);
                     boxes[nb].position.x += x*this.taille;
                     boxes[nb].position.z += z*this.taille;
+                    boxes[nb].freezeWorldMatrix();
                     //boxes[nb].physicsImpostor = new BABYLON.PhysicsImpostor(boxes[nb], BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0 }, scene);
                     boxes[nb].checkCollisions = true;
                     nb+=1;
@@ -172,6 +184,19 @@ export default class Sale {
         }
         
         return descript;
+    }
+
+    createroom(marowakobj,scene){
+        if(this.loaded == 0){
+            let marowakmesh = this.doClone(marowakobj.meshes[0],  marowakobj.skeletons,1)
+            marowakmesh.addLODLevel(200, null);
+            marowakmesh.position = new BABYLON.Vector3(this.ox+100, 8, this.oz+100)
+            let marowak = new Enemi(marowakmesh,marowakmesh.skeleton,1,7,scene);
+            scene.enemies.push(marowakmesh);
+            console.log("passe");
+            this.loaded=1;
+        }
+        
     }
 
 
