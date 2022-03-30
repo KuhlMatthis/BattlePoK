@@ -35,10 +35,11 @@ function startGame() {
         
         
         modifySettings();
+
         setTimeout(() => {
             engine.hideLoadingUI() 
         }, 2000)
-
+        
          // main animation loop 60 times/s
         engine.runRenderLoop(() => {
             

@@ -17,6 +17,8 @@ export default class Sale {
         this.porte = this.createporte();
         this.cub = [this.gx,this.gz,this.gx+this.length-1,this.gz+this.width-1];
         this.loaded = 0;
+        this.boxes;
+        this.box1;
     }
 
     create(vlight,marowakobj,scene) {
@@ -67,7 +69,7 @@ export default class Sale {
         }
 
         var box1 = BABYLON.Mesh.CreateBox("Box1", this.taille, scene);
-        
+        this.box1 = box1;
         //light of all copies are only affexted by cplight2
         cplight.includedOnlyMeshes.push(box1);
         cplight2.includedOnlyMeshes.push(box1);
@@ -142,19 +144,13 @@ export default class Sale {
                             nb+=1;  
                         }
                     }
-                }else{
-                    boxes[nb] = box1.createInstance("copySaleSolebox"+nb);
-                    boxes[nb].position.x += x*this.taille;
-                    boxes[nb].position.z += z*this.taille;
-                    boxes[nb].freezeWorldMatrix();
-                    //boxes[nb].physicsImpostor = new BABYLON.PhysicsImpostor(boxes[nb], BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0 }, scene);
-                    boxes[nb].checkCollisions = true;
-                    nb+=1;
                 }
             }    
         }
+        this.boxes = boxes;
     }
     createporte() {
+        
         let descript = [];
         let val = parseInt(Math.random ()*4);
         if(val==0){
@@ -184,10 +180,13 @@ export default class Sale {
         }
         
         return descript;
+
     }
 
     createroom(marowakobj,scene){
         if(this.loaded == 0){
+            let boxes = this.boxes;
+            let nb = this.boxes.length;
             let marowakmesh = this.doClone(marowakobj.meshes[0],  marowakobj.skeletons,1)
             marowakmesh.addLODLevel(200, null);
             marowakmesh.position = new BABYLON.Vector3(this.ox+100, 8, this.oz+100)
@@ -195,6 +194,16 @@ export default class Sale {
             scene.enemies.push(marowakmesh);
             console.log("passe");
             this.loaded=1;
+            for (let x = 0; x < this.length; x++) {
+                for(let z = 0; z < this.width; z++){
+                    boxes[nb] = this.box1.createInstance("copySaleSolebox"+nb);
+                    boxes[nb].position.x += x*this.taille;
+                    boxes[nb].position.z += z*this.taille;
+                    boxes[nb].freezeWorldMatrix();
+                    boxes[nb].checkCollisions = true;
+                    nb+=1;
+                }
+            }
         }
         
     }
