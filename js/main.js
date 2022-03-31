@@ -100,6 +100,7 @@ async function createScene () {
     groundMatrial.diffuseTexture = texture;
     ground.material = groundMatrial;
     scene.ground = ground;
+
     var skybox = BABYLON.Mesh.CreateBox("BackgroundSkybox", 1500, scene, undefined, BABYLON.Mesh.BACKSIDE);
     var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
 	skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("img/skybox/skybox", scene);
@@ -108,11 +109,11 @@ async function createScene () {
 	skyboxMaterial.specularColor = new BABYLON.Color3(0.4, 0.4, 0.95);
 	skyboxMaterial.disableLighting = true;
 	skybox.material = skyboxMaterial;
-    /*
-    var waterMesh = BABYLON.Mesh.CreateGround("waterMesh", 512, 512, 32, scene, false);
+    scene.skybox = skybox;
+    /*var waterMesh = BABYLON.Mesh.CreateGround("waterMesh", 512, 512, 32, scene, false);
 	var water = new BABYLON.WaterMaterial("water", scene, new BABYLON.Vector2(512, 512));
 	water.backFaceCulling = true;
-	water.bumpTexture = new BABYLON.Texture("textures/waterbump.png", scene);
+	//water.bumpTexture = new BABYLON.Texture("textures/waterbump.png", scene);
 	water.windForce = -5;
 	water.waveHeight = 0.2;
 	water.bumpHeight = 0.05;
@@ -245,7 +246,7 @@ function createenv(vlight,marowakobj,scene){
         salles[i] = new Sale(x,z,y,19,19,5,taille, scene);
         salles[i].create(vlight, scene);
     }
-      
+    
     for(let isalle = 0; isalle<salles.length-1; isalle++){
         let debutsalle = salles[isalle];
         let debut = [debutsalle.porte[0]+debutsalle.gx,debutsalle.porte[1]+debutsalle.gz,debutsalle.porte[0]+debutsalle.gx,debutsalle.porte[1]+debutsalle.gz]
@@ -259,6 +260,11 @@ function createenv(vlight,marowakobj,scene){
     let debut = [debutsalle.porte[0]+debutsalle.gx,debutsalle.porte[1]+debutsalle.gz,debutsalle.porte[0]+debutsalle.gx,debutsalle.porte[1]+debutsalle.gz]
     let fin = [playground[2]+20,playground[3]+20,playground[2]+20,playground[3]+20+1]
     debut = decalcub(debut, debutsalle);
+    chemin[chemin.length] = new Chemin([debut],debut,fin,salles);
+    debutsalle = salles[0];
+    debut =  [playground[0]-2,playground[1]-2,playground[0]-2,playground[1]-2]
+    fin = [debutsalle.porte[0]+debutsalle.gx,debutsalle.porte[1]+debutsalle.gz,debutsalle.porte[0]+debutsalle.gx,debutsalle.porte[1]+debutsalle.gz]
+    fin  = decalcub(fin, debutsalle);
     chemin[chemin.length] = new Chemin([debut],debut,fin,salles);
     let chargenext = new BABYLON.Mesh.CreateBox("cobesi",30,scene);
     chargenext.position = new BABYLON.Vector3((playground[2]+20)*taille,10,(playground[3]+20)*taille);
@@ -283,12 +289,14 @@ function createenv(vlight,marowakobj,scene){
             
             playground=[playground[2]+20,playground[3]+20,playground[2]+70,playground[3]+70]
             scene.ground.position = new BABYLON.Vector3((playground[2]+playground[2]/2)*5,0,(playground[3]+playground[3]/2)*5);
+            scene.skybox.position = new BABYLON.Vector3((playground[2]+playground[2]/2)*5,0,(playground[3]+playground[3]/2)*5);
             createenv(vlight,marowakobj,scene);
+            
             
         }
     )
     );
-    //chargenext.visibility = 0;
+    chargenext.visibility = 0;
 }
 
 function decalcub(cube,salle){
