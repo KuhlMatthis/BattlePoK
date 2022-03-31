@@ -156,9 +156,9 @@ async function createScene () {
 
     
     let alllight = new BABYLON.HemisphericLight("myLight", new BABYLON.Vector3(1, 100, 1), scene);
-    alllight.intensity = 0.7;
+    alllight.intensity = 0.4;
     // color of the light
-    alllight.diffuse = new BABYLON.Color3(1, 1, 1);
+    alllight.diffuse = new BABYLON.Color3(0.5, 0.5, 0.5);
 
     var clowlayer = new BABYLON.GlowLayer("lightglow",scene);
     clowlayer.intensity = 5;

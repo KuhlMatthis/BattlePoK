@@ -78,8 +78,7 @@ export default class Sale {
         var box1 = BABYLON.Mesh.CreateBox("Box1", this.taille, scene);
         this.box1 = box1;
         //light of all copies are only affexted by cplight2
-        cplight.includedOnlyMeshes.push(box1);
-        cplight2.includedOnlyMeshes.push(box1);
+        
 
 
         box1.Color = new BABYLON.Color3(1, 0, 0);
@@ -104,9 +103,8 @@ export default class Sale {
         //creating spher
         const sphere = BABYLON.MeshBuilder.CreateSphere("sphere", {diameterX: 5, diameterY: 5, diameterZ: 1});
 
-        // light only
-        cplight2.includedOnlyMeshes.push(box2);
-        cplight.includedOnlyMeshes.push(box1);
+        
+        
         
         var materialBox2 = new BABYLON.StandardMaterial("mat", scene);
         materialBox2.specularColor = new BABYLON.Color3(0, 0, 0);
@@ -124,6 +122,12 @@ export default class Sale {
         box2.freezeWorldMatrix();
         box2.convertToUnIndexedMesh();
         this.salleobjects = []
+
+        // light only
+        cplight.includedOnlyMeshes.push(box1);
+        cplight2.includedOnlyMeshes.push(box1);
+        cplight.includedOnlyMeshes.push(box2);
+        cplight2.includedOnlyMeshes.push(box2);
         // to be taken into account by collision detection
         //
         let boxes = [];
