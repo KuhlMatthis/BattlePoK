@@ -38,7 +38,6 @@ function startGame() {
         setTimeout(() => {
             engine.hideLoadingUI() 
         }, 2000)
-        
          // main animation loop 60 times/s
         engine.runRenderLoop(() => {
             let picatchu = scene.getMeshByName("mypicatchu");
@@ -46,7 +45,15 @@ function startGame() {
                 picatchu.Pica.move(scene,inputStates);
                 //console.log(picatchu.Pica.bounder.x);
                 
+                // when the picka is not on the ground he dies
+                if (picatchu.position.y <=0.1){
+                    setTimeout(() => {
+                        if (picatchu.position.y <=0.1){
+                            picatchu.Pica.degat(0.5);
+                    }},5000);
+                }
             }
+
             actionEnemies();    
             scene.render();
             
