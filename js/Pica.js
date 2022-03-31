@@ -221,7 +221,7 @@ export default class Pica {
 
 
     
-    move(scene,inputStates) {
+    move(scene,inputStates, mymouse) {
         
         // bloque mouvement si bounder not ready
         if (!this.bounder) return;
@@ -271,7 +271,15 @@ export default class Pica {
             this.vuecube.rotation.y += 0.06;
             this.picaMesh.frontVector = new BABYLON.Vector3(Math.sin(this.picaMesh.rotation.y), 0, Math.cos(this.picaMesh.rotation.y));
         }
-        
+        if(mymouse.x<-100){
+            this.picaMesh.rotation.y -= 0.06;
+            this.vuecube.rotation.y -= 0.06;
+            this.picaMesh.frontVector = new BABYLON.Vector3(Math.sin(this.picaMesh.rotation.y), 0, Math.cos(this.picaMesh.rotation.y)); 
+        }else if(mymouse.x>100){
+            this.picaMesh.rotation.y += 0.06;
+            this.vuecube.rotation.y += 0.06;
+            this.picaMesh.frontVector = new BABYLON.Vector3(Math.sin(this.picaMesh.rotation.y), 0, Math.cos(this.picaMesh.rotation.y));
+        }
         
         if(this.notbloque){
             if(inputStates.space){
@@ -289,6 +297,7 @@ export default class Pica {
                 }
             }else if(inputStates.fight){
                 if(this.energie>0){
+                    inputStates.fight = false;
                     this.aplyshortataccolision(scene,1,10)
                     this.energie-=1;
                     this.modifiemaxbar(this.energiebar,-1);
@@ -296,6 +305,7 @@ export default class Pica {
                 }
             }else if(inputStates.fight2){
                 if(this.energie>0){
+                    inputStates.fight2 = false;
                     this.aplyshortataccolision(scene,1,10);
                     this.animation(scene,8);
                     this.energie-=1;
@@ -303,6 +313,7 @@ export default class Pica {
                 }
             }else if(inputStates.fire2){
                 if(this.energie>0){
+                    inputStates.fire2 = false;
                     this.visibilityeclairemesh(true);
                     scene.beginAnimation(this.picaatarmature, 0, 32, false);
                     this.notbloque = false;

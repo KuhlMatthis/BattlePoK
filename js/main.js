@@ -9,8 +9,11 @@ let engine;
 let scene;
 let camera;
 
-let playground = [0,0,50,50]
+
 let inputStates = {};
+let mymouse = {};
+
+let playground = [0,0,50,50]
 let salles = [];
 let chemin = [];
 let cubes = [];
@@ -41,7 +44,7 @@ function startGame() {
         engine.runRenderLoop(() => {
             let picatchu = scene.getMeshByName("mypicatchu");
             if(picatchu){
-                picatchu.Pica.move(scene,inputStates);
+                picatchu.Pica.move(scene,inputStates,mymouse);
                 //console.log(picatchu.Pica.bounder.x);
                 if(picatchu.Pica.life <=0){
                     const promise = createScene();
@@ -396,6 +399,7 @@ function createFollowCamera(scene, pos, target) {
 function modifySettings() {
     // as soon as we click on the game window, the mouse pointer is "locked"
     // you will have to press ESC to unlock it
+    /*
     scene.onPointerDown = () => {
         if(!scene.alreadyLocked) {
             console.log("requesting pointer lock");
@@ -414,8 +418,8 @@ function modifySettings() {
             scene.alreadyLocked = false;
         }
     })
-
-    // key listeners for the tank
+    */
+    // key listeners for the player
     inputStates.left = false;
     inputStates.right = false;
     inputStates.up = false;
@@ -425,6 +429,12 @@ function modifySettings() {
     inputStates.fight = false;
     inputStates.fight2 = false;
     inputStates.fire2 = false;
+    
+
+
+    // mouse listener for the player
+    mymouse.x = 0;
+    mymouse.y = 0;
     
     //add the listener to the main, window object, and update the states
     window.addEventListener('keydown', (event) => {
@@ -476,6 +486,20 @@ function modifySettings() {
         }
     }, false);
 
+    window.addEventListener('mousemove', (event) => {
+        mymouse.x = event.pageX-document.documentElement.clientWidth/2;
+        mymouse.y = event.pageY-document.documentElement.clientHeight/2;
+        //console.log(x, y);
+      },false);
+    
+    window.addEventListener('click',(event) => {
+        inputStates.fire2 = true;
+        console.log("click");
+    },false);
+    window.addEventListener('contextmenu',(event) => {
+        inputStates.fight = true;
+        console.log("lclick");
+    },false);
     
 }
 
