@@ -44,7 +44,22 @@ function startGame() {
             if(picatchu){
                 picatchu.Pica.move(scene,inputStates);
                 //console.log(picatchu.Pica.bounder.x);
-                
+                if(picatchu.Pica.life <=0){
+                    const promise = createScene();
+                    while(!promise){
+
+                    }
+                    promise.then(() => {
+                    let picamesh = scene.pica.bounder;
+                    picamesh.position.x = salles[0].ox+50;
+                    picamesh.position.z = salles[0].oz+50;
+                    picamesh.position.y = 10;
+                    scene.activeCamera = createFollowCamera(scene,picamesh.position, scene.pica.vuecube);
+                    
+            
+                    modifySettings();
+                    });
+                }
                 // when the picka is not on the ground he dies
                 if (picatchu.position.y <=0.1){
                     setTimeout(() => {
