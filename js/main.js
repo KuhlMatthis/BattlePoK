@@ -32,7 +32,7 @@ function startGame() {
         
         
         
-        scene.activeCamera = createFollowCamera(scene,picamesh.position, scene.pica.vuecube);*/
+        scene.activeCamera = createFollowCamera(scene,picamesh.position, scene.pica.vuecube);
         
 
         
