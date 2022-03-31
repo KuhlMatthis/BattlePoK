@@ -126,6 +126,15 @@ export default class Chemin {
         }
         return true;
     }
+
+    chemindispose(){
+        this.boxes.forEach(box => {
+            box.dispose()
+        });
+    }
+
+
+
     /**
      * forme x,y,x2,y2
      * @param {*} cube1 
