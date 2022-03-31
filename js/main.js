@@ -9,6 +9,7 @@ let engine;
 let scene;
 let camera;
 
+let playground = [0,0,50,50]
 let inputStates = {};
 let salles = [];
 let chemin = [];
@@ -29,13 +30,9 @@ function startGame() {
         picamesh.position.x = salles[0].ox+50;
         picamesh.position.z = salles[0].oz+50;
         picamesh.position.y = 10;
-        
-        
-        
         scene.activeCamera = createFollowCamera(scene,picamesh.position, scene.pica.vuecube);
         
 
-        
         modifySettings();
 
         setTimeout(() => {
@@ -44,15 +41,14 @@ function startGame() {
         
          // main animation loop 60 times/s
         engine.runRenderLoop(() => {
-            
             let picatchu = scene.getMeshByName("mypicatchu");
             if(picatchu){
                 picatchu.Pica.move(scene,inputStates);
+                //console.log(picatchu.Pica.bounder.x);
                 
             }
             actionEnemies();    
             scene.render();
-            
             
         });
     });
@@ -137,11 +133,6 @@ async function createScene () {
 
 
     createenv(vlight,marowakobj,scene);
-
-    let box = new BABYLON.Mesh.CreateBox("Box1", 4, scene);
-    box.position.x = 0;
-    box.position.z = -10;
-    box.position.y = 7;
     
     
     
@@ -161,8 +152,8 @@ function createenv(vlight,marowakobj,scene){
         let z;
         while(!found){
             found = true;
-            x = parseInt(Math.random()*50);
-            z = parseInt(Math.random()*50);
+            x = parseInt(playground[0]+Math.random()*(playground[2]-playground[0]));
+            z = parseInt(playground[1]+Math.random()*(playground[3]-playground[1]));
             y = 0;
             for(let icubes= 0; icubes<cubes.length; icubes++){
                 if(containe([x,z,x+20,z+20], cubes[icubes])){
@@ -179,17 +170,16 @@ function createenv(vlight,marowakobj,scene){
               {
                 trigger: BABYLON.ActionManager.OnIntersectionEnterTrigger,
                 parameter: scene.pica.bounder,
-              }, // dude is the mesh, Dude is the instance if Dude class that has a bbox as a property named bounder.
-              // see Dude class, line 16 ! dudeMesh.Dude = this;
+              },
               () => {
                     salles[i].createroom(marowakobj, scene);
+                    // boucles sur les autres salles est les décharger
                 }
             )
           );
         chargecubes[i].visibility = 0;
         salles[i] = new Sale(x,z,y,19,19,5,taille, scene);
         salles[i].create(vlight, scene);
-        
     }
       
     for(let isalle = 0; isalle<salles.length-1; isalle++){
@@ -201,6 +191,38 @@ function createenv(vlight,marowakobj,scene){
         fin  = decalcub(fin, endsalle);
         chemin[isalle] = new Chemin([debut],debut,fin,salles);
     }
+    let debutsalle = salles[salles.length-1];
+    let debut = [debutsalle.porte[0]+debutsalle.gx,debutsalle.porte[1]+debutsalle.gz,debutsalle.porte[0]+debutsalle.gx,debutsalle.porte[1]+debutsalle.gz]
+    let fin = [playground[2]+20,playground[3]+20,playground[2]+20,playground[3]+20+1]
+    debut = decalcub(debut, debutsalle);
+    chemin[chemin.length] = new Chemin([debut],debut,fin,salles);
+    let chargenext = new BABYLON.Mesh.CreateBox("cobesi",30,scene);
+    chargenext.position = new BABYLON.Vector3((playground[2]+20)*taille,10,(playground[3]+20)*taille);
+    chargenext.actionManager = new BABYLON.ActionManager(scene);
+    chargenext.actionManager.registerAction(
+    new BABYLON.ExecuteCodeAction(
+        {
+        trigger: BABYLON.ActionManager.OnIntersectionEnterTrigger,
+        parameter: scene.pica.bounder,
+        },
+        () => {
+            chargenext.dispose();
+            salles.forEach(salle => {
+                salle.disposesalle()
+            });
+            chemin.forEach(unchemin => {
+                unchemin.chemindispose()
+            });
+            chargecubes.forEach(chargecube => {
+                chargecube.dispose();
+            });
+            
+            playground=[playground[2]+20,playground[3]+20,playground[2]+70,playground[3]+70]
+            createenv(vlight,marowakobj,scene);
+        }
+    )
+    );
+    //chargenext.visibility = 0;
 }
 
 function decalcub(cube,salle){

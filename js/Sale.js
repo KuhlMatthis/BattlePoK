@@ -19,6 +19,7 @@ export default class Sale {
         this.loaded = 0;
         this.boxes;
         this.box1;
+        this.lights = []
     }
 
     create(vlight,marowakobj,scene) {
@@ -28,8 +29,9 @@ export default class Sale {
         let posz = parseInt(this.oz+Math.random()*60+80);
         let cvlight = vlight.createInstance("vlight1")
         cvlight.position = new BABYLON.Vector3(posx,  20, posz)
-        
+        this.lights[0] = cvlight;
         let cplight = new BABYLON.PointLight("myLight1", new BABYLON.Vector3(posx,  20, posz), scene);
+        this.lights[1] = cplight;
         cplight.intensity = 5;
         cplight.range = 100;
         cplight.diffuse = new BABYLON.Color3(1, 0.1, 0.1);  
@@ -50,8 +52,9 @@ export default class Sale {
         let pos2z = parseInt(this.oz+Math.random()*40+20);
         let cvlight2 = vlight.createInstance("vlight1")
         cvlight2.position = new BABYLON.Vector3(pos2x,  20, pos2z)
-        
+        this.lights[2] = cvlight2;
         let cplight2 = new BABYLON.PointLight("myLight2", new BABYLON.Vector3(pos2x,  20, pos2z), scene);
+        this.lights[3] = cplight2;
         cplight2.intensity = 5;
         cplight2.range = 100;
         
@@ -210,6 +213,15 @@ let boxs = [];
             }
         }
         
+    }
+
+    disposesalle(){
+        this.boxes.forEach(box => {
+            box.dispose()
+        }); 
+        this.lights.forEach(light => {
+            light.dispose()
+        });
     }
 
 
