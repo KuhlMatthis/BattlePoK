@@ -13,6 +13,7 @@ let inputStates = {};
 let salles = [];
 let chemin = [];
 let cubes = [];
+let chargecubes = [];
     
 
 window.onload = startGame;
@@ -22,26 +23,40 @@ function startGame() {
     engine = new BABYLON.Engine(canvas, true);
     engine.displayLoadingUI();
     const promise = createScene();
-    promise.then(() => {
+    promise.then(() => { 
         setTimeout(() => {engine.hideLoadingUI()}, 4000);
-    });
-    modifySettings();
-    // main animation loop 60 times/s
-    engine.runRenderLoop(() => {
-        let picatchu = scene.getMeshByName("mypicatchu");
-        if(picatchu){
-            picatchu.Pica.move(scene,inputStates);
-        }
-        // when the picka is not on the ground he dies
-        setTimeout(() => {
-            if (picatchu.position.y <=0.1){
-            setTimeout(() => {picatchu.Pica.degat(0.5)},2000);
-            scene.actionManager.registerAction(new BABYLON.ExecuteCodeAction({},clear));
-        }},5000);
-        actionEnemies();    
-        scene.render();
+        let picamesh = scene.pica.bounder;
+        picamesh.position.x = salles[0].ox+50;
+        picamesh.position.z = salles[0].oz+50;
+        picamesh.position.y = 10;
         
+        
+        
+        scene.activeCamera = createFollowCamera(scene,picamesh.position, scene.pica.vuecube);*/
+        
+
+        
+        modifySettings();
+
+        setTimeout(() => {
+            engine.hideLoadingUI() 
+        }, 2000)
+        
+         // main animation loop 60 times/s
+        engine.runRenderLoop(() => {
+            
+            let picatchu = scene.getMeshByName("mypicatchu");
+            if(picatchu){
+                picatchu.Pica.move(scene,inputStates);
+                
+            }
+            actionEnemies();    
+            scene.render();
+            
+            
+        });
     });
+    //scene.assetsManager.load();
 }
 
 async function createScene () {
@@ -50,6 +65,8 @@ async function createScene () {
     canvas = document.querySelector("#myCanvas");
     scene.enablePhysics();
     scene.enemies = [];
+    scene.blockMaterialDirtyMechanism = true;
+    scene.blockfreeActiveMeshesAndRenderingGroups = true;
     var physicsEngine =  scene.getPhysicsEngine();
     //Get gravity
     var gravity = physicsEngine.gravity;
@@ -57,7 +74,7 @@ async function createScene () {
     //Set gravity
     physicsEngine.setGravity(new BABYLON.Vector3(0, 0, 0))
     
-    let ground = BABYLON.MeshBuilder.CreateGround("myGround", {width: 4000, height: 4000, segments:1}, scene);
+    let ground = BABYLON.MeshBuilder.CreateGround("myGround", {width: 3000, height: 3000, segments:1}, scene);
     ground.checkCollisions = true;
     //ground.physicsImpostor = new BABYLON.PhysicsImpostor(ground, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, friction: 0.5, restitution: 0.7 }, scene);
     let groundMatrial = new BABYLON.StandardMaterial("mat", scene);
@@ -67,7 +84,14 @@ async function createScene () {
     scene.fogMode = BABYLON.Scene.FOGMODE_EXP;
     scene.fogColor = new BABYLON.Color3(0.2, 0.2, 0.2);
     scene.fogDensity = 0.005;
+    camera = new BABYLON.FreeCamera("myCamera", new BABYLON.Vector3(0, 5, 10), scene);
+    camera.attachControl(canvas);
+    //scene.assetsManager = configureAssetManager(scene);
 
+    const vlightmesh = await BABYLON.SceneLoader.ImportMeshAsync("", "3dmodule/light/", "light.babylon", scene);
+    const marowakobj = await BABYLON.SceneLoader.ImportMeshAsync("", "3dmodule/Marowak/", "marowak.babylon", scene);
+    const picaeclaireobj = await BABYLON.SceneLoader.ImportMeshAsync("", "3dmodule/Picatchu/Picalightatac/", "picalightatc.babylon", scene); 
+    const picamesh = await BABYLON.SceneLoader.ImportMeshAsync("", "3dmodule/Picatchu/", "picatchu5d.babylon", scene);
     //var skybox = BABYLON.Mesh.CreateBox("BackgroundSkybox", 500, scene, undefined, BABYLON.Mesh.BACKSIDE);
     
     // Create and tweak the background material.
@@ -80,14 +104,8 @@ async function createScene () {
 
     //let ground = BABYLON.MeshBuilder.CreateGround("myGround", {width: 60, height: 60}, scene);
     
-    //scene.collisionsEnabled = true;
-    camera = new BABYLON.FreeCamera("myCamera", new BABYLON.Vector3(0, 5, 10), scene);
-    // This targets the camera to scene origin
-    camera.attachControl(canvas);
-    /*camera.checkCollisions = true;
-    camera.collisionRadius = new BABYLON.Vector3(10, 10, 10);
-    camera.inputs.removeByType("FreeCameraKeyboardMoveInput");
-    */
+    scene.collisionsEnabled = true;
+
     
     let alllight = new BABYLON.HemisphericLight("myLight", new BABYLON.Vector3(1, 100, 1), scene);
     alllight.intensity = 0.5;
@@ -97,49 +115,37 @@ async function createScene () {
     var clowlayer = new BABYLON.GlowLayer("lightglow",scene);
     clowlayer.intensity = 5;
     
-    const vlightmesh = await BABYLON.SceneLoader.ImportMeshAsync("", "3dmodule/light/", "light.babylon", scene);
+    
     let vlight = vlightmesh.meshes[0];
+    vlight.addLODLevel(200, null);
+    vlight.setEnabled(false);
     let larmature = vlightmesh.skeletons[0];
     scene.beginAnimation(larmature, 0, 16, true, 1);
     vlight.name = "vlight"
     vlight.scaling = new BABYLON.Vector3(0.5, 0.5, 0.5)
-
+    
     
     //clowlayer.addIncludedOnlyMesh(vlight)
-    //vlight.diffuseColor = new BABYLON.Color3(Math.random(), Math.random(), Math.random());
+    vlight.diffuseColor = new BABYLON.Color3(Math.random(), Math.random(), Math.random());
     
-    const marowakobj = await BABYLON.SceneLoader.ImportMeshAsync("", "3dmodule/Marowak/", "marowak.babylon", scene);
-    const picaeclaireobj = await BABYLON.SceneLoader.ImportMeshAsync("", "3dmodule/Picatchu/Picalightatac/", "picalightatc.babylon", scene); 
-    const picamesh = await BABYLON.SceneLoader.ImportMeshAsync("", "3dmodule/Picatchu/", "picatchu5d.babylon", scene);
+    
     let picatchu = picamesh.meshes[0];
 
-    
-    createenv(vlight,marowakobj,scene);
-    
-    picatchu.position.x = salles[0].ox+50;
-    picatchu.position.z = salles[0].oz+50;
-    picatchu.position.y = 7;
-    //camera.position = new BABYLON.Vector3(picatchu.position.x-10,picatchu.position.y+3, picatchu.position.z);
     let armature = picamesh.skeletons[0];
     picatchu.name = "mypicatchu";
-    let pica = new Pica(picatchu,armature,picaeclaireobj, 2,scene);
-    scene.activeCamera = createFollowCamera(scene, pica.vuecube);
+    scene.pica = new Pica(picatchu,armature,picaeclaireobj, 2,scene);    
 
-    
-    
 
-    
+    createenv(vlight,marowakobj,scene);
 
+    let box = new BABYLON.Mesh.CreateBox("Box1", 4, scene);
+    box.position.x = 0;
+    box.position.z = -10;
+    box.position.y = 7;
     
-    /*let marowakmesh = marowakobj.meshes[0];
-    let marowakarmature = marowakobj.skeletons[0];
-    marowakmesh.position.x = salles[0].ox+100;
-    marowakmesh.position.z = salles[0].oz+50;
-    marowakmesh.position.y = 10;
-    marowakmesh.name = "marowakmesh";
-    let marowak = new Enemi(marowakmesh,marowakarmature,1,7,scene);
-    scene.enemies.push(marowakmesh);
-    */
+    
+    
+    //camera.position = new BABYLON.Vector3(picatchu.position.x-10,picatchu.position.y+3, picatchu.position.z);
 
     return scene;
 }
@@ -165,8 +171,24 @@ function createenv(vlight,marowakobj,scene){
             }
         }
         cubes[i] = [x,z,x+20,z+20];
+        chargecubes[i] = new BABYLON.Mesh.CreateBox("cobesi",220,scene);
+        chargecubes[i].position = new BABYLON.Vector3((x+9)*taille,y,(z+9)*taille);
+        chargecubes[i].actionManager = new BABYLON.ActionManager(scene);
+        chargecubes[i].actionManager.registerAction(
+            new BABYLON.ExecuteCodeAction(
+              {
+                trigger: BABYLON.ActionManager.OnIntersectionEnterTrigger,
+                parameter: scene.pica.bounder,
+              }, // dude is the mesh, Dude is the instance if Dude class that has a bbox as a property named bounder.
+              // see Dude class, line 16 ! dudeMesh.Dude = this;
+              () => {
+                    salles[i].createroom(marowakobj, scene);
+                }
+            )
+          );
+        chargecubes[i].visibility = 0;
         salles[i] = new Sale(x,z,y,19,19,5,taille, scene);
-        salles[i].create(vlight, marowakobj, scene);
+        salles[i].create(vlight, scene);
         
     }
       
@@ -260,9 +282,9 @@ function createFreeCamera(scene) {
     return camera;
 }
 
-function createFollowCamera(scene, target) {
+function createFollowCamera(scene, pos, target) {
     //let camera = new BABYLON.ArcFollowCamera("picatchuFollowCamera", target.position, scene)
-    let camera = new BABYLON.FollowCamera("picatchuFollowCamera", target.position, scene, target);
+    let camera = new BABYLON.FollowCamera("picatchuFollowCamera", pos, scene, target);
     //camera.setMeshTarget(target);
     camera.radius = 30; // how far from the object to follow
 	camera.heightOffset = 5; // how high above the object to place the camera

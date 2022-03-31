@@ -1,6 +1,7 @@
 //import * as BABYLON from "@babylonjs/core";
 
 export default class Pica {
+    
     constructor(picaMesh, armature ,picaeclaireobj, speed,scene) {
         this.picaMesh = picaMesh;
         this.armature = armature;
@@ -62,7 +63,7 @@ export default class Pica {
         this.expblackbar.position.z +=0.1;
         this.expblackbar.material = blackmat;
         this.expblackbar.scaling.x = this.nextlevelexperience;
-
+    
 
         //creer bar d'energie
         this.maxenergie=5;
@@ -376,6 +377,4 @@ export default class Pica {
             }  
 	    }
     }
-        
-
 }

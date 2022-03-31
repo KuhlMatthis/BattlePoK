@@ -5,11 +5,19 @@ export default class Chemin {
         this.salles = salles;
         this.box = BABYLON.Mesh.CreateBox("Box1", 10, scene);
         this.box.Color = new BABYLON.Color3(1, 0, 0);
+        this.box.setEnabled(false);
+        this.box.addLODLevel(500, null);
         var materialBox = new BABYLON.StandardMaterial("mat", scene);
         var texture = new BABYLON.Texture("img/sole2.jpg", scene);
         materialBox.diffuseTexture = texture;
         materialBox.specularColor = new BABYLON.Color3(0, 0, 0);
+        materialBox.freeze();
         this.box.material = materialBox;
+        this.box.setEnabled(false);
+        this.box.addLODLevel(500, null);
+        this.box.computeWorldMatrix();
+        this.box.freezeWorldMatrix();
+        this.box.convertToUnIndexedMesh();
         this.box.position.y = 0;
         this.boxes = [];
         this.pos = pos;
@@ -69,6 +77,7 @@ export default class Chemin {
         this.boxes[this.boxes.length-1].position.x = mypos[0]*10;
         this.boxes[this.boxes.length-1].position.z = mypos[1]*10;
         this.boxes[this.boxes.length-1].checkCollisions = true;
+
         //this.boxes[this.boxes.length-1].physicsImpostor = new BABYLON.PhysicsImpostor(this.boxes[this.boxes.length-1], BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0 }, this.scene );
     }
 

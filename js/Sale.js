@@ -16,13 +16,13 @@ export default class Sale {
         this.t = 3;
         this.porte = this.createporte();
         this.cub = [this.gx,this.gz,this.gx+this.length-1,this.gz+this.width-1];
+        this.loaded = 0;
+        this.boxes;
+        this.box1;
     }
 
     create(vlight,marowakobj,scene) {
-        let marowakmesh = this.doClone(marowakobj.meshes[0],  marowakobj.skeletons,1)
-        marowakmesh.position = new BABYLON.Vector3(this.ox+100, 8, this.oz+100)
-        let marowak = new Enemi(marowakmesh,marowakmesh.skeleton,1,7,scene);
-        scene.enemies.push(marowakmesh);
+        
 
         let posx = parseInt(this.ox+Math.random()*60+80);
         let posz = parseInt(this.oz+Math.random()*60+80);
@@ -69,7 +69,7 @@ export default class Sale {
         }
 
         var box1 = BABYLON.Mesh.CreateBox("Box1", this.taille, scene);
-        
+        this.box1 = box1;
         //light of all copies are only affexted by cplight2
         cplight.includedOnlyMeshes.push(box1);
         cplight2.includedOnlyMeshes.push(box1);
@@ -80,12 +80,18 @@ export default class Sale {
         var texture = new BABYLON.Texture("img/sole2.jpg", scene);
         materialBox.specularColor = new BABYLON.Color3(0, 0, 0);
         materialBox.diffuseTexture = texture;
+        materialBox.freeze();
         box1.material = materialBox;
         box1.position.y= this.oy;
         box1.position.x= this.ox;
         box1.position.z= this.oz;
         box1.checkCollisions = true;
+        box1.setEnabled(false);
+        box1.addLODLevel(500, null);
         box1.computeWorldMatrix();
+        box1.freezeWorldMatrix();
+        box1.convertToUnIndexedMesh();
+        
         var box2 = BABYLON.Mesh.CreateBox("Box1", this.taille, scene);
         
         //creating spher
@@ -99,6 +105,7 @@ export default class Sale {
         materialBox2.specularColor = new BABYLON.Color3(0, 0, 0);
         var texture2 = new BABYLON.Texture("img/mure.jpg", scene);
         materialBox2.diffuseTexture = texture2;
+        materialBox2.freeze()
         // to be taken into account by collision detection
         //box1.checkCollisions = true;
 
@@ -106,8 +113,12 @@ export default class Sale {
         box2.position.y= this.oy;
         box2.position.x= this.ox;
         box2.position.z= this.oz;
+        box2.setEnabled(false);
+        box2.addLODLevel(500, null);
         box2.checkCollisions = true;
-        box2.physicsImpostor = new BABYLON.PhysicsImpostor(box2, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 1 }, scene);
+        box2.computeWorldMatrix();
+        box2.freezeWorldMatrix();
+        box2.convertToUnIndexedMesh();
         // to be taken into account by collision detection
         //
         let boxes = [];
@@ -120,23 +131,7 @@ let boxs = [];
                         boxes[nb] = box1.createInstance("copySaleSolebox"+nb);
                         boxes[nb].position.x += x*this.taille;
                         boxes[nb].position.z += z*this.taille;
-                        if(nb==10 || nb == 20 || nb==15 || nb == 25 || nb==35 || nb == 45){
-                            sphere.position.x = boxes[nb].position.x ;
-                            sphere.position.y = 12;
-                            sphere.position.z = boxes[nb].position.z -100;
-                            for(let j = 0; j< 5 ; j++){
-                                boxs[nb] = box2.createInstance("objet"+nb);
-                                boxs[nb].position.x = boxes[nb].position.x + 30 + 10;
-                                boxs[nb].position.z = boxes[nb].position.z + 10 + 10;
-                                boxs[nb].position.y =  10 + (j*10);
-                                if(nb==60){
-                                    boxs[nb].position.x = boxes[nb].position.x + 30 + 10;
-                                    boxs[nb].position.z = boxes[nb].position.z + 10 ;
-                                    boxs[nb].position.y = 10 + (j*10);
-                                }
-                                boxs[nb].checkCollisions=true;
-                            }
-                        }
+                        boxes[nb].freezeWorldMatrix();
                         //collision
                         boxes[nb].checkCollisions = true;
                         //boxes[nb].physicsImpostor = new BABYLON.PhysicsImpostor(boxes[nb], BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0 }, scene);
@@ -147,57 +142,19 @@ let boxs = [];
                             boxes[nb].position.x += x*this.taille;
                             boxes[nb].position.z += z*this.taille;
                             boxes[nb].position.y += y*this.taille;
-                            if(nb==60 || nb == 70 || nb==65 || nb == 85 || nb==75 || nb == 45 ){
-                                sphere.position.x = boxes[nb].position.x +30;
-                            sphere.position.y = 12;
-                            sphere.position.z = boxes[nb].position.z -100 ;
-                                for(let j = 0; j< 5 ; j++){
-                                    boxs[nb] = box2.createInstance("objet"+nb);
-                                    boxs[nb].position.x = boxes[nb].position.x + 30 + 10;
-                                    boxs[nb].position.z = boxes[nb].position.z + 10 + 10;
-                                    if(nb==60){
-                                        boxs[nb].position.x = boxes[nb].position.x + 30 + 10;
-                                        boxs[nb].position.z = boxes[nb].position.z + 10 ;
-                                        boxs[nb].position.y = 10 + (j*10);
-                                    }
-                                    boxs[nb].position.y = 10 + (j*10);
-                                    boxs[nb].checkCollisions=true;
-                                }
-                            }
+                            boxes[nb].freezeWorldMatrix();
                             //boxes[nb].physicsImpostor = new BABYLON.PhysicsImpostor(boxes[nb], BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 1 }, scene);
                             boxes[nb].checkCollisions = true;
                             nb+=1;  
                         }
                     }
-                }else{
-                    boxes[nb] = box1.createInstance("copySaleSolebox"+nb);
-                    boxes[nb].position.x += x*this.taille;
-                    boxes[nb].position.z += z*this.taille;
-                    if(nb==10 || nb == 20 || nb==15 || nb == 25 || nb==35 || nb == 45){
-                        sphere.position.x = boxes[nb].position.x+20 ;
-                            sphere.position.y = 12;
-                            sphere.position.z = boxes[nb].position.z -100;
-                        for(let j = 0; j< 5 ; j++){
-                            boxs[nb] = box2.createInstance("objet"+nb);
-                            boxs[nb].position.x = boxes[nb].position.x + 30 + (j*10);
-                            boxs[nb].position.z = boxes[nb].position.z + 10 + 10;
-                            boxs[nb].position.y = 10 + (j*10);
-                            if(nb==60 || nb == 70 || nb==65 || nb == 85 || nb==75 || nb == 45){
-                                boxs[nb].position.x = boxes[nb].position.x + 30 + 10;
-                                boxs[nb].position.z = boxes[nb].position.z + 10 ;
-                                boxs[nb].position.y = 10 + (j*10);
-                            }
-                            boxs[nb].checkCollisions=true;
-                        }
-                    }
-                    //boxes[nb].physicsImpostor = new BABYLON.PhysicsImpostor(boxes[nb], BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0 }, scene);
-                    boxes[nb].checkCollisions = true;
-                    nb+=1;
                 }
             }    
         }
+        this.boxes = boxes;
     }
     createporte() {
+        
         let descript = [];
         let val = parseInt(Math.random ()*4);
         if(val==0){
@@ -227,6 +184,32 @@ let boxs = [];
         }
         
         return descript;
+
+    }
+
+    createroom(marowakobj,scene){
+        if(this.loaded == 0){
+            let boxes = this.boxes;
+            let nb = this.boxes.length;
+            let marowakmesh = this.doClone(marowakobj.meshes[0],  marowakobj.skeletons,1)
+            marowakmesh.addLODLevel(200, null);
+            marowakmesh.position = new BABYLON.Vector3(this.ox+100, 8, this.oz+100)
+            let marowak = new Enemi(marowakmesh,marowakmesh.skeleton,1,7,scene);
+            scene.enemies.push(marowakmesh);
+            console.log("passe");
+            this.loaded=1;
+            for (let x = 0; x < this.length; x++) {
+                for(let z = 0; z < this.width; z++){
+                    boxes[nb] = this.box1.createInstance("copySaleSolebox"+nb);
+                    boxes[nb].position.x += x*this.taille;
+                    boxes[nb].position.z += z*this.taille;
+                    boxes[nb].freezeWorldMatrix();
+                    boxes[nb].checkCollisions = true;
+                    nb+=1;
+                }
+            }
+        }
+        
     }
 
 
