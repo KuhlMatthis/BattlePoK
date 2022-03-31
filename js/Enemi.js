@@ -71,6 +71,7 @@ export default class Enemi {
         this.bounder = this.createBoundingBox();
         this.bounder.ellipsoid = new BABYLON.Vector3(4, 5, 4);
         this.bounder.checkCollisions = true;
+        this.bounder.physicsImpostor = new BABYLON.PhysicsImpostor(this.bounder, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0 }, scene);
         //this.bounder.isVisible = false; not good because block raycasting
     
         this.bounder.enemiMesh = this.enemiMesh;
@@ -124,7 +125,7 @@ export default class Enemi {
             }
         }
     }
-
+    
     /*
     //peut etre util rajouter un evenement en physic a l'animation a une frame
     var event1 = new BABYLON.AnimationEvent(

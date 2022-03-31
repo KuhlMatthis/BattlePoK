@@ -20,19 +20,21 @@ export default class Sale {
         this.boxes;
         this.box1;
         this.lights = []
+        this.salleenv = []
+        this.enemies = []
     }
 
-    create(vlight,marowakobj,scene) {
-        
+    create(vlight,scene) {
 
         let posx = parseInt(this.ox+Math.random()*60+80);
         let posz = parseInt(this.oz+Math.random()*60+80);
         let cvlight = vlight.createInstance("vlight1")
         cvlight.position = new BABYLON.Vector3(posx,  20, posz)
-        this.lights[0] = cvlight;
+        this.salleenv.push(cvlight);
         let cplight = new BABYLON.PointLight("myLight1", new BABYLON.Vector3(posx,  20, posz), scene);
         this.lights[1] = cplight;
-        cplight.intensity = 5;
+        //this.salleenv.push(cplight)
+        cplight.intensity = 10;
         cplight.range = 100;
         cplight.diffuse = new BABYLON.Color3(1, 0.1, 0.1);  
         cplight.specularColor = new BABYLON.Color3(0, 0, 0);
@@ -51,13 +53,14 @@ export default class Sale {
         let pos2x = parseInt(this.ox+Math.random()*40+20);
         let pos2z = parseInt(this.oz+Math.random()*40+20);
         let cvlight2 = vlight.createInstance("vlight1")
+        this.salleenv.push(cvlight2)
         cvlight2.position = new BABYLON.Vector3(pos2x,  20, pos2z)
         this.lights[2] = cvlight2;
         let cplight2 = new BABYLON.PointLight("myLight2", new BABYLON.Vector3(pos2x,  20, pos2z), scene);
         this.lights[3] = cplight2;
         cplight2.intensity = 5;
         cplight2.range = 100;
-        
+        //this.salleenv.push(cplight2)        
 
         let choice2 = parseInt(Math.random()*3)
         cplight2.diffuse = new BABYLON.Color3(1, 0.1, 0.1);  
@@ -70,6 +73,7 @@ export default class Sale {
         else{
             cplight2.diffuse = new BABYLON.Color3(0.1, 0.1, 1);    
         }
+        
 
         var box1 = BABYLON.Mesh.CreateBox("Box1", this.taille, scene);
         this.box1 = box1;
@@ -109,9 +113,6 @@ export default class Sale {
         var texture2 = new BABYLON.Texture("img/mure.jpg", scene);
         materialBox2.diffuseTexture = texture2;
         materialBox2.freeze()
-        // to be taken into account by collision detection
-        //box1.checkCollisions = true;
-
         box2.material = materialBox2;
         box2.position.y= this.oy;
         box2.position.x= this.ox;
@@ -122,10 +123,10 @@ export default class Sale {
         box2.computeWorldMatrix();
         box2.freezeWorldMatrix();
         box2.convertToUnIndexedMesh();
+        this.salleobjects = []
         // to be taken into account by collision detection
         //
         let boxes = [];
-let boxs = [];
         let nb = 0
         for (let x = 0; x < this.length; x++) {
             for(let z = 0; z < this.width; z++){
@@ -151,10 +152,22 @@ let boxs = [];
                             nb+=1;  
                         }
                     }
+                }else{
+                    boxes[nb] = this.box1.createInstance("copySaleSolebox"+nb);
+                    boxes[nb].position.x += x*this.taille;
+                    boxes[nb].position.z += z*this.taille;
+                    boxes[nb].freezeWorldMatrix();
+                    boxes[nb].checkCollisions = true;
+                    this.salleenv.push(boxes[nb]);
+                    nb+=1; 
                 }
             }    
         }
         this.boxes = boxes;
+        // fais desenable tous les objets interne
+        this.salleenv.forEach(element => {
+            element.setEnabled(false);
+        });
     }
     createporte() {
         
@@ -191,29 +204,28 @@ let boxs = [];
     }
 
     createroom(marowakobj,scene){
-        if(this.loaded == 0){
-            let boxes = this.boxes;
-            let nb = this.boxes.length;
-            let marowakmesh = this.doClone(marowakobj.meshes[0],  marowakobj.skeletons,1)
-            marowakmesh.addLODLevel(200, null);
-            marowakmesh.position = new BABYLON.Vector3(this.ox+100, 8, this.oz+100)
-            let marowak = new Enemi(marowakmesh,marowakmesh.skeleton,1,7,scene);
-            scene.enemies.push(marowakmesh);
-            console.log("passe");
-            this.loaded=1;
-            for (let x = 0; x < this.length; x++) {
-                for(let z = 0; z < this.width; z++){
-                    boxes[nb] = this.box1.createInstance("copySaleSolebox"+nb);
-                    boxes[nb].position.x += x*this.taille;
-                    boxes[nb].position.z += z*this.taille;
-                    boxes[nb].freezeWorldMatrix();
-                    boxes[nb].checkCollisions = true;
-                    nb+=1;
-                }
-            }
-        }
-        
+        this.salleenv.forEach(element => {
+            element.setEnabled(true);
+        });
+        let marowakmesh = this.doClone(marowakobj.meshes[0],  marowakobj.skeletons,1)
+        marowakmesh.addLODLevel(200, null);
+        marowakmesh.position = new BABYLON.Vector3(this.ox+100, 8, this.oz+100)
+        let marowak = new Enemi(marowakmesh,marowakmesh.skeleton,1,7,scene);
+        scene.enemies.push(marowakmesh);
+        this.enemies.push(marowakmesh);    
     }
+    disolveroom(scene){
+        this.salleenv.forEach(element => {
+            element.setEnabled(false);
+        });
+        this.enemies.forEach(enemi => {
+            scene.enemies.pop(enemi);
+            enemi.dispose();
+            enemi.Enemi.bounder.dispose();
+        });
+        this.enemies = [];
+    }
+
 
     disposesalle(){
         this.boxes.forEach(box => {

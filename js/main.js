@@ -25,13 +25,12 @@ function startGame() {
     engine.displayLoadingUI();
     const promise = createScene();
     promise.then(() => { 
-        setTimeout(() => {engine.hideLoadingUI()}, 4000);
         let picamesh = scene.pica.bounder;
         picamesh.position.x = salles[0].ox+50;
         picamesh.position.z = salles[0].oz+50;
         picamesh.position.y = 10;
         scene.activeCamera = createFollowCamera(scene,picamesh.position, scene.pica.vuecube);
-        
+
 
         modifySettings();
 
@@ -61,12 +60,12 @@ function startGame() {
                     });
                 }
                 // when the picka is not on the ground he dies
-                if (picatchu.position.y <=0.1){
+                /*if (picatchu.position.y <=0.1){
                     setTimeout(() => {
                         if (picatchu.position.y <=0.1){
                             picatchu.Pica.degat(0.5);
                     }},5000);
-                }
+                }*/
             }
 
             actionEnemies();    
@@ -92,16 +91,47 @@ async function createScene () {
     //Set gravity
     physicsEngine.setGravity(new BABYLON.Vector3(0, 0, 0))
     
-    let ground = BABYLON.MeshBuilder.CreateGround("myGround", {width: 3000, height: 3000, segments:1}, scene);
+    let ground = BABYLON.MeshBuilder.CreateGround("myGround", {width: 1500, height: 1500, segments:1}, scene);
+    ground.position = new BABYLON.Vector3(250,0,250);
     ground.checkCollisions = true;
     //ground.physicsImpostor = new BABYLON.PhysicsImpostor(ground, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, friction: 0.5, restitution: 0.7 }, scene);
     let groundMatrial = new BABYLON.StandardMaterial("mat", scene);
     var texture = new BABYLON.Texture("img/sole1.jpg", scene);
     groundMatrial.diffuseTexture = texture;
     ground.material = groundMatrial;
+    scene.ground = ground;
+    var skybox = BABYLON.Mesh.CreateBox("BackgroundSkybox", 1500, scene, undefined, BABYLON.Mesh.BACKSIDE);
+    var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
+	skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("img/skybox/skybox", scene);
+	skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+	skyboxMaterial.diffuseColor = new BABYLON.Color3(0.72, 0.4, 0.61);
+	skyboxMaterial.specularColor = new BABYLON.Color3(0.4, 0.4, 0.95);
+	skyboxMaterial.disableLighting = true;
+	skybox.material = skyboxMaterial;
+    /*
+    var waterMesh = BABYLON.Mesh.CreateGround("waterMesh", 512, 512, 32, scene, false);
+	var water = new BABYLON.WaterMaterial("water", scene, new BABYLON.Vector2(512, 512));
+	water.backFaceCulling = true;
+	water.bumpTexture = new BABYLON.Texture("textures/waterbump.png", scene);
+	water.windForce = -5;
+	water.waveHeight = 0.2;
+	water.bumpHeight = 0.05;
+	water.waterColor = new BABYLON.Color3(0.81, 0.04, 0.52);
+	water.colorBlendFactor = 0.5;
+	water.addToRenderList(skybox);
+	water.addToRenderList(ground);
+	waterMesh.material = water;
+    */
+
     scene.fogMode = BABYLON.Scene.FOGMODE_EXP;
-    scene.fogColor = new BABYLON.Color3(0.2, 0.2, 0.2);
-    scene.fogDensity = 0.005;
+    scene.fogColor = new BABYLON.Color3(0.50, 0.25, 0.40);
+    scene.fogDensity = 0.004;
+    //scene.fogStart = 0.0;
+    //scene.fogEnd = 500.0;
+    /*scene.debugLayer.show({
+        embedMode: true,
+    });
+    */
     camera = new BABYLON.FreeCamera("myCamera", new BABYLON.Vector3(0, 5, 10), scene);
     camera.attachControl(canvas);
     //scene.assetsManager = configureAssetManager(scene);
@@ -110,11 +140,11 @@ async function createScene () {
     const marowakobj = await BABYLON.SceneLoader.ImportMeshAsync("", "3dmodule/Marowak/", "marowak.babylon", scene);
     const picaeclaireobj = await BABYLON.SceneLoader.ImportMeshAsync("", "3dmodule/Picatchu/Picalightatac/", "picalightatc.babylon", scene); 
     const picamesh = await BABYLON.SceneLoader.ImportMeshAsync("", "3dmodule/Picatchu/", "picatchu5d.babylon", scene);
-    //var skybox = BABYLON.Mesh.CreateBox("BackgroundSkybox", 500, scene, undefined, BABYLON.Mesh.BACKSIDE);
+    
     
     // Create and tweak the background material.
-    /*var backgroundMaterial = new BABYLON.BackgroundMaterial("backgroundMaterial", scene);
-    backgroundMaterial.reflectionTexture = new BABYLON.CubeTexture("textures/TropicalSunnyDay", scene);
+    var backgroundMaterial = new BABYLON.StandardMaterial("skyBox", scene);
+    /*backgroundMaterial.reflectionTexture = new BABYLON.CubeTexture("textures/TropicalSunnyDay", scene);
     backgroundMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
     skybox.material = backgroundMaterial;
     */
@@ -126,7 +156,7 @@ async function createScene () {
 
     
     let alllight = new BABYLON.HemisphericLight("myLight", new BABYLON.Vector3(1, 100, 1), scene);
-    alllight.intensity = 0.5;
+    alllight.intensity = 0.7;
     // color of the light
     alllight.diffuse = new BABYLON.Color3(1, 1, 1);
 
@@ -184,7 +214,7 @@ function createenv(vlight,marowakobj,scene){
             }
         }
         cubes[i] = [x,z,x+20,z+20];
-        chargecubes[i] = new BABYLON.Mesh.CreateBox("cobesi",220,scene);
+        chargecubes[i] = new BABYLON.Mesh.CreateBox("cobesi",185,scene);
         chargecubes[i].position = new BABYLON.Vector3((x+9)*taille,y,(z+9)*taille);
         chargecubes[i].actionManager = new BABYLON.ActionManager(scene);
         chargecubes[i].actionManager.registerAction(
@@ -198,7 +228,19 @@ function createenv(vlight,marowakobj,scene){
                     // boucles sur les autres salles est les décharger
                 }
             )
-          );
+        );
+        chargecubes[i].actionManager.registerAction(
+            new BABYLON.ExecuteCodeAction(
+              {
+                trigger: BABYLON.ActionManager.OnIntersectionExitTrigger,
+                parameter: scene.pica.bounder,
+              },
+              () => {
+                    salles[i].disolveroom(scene);
+                    // boucles sur les autres salles est les décharger
+                }
+            )
+        );
         chargecubes[i].visibility = 0;
         salles[i] = new Sale(x,z,y,19,19,5,taille, scene);
         salles[i].create(vlight, scene);
@@ -240,7 +282,9 @@ function createenv(vlight,marowakobj,scene){
             });
             
             playground=[playground[2]+20,playground[3]+20,playground[2]+70,playground[3]+70]
+            scene.ground.position = new BABYLON.Vector3((playground[2]+playground[2]/2)*5,0,(playground[3]+playground[3]/2)*5);
             createenv(vlight,marowakobj,scene);
+            
         }
     )
     );
@@ -266,7 +310,6 @@ function actionEnemies() {
     if(scene.enemies) {
         
         scene.enemies.forEach(enemi => {
-            
             enemi.Enemi.action(scene);
             //remove dead enemi from enemies list
             if(enemi.Enemi.life<0){
