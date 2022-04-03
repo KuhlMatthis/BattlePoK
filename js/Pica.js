@@ -175,6 +175,13 @@ export default class Pica {
             picaeclairemesh.visibility= 0.9;
         });
         this.visibilityeclairemesh(false);
+        this.cplight = new BABYLON.PointLight("myLight2", new BABYLON.Vector3(0,  0, 0), scene);
+        
+        this.cplight.parent = this.picaMesh;
+        this.cplight.position = new BABYLON.Vector3(0,  5, -4)
+        this.cplight.diffuse = new BABYLON.Color3(0.97, 0.8, 0.02);
+        this.cplight.range = 100;
+        this.cplight.intensity = 2;
     }
 
 
@@ -268,7 +275,7 @@ export default class Pica {
         }    
         if(inputStates.left) {
             //tank.moveWithCollisions(new BABYLON.Vector3(-1*tank.speed, 0, 0));
-            let left =  new BABYLON.Vector3(Math.sin(this.picaMesh.rotation.y-1.60), 0, Math.cos(this.picaMesh.rotation.y-1.60))
+            let left =  new BABYLON.Vector3(Math.sin(this.picaMesh.rotation.y-1.40), 0, Math.cos(this.picaMesh.rotation.y-1.40))
             if(this.isrunning){
                 this.bounder.moveWithCollisions(left.multiplyByFloats(this.runspeed, this.runspeed, this.runspeed));
             }else{
@@ -278,7 +285,7 @@ export default class Pica {
         }    
         if(inputStates.right) {
             //tank.moveWithCollisions(new BABYLON.Vector3(1*tank.speed, 0, 0));
-            let left =  new BABYLON.Vector3(Math.sin(this.picaMesh.rotation.y+1.60), 0, Math.cos(this.picaMesh.rotation.y+1.60))
+            let left =  new BABYLON.Vector3(Math.sin(this.picaMesh.rotation.y+1.40), 0, Math.cos(this.picaMesh.rotation.y+1.40))
             if(this.isrunning){
                 this.bounder.moveWithCollisions(left.multiplyByFloats(this.runspeed, this.runspeed, this.runspeed));
             }else{

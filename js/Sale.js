@@ -28,17 +28,18 @@ export default class Sale {
     }
 
     create(vlight,scene) {
+        this.portesmoke = scene.bluesmoke.clone("system2");
+        this.portesmoke.particleTexture = new BABYLON.Texture("img/Smoke_SpriteSheet_8x8.png");
         if(this.porte[0]-this.porte[2]!= 0){
-            this.portesmoke = scene.bluesmoke.clone("system2");
-            this.portesmoke.particleTexture = new BABYLON.Texture("img/Smoke_SpriteSheet_8x8.png");
+            
             this.portesmoke.emitter = new BABYLON.Vector3((this.porte[0]+1)*this.taille+this.ox,5,(this.porte[1])*this.taille+this.oz)
-            this.portesmoke.start();
+            
         }else{
-            this.portesmoke = scene.bluesmoke.clone("system2");
-            this.portesmoke.particleTexture = new BABYLON.Texture("img/Smoke_SpriteSheet_8x8.png");
             this.portesmoke.emitter = new BABYLON.Vector3((this.porte[0])*this.taille+this.ox,5,(this.porte[1]+1)*this.taille+this.oz)
             this.portesmoke.start();
         }
+        this.portesmoke.start();
+        //this.portesmoke.addLODLevel(500,null);
         
         let posx = parseInt(this.ox+Math.random()*60+80);
         let posz = parseInt(this.oz+Math.random()*60+80);
@@ -253,6 +254,7 @@ export default class Sale {
         this.lights.forEach(light => {
             light.dispose()
         });
+        this.portesmoke.dispose();
     }
 
 

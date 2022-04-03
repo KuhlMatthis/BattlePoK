@@ -29,8 +29,8 @@ function startGame() {
     const promise = createScene();
     promise.then(() => { 
         let picamesh = scene.pica.bounder;
-        picamesh.position.x = salles[0].ox+50;
-        picamesh.position.z = salles[0].oz+50;
+        //picamesh.position.x = salles[0].ox+50;
+        //picamesh.position.z = salles[0].oz+50;
         picamesh.position.y = 10;
         scene.activeCamera = createFollowCamera(scene,picamesh.position, scene.pica.vuecube);
 
@@ -39,7 +39,7 @@ function startGame() {
 
         setTimeout(() => {
             engine.hideLoadingUI() 
-        }, 2000)
+        }, 1000)
          // main animation loop 60 times/s
         engine.runRenderLoop(() => {
             let picatchu = scene.getMeshByName("mypicatchu");
@@ -94,14 +94,14 @@ async function createScene () {
     //Set gravity
     physicsEngine.setGravity(new BABYLON.Vector3(0, 0, 0))
     
-    let ground = BABYLON.MeshBuilder.CreateGround("myGround", {width: 1500, height: 1500, segments:1}, scene);
-    ground.position = new BABYLON.Vector3(250,0,250);
+    let ground = BABYLON.MeshBuilder.CreateGround("myGround", {width: 1500, height: 1500, segments:1000}, scene);
+    ground.position = new BABYLON.Vector3(250,-1,250);
     ground.checkCollisions = true;
     //ground.physicsImpostor = new BABYLON.PhysicsImpostor(ground, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, friction: 0.5, restitution: 0.7 }, scene);
-    let groundMatrial = new BABYLON.StandardMaterial("mat", scene);
-    var texture = new BABYLON.Texture("img/sole1.jpg", scene);
-    groundMatrial.diffuseTexture = texture;
-    ground.material = groundMatrial;
+    let groundMaterial = new BABYLON.StandardMaterial("groundMaterial", scene);
+    groundMaterial.diffuseTexture = new BABYLON.Texture("img/ground.jpg", scene);
+    // groundMaterial.diffuseTexture = new BABYLON.Texture("img/sole1.jpg", scene);
+    ground.material = groundMaterial;
     scene.ground = ground;
 
     var skybox = BABYLON.Mesh.CreateBox("BackgroundSkybox", 1500, scene, undefined, BABYLON.Mesh.BACKSIDE);
@@ -113,29 +113,30 @@ async function createScene () {
 	skyboxMaterial.disableLighting = true;
 	skybox.material = skyboxMaterial;
     scene.skybox = skybox;
-    //var waterMesh = BABYLON.Mesh.CreateGround("waterMesh", 512, 512, 32, scene, false);
-	//var water = new BABYLON.WaterMaterial("water", scene, new BABYLON.Vector2(512, 512));
-   
+
+    var waterMesh = BABYLON.Mesh.CreateGround("waterMesh", 1500, 1500, 32, scene, false);
+	var water = new BABYLON.WaterMaterial("water", scene, new BABYLON.Vector2(512, 512));
+	water.bumpTexture = new BABYLON.Texture("img/waterbump.png", scene);
+	water.windForce = -15;
+	water.waveHeight = 0.1;
+	water.windDirection = new BABYLON.Vector2(1, 1);
+	water.waterColor = new BABYLON.Color3(0.75, 0.02, 0.78);
+	water.colorBlendFactor = 0.3;
+	water.bumpHeight = 1;
+	water.waveLength = 0.4;
+	//water.addToRenderList(skybox);
+	water.addToRenderList(ground);
+	waterMesh.material = water;
+
     BABYLON.ParticleHelper.BaseAssetsUrl = "./particuleeffects"
     let Psystem = await BABYLON.ParticleHelper.CreateAsync("bluesmoke", scene);
     scene.bluesmoke = Psystem.systems[0];
-
     
-	/*water.backFaceCulling = true;
-	//water.bumpTexture = new BABYLON.Texture("textures/waterbump.png", scene);
-	water.windForce = -5;
-	water.waveHeight = 0.2;
-	water.bumpHeight = 0.05;
-	water.waterColor = new BABYLON.Color3(0.81, 0.04, 0.52);
-	water.colorBlendFactor = 0.5;
-	water.addToRenderList(skybox);
-	water.addToRenderList(ground);
-	waterMesh.material = water;
-    */
-
+    
     scene.fogMode = BABYLON.Scene.FOGMODE_EXP;
     scene.fogColor = new BABYLON.Color3(0.50, 0.25, 0.40);
     scene.fogDensity = 0.004;
+    
     //scene.fogStart = 0.0;
     //scene.fogEnd = 500.0;
     /*scene.debugLayer.show({
@@ -153,7 +154,6 @@ async function createScene () {
     marowakobj.meshes[0].setEnabled(false);
     
     // Create and tweak the background material.
-    var backgroundMaterial = new BABYLON.StandardMaterial("skyBox", scene);
     /*backgroundMaterial.reflectionTexture = new BABYLON.CubeTexture("textures/TropicalSunnyDay", scene);
     backgroundMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
     skybox.material = backgroundMaterial;
@@ -165,8 +165,8 @@ async function createScene () {
     scene.collisionsEnabled = true;
 
     
-    let alllight = new BABYLON.HemisphericLight("myLight", new BABYLON.Vector3(1, 100, 1), scene);
-    alllight.intensity = 0.6;
+    let alllight = new BABYLON.HemisphericLight("myLight", new BABYLON.Vector3(0, 20, 0), scene);
+    alllight.intensity = 0.8;
     // color of the light
     alllight.diffuse = new BABYLON.Color3(0.5, 0.5, 0.5);
 
@@ -193,12 +193,7 @@ async function createScene () {
     picatchu.name = "mypicatchu";
     scene.pica = new Pica(picatchu,armature,picaeclaireobj, 2,scene);    
 
-
     createenv(vlight,marowakobj,scene);
-    
-    
-    
-    //camera.position = new BABYLON.Vector3(picatchu.position.x-10,picatchu.position.y+3, picatchu.position.z);
 
     return scene;
 }
