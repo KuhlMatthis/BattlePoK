@@ -124,7 +124,7 @@ export default class Pica {
         // it after a scene.getMeshByName that would return the Mesh
         // SEE IN RENDER LOOP !
         
-
+        this.attacstate = 0;
         this.boolincrenergie = true;
         this.jump = -2;
         
@@ -242,6 +242,13 @@ export default class Pica {
                 this.boolincrenergie=true;   
             }, 1000 * 5)
         }
+
+        if(inputStates.switch){
+            
+            this.attacstate = !this.attacstate;
+            console.log("switch",this.attacstate)
+            inputStates.switch = false;
+        }
             
 
         if(inputStates.up) {
@@ -261,24 +268,45 @@ export default class Pica {
         }    
         if(inputStates.left) {
             //tank.moveWithCollisions(new BABYLON.Vector3(-1*tank.speed, 0, 0));
-            this.picaMesh.rotation.y -= 0.06;
-            this.vuecube.rotation.y -= 0.06;
-            this.picaMesh.frontVector = new BABYLON.Vector3(Math.sin(this.picaMesh.rotation.y), 0, Math.cos(this.picaMesh.rotation.y));
+            let left =  new BABYLON.Vector3(Math.sin(this.picaMesh.rotation.y-1.60), 0, Math.cos(this.picaMesh.rotation.y-1.60))
+            if(this.isrunning){
+                this.bounder.moveWithCollisions(left.multiplyByFloats(this.runspeed, this.runspeed, this.runspeed));
+            }else{
+                this.bounder.moveWithCollisions(left.multiplyByFloats(this.speed, this.speed, this.speed));
+            }
+            //this.picaMesh.frontVector = new BABYLON.Vector3(Math.sin(this.picaMesh.rotation.y), 0, Math.cos(this.picaMesh.rotation.y));
         }    
         if(inputStates.right) {
             //tank.moveWithCollisions(new BABYLON.Vector3(1*tank.speed, 0, 0));
-            this.picaMesh.rotation.y += 0.06;
-            this.vuecube.rotation.y += 0.06;
-            this.picaMesh.frontVector = new BABYLON.Vector3(Math.sin(this.picaMesh.rotation.y), 0, Math.cos(this.picaMesh.rotation.y));
+            let left =  new BABYLON.Vector3(Math.sin(this.picaMesh.rotation.y+1.60), 0, Math.cos(this.picaMesh.rotation.y+1.60))
+            if(this.isrunning){
+                this.bounder.moveWithCollisions(left.multiplyByFloats(this.runspeed, this.runspeed, this.runspeed));
+            }else{
+                this.bounder.moveWithCollisions(left.multiplyByFloats(this.speed, this.speed, this.speed));
+            }
+            //this.picaMesh.frontVector = new BABYLON.Vector3(Math.sin(this.picaMesh.rotation.y), 0, Math.cos(this.picaMesh.rotation.y));
         }
-        if(mymouse.x<-100){
-            this.picaMesh.rotation.y -= 0.06;
-            this.vuecube.rotation.y -= 0.06;
-            this.picaMesh.frontVector = new BABYLON.Vector3(Math.sin(this.picaMesh.rotation.y), 0, Math.cos(this.picaMesh.rotation.y)); 
-        }else if(mymouse.x>100){
-            this.picaMesh.rotation.y += 0.06;
-            this.vuecube.rotation.y += 0.06;
-            this.picaMesh.frontVector = new BABYLON.Vector3(Math.sin(this.picaMesh.rotation.y), 0, Math.cos(this.picaMesh.rotation.y));
+        if(mymouse.x<-0.2){
+            if(mymouse.x<-0.5){
+                this.picaMesh.rotation.y -= 0.12;
+                this.vuecube.rotation.y -= 0.12;
+                this.picaMesh.frontVector = new BABYLON.Vector3(Math.sin(this.picaMesh.rotation.y), 0, Math.cos(this.picaMesh.rotation.y));
+            }else{
+                this.picaMesh.rotation.y -= 0.06;
+                this.vuecube.rotation.y -= 0.06;
+                this.picaMesh.frontVector = new BABYLON.Vector3(Math.sin(this.picaMesh.rotation.y), 0, Math.cos(this.picaMesh.rotation.y)); 
+            }
+            
+        }else if(mymouse.x>0.2){
+            if(mymouse.x>0.5){
+                this.picaMesh.rotation.y += 0.12;
+                this.vuecube.rotation.y += 0.12;
+                this.picaMesh.frontVector = new BABYLON.Vector3(Math.sin(this.picaMesh.rotation.y), 0, Math.cos(this.picaMesh.rotation.y));
+            }else{
+                this.picaMesh.rotation.y += 0.06;
+                this.vuecube.rotation.y += 0.06;
+                this.picaMesh.frontVector = new BABYLON.Vector3(Math.sin(this.picaMesh.rotation.y), 0, Math.cos(this.picaMesh.rotation.y)); 
+            }
         }
         
         if(this.notbloque){
@@ -286,6 +314,8 @@ export default class Pica {
                 if(this.isrunning){
                     this.jump=4;
                     this.animation(scene,6)
+                }else{
+                    this.jump=3;
                 }
             }else if(inputStates.run){
                 if(this.isrunning){
@@ -297,15 +327,22 @@ export default class Pica {
                 }
             }else if(inputStates.fight){
                 if(this.energie>0){
-                    inputStates.fight = false;
-                    this.aplyshortataccolision(scene,1,10)
-                    this.energie-=1;
-                    this.modifiemaxbar(this.energiebar,-1);
-                    this.animation(scene,7)
+                    if(this.attacstate){
+                        this.aplyshortataccolision(scene,1,10)
+                        this.energie-=1;
+                        this.modifiemaxbar(this.energiebar,-1);
+                        this.animation(scene,7)
+                    }else{
+                        this.aplyshortataccolision(scene,1,10);
+                        this.animation(scene,8);
+                        this.energie-=1;
+                        this.modifiemaxbar(this.energiebar,-1);
+                    }
+                    
                 }
             }else if(inputStates.fight2){
                 if(this.energie>0){
-                    inputStates.fight2 = false;
+                    
                     this.aplyshortataccolision(scene,1,10);
                     this.animation(scene,8);
                     this.energie-=1;
@@ -313,7 +350,7 @@ export default class Pica {
                 }
             }else if(inputStates.fire2){
                 if(this.energie>0){
-                    inputStates.fire2 = false;
+                    
                     this.visibilityeclairemesh(true);
                     scene.beginAnimation(this.picaatarmature, 0, 32, false);
                     this.notbloque = false;
@@ -340,7 +377,13 @@ export default class Pica {
                 }
             } 
         }
+        
+        inputStates.fight = false;
+        inputStates.fight2 = false;
+        inputStates.fire2 = false;
+        inputStates.space = false;
     }
+    
 
     //0 stand 1 staydown 2 up 3 down 4 walk 5 run  6 jump 7 .. attaque 
     animation(scene,number){

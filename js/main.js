@@ -113,9 +113,15 @@ async function createScene () {
 	skyboxMaterial.disableLighting = true;
 	skybox.material = skyboxMaterial;
     scene.skybox = skybox;
-    /*var waterMesh = BABYLON.Mesh.CreateGround("waterMesh", 512, 512, 32, scene, false);
-	var water = new BABYLON.WaterMaterial("water", scene, new BABYLON.Vector2(512, 512));
-	water.backFaceCulling = true;
+    //var waterMesh = BABYLON.Mesh.CreateGround("waterMesh", 512, 512, 32, scene, false);
+	//var water = new BABYLON.WaterMaterial("water", scene, new BABYLON.Vector2(512, 512));
+   
+    BABYLON.ParticleHelper.BaseAssetsUrl = "./particuleeffects"
+    let Psystem = await BABYLON.ParticleHelper.CreateAsync("bluesmoke", scene);
+    scene.bluesmoke = Psystem.systems[0];
+
+    
+	/*water.backFaceCulling = true;
 	//water.bumpTexture = new BABYLON.Texture("textures/waterbump.png", scene);
 	water.windForce = -5;
 	water.waveHeight = 0.2;
@@ -144,7 +150,7 @@ async function createScene () {
     const marowakobj = await BABYLON.SceneLoader.ImportMeshAsync("", "3dmodule/Marowak/", "marowak.babylon", scene);
     const picaeclaireobj = await BABYLON.SceneLoader.ImportMeshAsync("", "3dmodule/Picatchu/Picalightatac/", "picalightatc.babylon", scene); 
     const picamesh = await BABYLON.SceneLoader.ImportMeshAsync("", "3dmodule/Picatchu/", "picatchu5d.babylon", scene);
-    
+    marowakobj.meshes[0].setEnabled(false);
     
     // Create and tweak the background material.
     var backgroundMaterial = new BABYLON.StandardMaterial("skyBox", scene);
@@ -160,7 +166,7 @@ async function createScene () {
 
     
     let alllight = new BABYLON.HemisphericLight("myLight", new BABYLON.Vector3(1, 100, 1), scene);
-    alllight.intensity = 0.4;
+    alllight.intensity = 0.6;
     // color of the light
     alllight.diffuse = new BABYLON.Color3(0.5, 0.5, 0.5);
 
@@ -228,7 +234,10 @@ function createenv(vlight,marowakobj,scene){
                 parameter: scene.pica.bounder,
               },
               () => {
+                    salles[i].portesmoke.reset();
+                    salles[i].portesmoke.stop();
                     salles[i].createroom(marowakobj, scene);
+                    
                     // boucles sur les autres salles est les décharger
                 }
             )
@@ -240,6 +249,7 @@ function createenv(vlight,marowakobj,scene){
                 parameter: scene.pica.bounder,
               },
               () => {
+                    salles[i].portesmoke.start();
                     salles[i].disolveroom(scene);
                     // boucles sur les autres salles est les décharger
                 }
@@ -429,6 +439,7 @@ function modifySettings() {
     inputStates.fight = false;
     inputStates.fight2 = false;
     inputStates.fire2 = false;
+    inputStates.switch = false;
     
 
 
@@ -458,7 +469,7 @@ function modifySettings() {
            inputStates.space = true;
         } else if (event.key === "r") {
             inputStates.run = true;
-         }
+        } 
     }, false);
 
     //if the key will be released, change the states object 
@@ -487,19 +498,29 @@ function modifySettings() {
     }, false);
 
     window.addEventListener('mousemove', (event) => {
-        mymouse.x = event.pageX-document.documentElement.clientWidth/2;
-        mymouse.y = event.pageY-document.documentElement.clientHeight/2;
-        //console.log(x, y);
+        // fait varier la position de la souris en pourcentage entre -1 et 1 avec 0 le centre de l'ecran
+        mymouse.x = event.pageX/document.documentElement.clientWidth*2 -1;
+        mymouse.y = event.pageY/document.documentElement.clientHeight*2-1;
+        //console.log(mymouse.x, mymouse.y);
       },false);
     
     window.addEventListener('click',(event) => {
         inputStates.fire2 = true;
-        console.log("click");
+        //console.log("click");
     },false);
     window.addEventListener('contextmenu',(event) => {
         inputStates.fight = true;
-        console.log("lclick");
+        //console.log("lclick");
     },false);
+    window.addEventListener('auxclick', (event) => {
+        event.preventDefault();
+        if(event.button==1){
+            inputStates.switch = true;
+            //console.log("wheel");
+        }
+        
+        
+    })
     
 }
 

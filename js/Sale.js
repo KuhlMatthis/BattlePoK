@@ -13,7 +13,8 @@ export default class Sale {
         this.width = width;
         this.height = height;
         this.taille = taille;
-        this.t = 3;
+        this.t = 2;
+        this.portesmoke;
         this.porte = this.createporte();
         this.cub = [this.gx,this.gz,this.gx+this.length-1,this.gz+this.width-1];
         this.loaded = 0;
@@ -22,10 +23,23 @@ export default class Sale {
         this.lights = []
         this.salleenv = []
         this.enemies = []
+        this.scene = scene;
+        
     }
 
     create(vlight,scene) {
-
+        if(this.porte[0]-this.porte[2]!= 0){
+            this.portesmoke = scene.bluesmoke.clone("system2");
+            this.portesmoke.particleTexture = new BABYLON.Texture("img/Smoke_SpriteSheet_8x8.png");
+            this.portesmoke.emitter = new BABYLON.Vector3((this.porte[0]+1)*this.taille+this.ox,5,(this.porte[1])*this.taille+this.oz)
+            this.portesmoke.start();
+        }else{
+            this.portesmoke = scene.bluesmoke.clone("system2");
+            this.portesmoke.particleTexture = new BABYLON.Texture("img/Smoke_SpriteSheet_8x8.png");
+            this.portesmoke.emitter = new BABYLON.Vector3((this.porte[0])*this.taille+this.ox,5,(this.porte[1]+1)*this.taille+this.oz)
+            this.portesmoke.start();
+        }
+        
         let posx = parseInt(this.ox+Math.random()*60+80);
         let posz = parseInt(this.oz+Math.random()*60+80);
         let cvlight = vlight.createInstance("vlight1")
@@ -212,6 +226,7 @@ export default class Sale {
             element.setEnabled(true);
         });
         let marowakmesh = this.doClone(marowakobj.meshes[0],  marowakobj.skeletons,1)
+        marowakmesh.setEnabled(true);
         marowakmesh.addLODLevel(200, null);
         marowakmesh.position = new BABYLON.Vector3(this.ox+100, 8, this.oz+100)
         let marowak = new Enemi(marowakmesh,marowakmesh.skeleton,1,7,scene);
