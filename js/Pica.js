@@ -2,7 +2,7 @@
 
 export default class Pica {
     
-    constructor(picaMesh, armature ,picaeclaireobj, speed,scene) {
+    constructor(picaMesh, armature ,picaeclaireobj,rain, speed,scene) {
         this.picaMesh = picaMesh;
         this.armature = armature;
         this.allanymation = armature._ranges;
@@ -106,6 +106,9 @@ export default class Pica {
         this.planelevel.material = mat;
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
+
+
+        
         
 
         this.animationstate = 0;
@@ -182,6 +185,11 @@ export default class Pica {
         this.cplight.diffuse = new BABYLON.Color3(0.97, 0.8, 0.02);
         this.cplight.range = 100;
         this.cplight.intensity = 2;
+        
+        
+        console.log(rain.emitter);
+        rain.start();
+        this.rain = rain;
     }
 
 
@@ -229,7 +237,7 @@ export default class Pica {
 
     
     move(scene,inputStates, mymouse) {
-        
+        this.rain.emitter = new BABYLON.Vector3(this.bounder.position.x,30,this.bounder.position.z);
         // bloque mouvement si bounder not ready
         if (!this.bounder) return;
         this.bounder.computeWorldMatrix();

@@ -112,6 +112,7 @@ async function createScene () {
 	skyboxMaterial.specularColor = new BABYLON.Color3(0.4, 0.4, 0.95);
 	skyboxMaterial.disableLighting = true;
 	skybox.material = skyboxMaterial;
+    skyboxMaterial.luminance = 100;
     scene.skybox = skybox;
 
     var waterMesh = BABYLON.Mesh.CreateGround("waterMesh", 1500, 1500, 32, scene, false);
@@ -127,10 +128,13 @@ async function createScene () {
 	//water.addToRenderList(skybox);
 	water.addToRenderList(ground);
 	waterMesh.material = water;
+    scene.waterground = waterMesh; 
 
     BABYLON.ParticleHelper.BaseAssetsUrl = "./particuleeffects"
     let Psystem = await BABYLON.ParticleHelper.CreateAsync("bluesmoke", scene);
     scene.bluesmoke = Psystem.systems[0];
+    let Prain = await BABYLON.ParticleHelper.CreateAsync("rain", scene);
+    let rain = Prain.systems[0];
     
     
     scene.fogMode = BABYLON.Scene.FOGMODE_EXP;
@@ -191,7 +195,7 @@ async function createScene () {
 
     let armature = picamesh.skeletons[0];
     picatchu.name = "mypicatchu";
-    scene.pica = new Pica(picatchu,armature,picaeclaireobj, 2,scene);    
+    scene.pica = new Pica(picatchu,armature,picaeclaireobj,rain, 2,scene);    
 
     createenv(vlight,marowakobj,scene);
 
@@ -232,7 +236,7 @@ function createenv(vlight,marowakobj,scene){
                     salles[i].portesmoke.reset();
                     salles[i].portesmoke.stop();
                     salles[i].createroom(marowakobj, scene);
-                    
+                    scene.pica.rain.stop();
                     // boucles sur les autres salles est les décharger
                 }
             )
@@ -246,6 +250,7 @@ function createenv(vlight,marowakobj,scene){
               () => {
                     salles[i].portesmoke.start();
                     salles[i].disolveroom(scene);
+                    scene.pica.rain.start();
                     // boucles sur les autres salles est les décharger
                 }
             )
@@ -298,9 +303,8 @@ function createenv(vlight,marowakobj,scene){
             playground=[playground[2]+20,playground[3]+20,playground[2]+70,playground[3]+70]
             scene.ground.position = new BABYLON.Vector3((playground[2]+playground[2]/2)*5,0,(playground[3]+playground[3]/2)*5);
             scene.skybox.position = new BABYLON.Vector3((playground[2]+playground[2]/2)*5,0,(playground[3]+playground[3]/2)*5);
-            createenv(vlight,marowakobj,scene);
-            
-            
+            scene.waterground.position = new BABYLON.Vector3((playground[2]+playground[2]/2)*5,0,(playground[3]+playground[3]/2)*5);
+            createenv(vlight,marowakobj,scene);      
         }
     )
     );
