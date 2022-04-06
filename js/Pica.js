@@ -301,27 +301,17 @@ export default class Pica {
             }
             //this.picaMesh.frontVector = new BABYLON.Vector3(Math.sin(this.picaMesh.rotation.y), 0, Math.cos(this.picaMesh.rotation.y));
         }
-        if(mymouse.x<-0.2){
-            if(mymouse.x<-0.5){
-                this.picaMesh.rotation.y -= 0.12;
-                this.vuecube.rotation.y -= 0.12;
-                this.picaMesh.frontVector = new BABYLON.Vector3(Math.sin(this.picaMesh.rotation.y), 0, Math.cos(this.picaMesh.rotation.y));
-            }else{
-                this.picaMesh.rotation.y -= 0.06;
-                this.vuecube.rotation.y -= 0.06;
-                this.picaMesh.frontVector = new BABYLON.Vector3(Math.sin(this.picaMesh.rotation.y), 0, Math.cos(this.picaMesh.rotation.y)); 
-            }
+        if(mymouse.x<0){
+            if(mymouse.x<-200)mymouse.x=-200;
+            this.picaMesh.rotation.y += 0.002*mymouse.x;
+            this.vuecube.rotation.y += 0.002*mymouse.x;
+            this.picaMesh.frontVector = new BABYLON.Vector3(Math.sin(this.picaMesh.rotation.y), 0, Math.cos(this.picaMesh.rotation.y));
             
-        }else if(mymouse.x>0.2){
-            if(mymouse.x>0.5){
-                this.picaMesh.rotation.y += 0.12;
-                this.vuecube.rotation.y += 0.12;
-                this.picaMesh.frontVector = new BABYLON.Vector3(Math.sin(this.picaMesh.rotation.y), 0, Math.cos(this.picaMesh.rotation.y));
-            }else{
-                this.picaMesh.rotation.y += 0.06;
-                this.vuecube.rotation.y += 0.06;
-                this.picaMesh.frontVector = new BABYLON.Vector3(Math.sin(this.picaMesh.rotation.y), 0, Math.cos(this.picaMesh.rotation.y)); 
-            }
+        }else if(mymouse.x>0){
+            if(mymouse.x>200)mymouse.x=200;
+            this.picaMesh.rotation.y += 0.002*mymouse.x;
+            this.vuecube.rotation.y += 0.002*mymouse.x;
+            this.picaMesh.frontVector = new BABYLON.Vector3(Math.sin(this.picaMesh.rotation.y), 0, Math.cos(this.picaMesh.rotation.y));
         }
         
         if(this.notbloque){
@@ -397,6 +387,8 @@ export default class Pica {
         inputStates.fight2 = false;
         inputStates.fire2 = false;
         inputStates.space = false;
+        mymouse.x = 0;
+        mymouse.y = 0;
     }
     
 

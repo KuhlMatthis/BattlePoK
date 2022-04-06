@@ -398,7 +398,7 @@ function createFollowCamera(scene, pos, target) {
 	camera.rotationOffset = 180; // the viewing angle
 	
     camera.cameraAcceleration = .2; // how fast to move
-	camera.maxCameraSpeed = 6; // speed limit
+	camera.maxCameraSpeed = 12; // speed limit
     //camera.minZ = 10;
     
 
@@ -408,13 +408,27 @@ function createFollowCamera(scene, pos, target) {
 function modifySettings() {
     // as soon as we click on the game window, the mouse pointer is "locked"
     // you will have to press ESC to unlock it
-    /*
-    scene.onPointerDown = () => {
+    
+    scene.onPointerDown = (event) => {
         if(!scene.alreadyLocked) {
             console.log("requesting pointer lock");
             canvas.requestPointerLock();
         } else {
-            console.log("Pointer already locked");
+            console.log(event.button)
+            //event.preventDefault();
+            if(event.button==0){
+                inputStates.fire2 = true;
+            }
+            if(event.button==1){
+                inputStates.switch = true;
+            }
+            if(event.button==2){
+                inputStates.fight = true;
+            }
+            
+            //console.log("wheel");
+
+            //console.log("Pointer already locked");
         }
     }
 
@@ -427,7 +441,7 @@ function modifySettings() {
             scene.alreadyLocked = false;
         }
     })
-    */
+    
     // key listeners for the player
     inputStates.left = false;
     inputStates.right = false;
@@ -498,28 +512,14 @@ function modifySettings() {
 
     window.addEventListener('mousemove', (event) => {
         // fait varier la position de la souris en pourcentage entre -1 et 1 avec 0 le centre de l'ecran
-        mymouse.x = event.pageX/document.documentElement.clientWidth*2 -1;
-        mymouse.y = event.pageY/document.documentElement.clientHeight*2-1;
+        //if(event.movementX)
+        console.log(event.movementX);
+        mymouse.x = event.movementX;
+        mymouse.y = event.movementY;
+        //mymouse.x = event.pageX/document.documentElement.clientWidth*2 -1;
+        //mymouse.y = event.pageY/document.documentElement.clientHeight*2-1;
         //console.log(mymouse.x, mymouse.y);
       },false);
-    
-    window.addEventListener('click',(event) => {
-        inputStates.fire2 = true;
-        //console.log("click");
-    },false);
-    window.addEventListener('contextmenu',(event) => {
-        inputStates.fight = true;
-        //console.log("lclick");
-    },false);
-    window.addEventListener('auxclick', (event) => {
-        event.preventDefault();
-        if(event.button==1){
-            inputStates.switch = true;
-            //console.log("wheel");
-        }
-        
-        
-    })
     
 }
 
