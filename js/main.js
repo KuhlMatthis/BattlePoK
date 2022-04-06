@@ -528,3 +528,41 @@ function clear() {
   scene.actionManager.registerAction(new BABYLON.ExecuteCodeAction({
   }, clear));
 }
+
+function panelCreate(){
+    var scene = new BABYLON.Scene(engine);
+    
+    // GUI
+    let advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+
+    // Style
+    let style = advancedTexture.createStyle();
+    style.fontSize = 24;
+    style.fontStyle = "bold";
+
+    // Panel
+    let panel = new BABYLON.GUI.StackPanel();   
+    panel.isVertical = true; 
+    advancedTexture.addControl(panel);
+
+    // Text 
+    let text1 = new BABYLON.GUI.TextBlock();
+    text1.text = "Welcome to the Battel Champion !! ";
+    text1.color = "white";
+    text1.height = "30px";
+    text1.fontSize = 24;
+    text1.fontStyle = "bold";
+    panel.addControl(text1);
+
+    let button = BABYLON.GUI.Button.CreateSimpleButton("Btn", "Start Game");
+    button.width = 0.2;
+    button.height = "50px";
+    button.color = "blue";
+    button.background = "green";
+
+    button.onPointerDownObservable.add(function() {});
+
+    panel.addControl(button);
+
+    return scene;
+}
