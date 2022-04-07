@@ -145,7 +145,7 @@ export default class Enemi {
             this.animationstate = number;
             let myanimation = Object.values(this.allanymation)[number];
             //wait end animation
-            if(number==2){
+            if(number==2||number==3){
                 this.notbloque =false;
                 setTimeout(async () => {
                     this.anim = scene.beginAnimation(this.armature, myanimation.from, myanimation.to, false);
@@ -188,8 +188,12 @@ export default class Enemi {
         if(this.life<0){
             let player = this.scene.getMeshByName("mypicatchu");
             player.Pica.increxperience(2);
-            this.enemiMesh.dispose();
-            this.bounder.dispose();
+            this.animation(this.scene,3);
+            setTimeout(() => {
+                this.enemiMesh.dispose();
+                this.bounder.dispose();
+            }, 1000 * 4)
+            
         }else{
             this.modifiemaxbar(this.lifebar,-degat);
         }  

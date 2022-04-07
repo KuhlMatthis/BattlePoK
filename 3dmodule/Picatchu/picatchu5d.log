@@ -39,6 +39,7 @@ Exporter version: 2.93.5, Blender version: 2.93.3
 		processing action 7jump:  in[1 - 32], out[200 - 232]
 		processing action 8attaque1:  in[1 - 28], out[240 - 268]
 		processing action 8attaque2:  in[1 - 29], out[280 - 309]
+		processing action 9die:  in[1 - 32], out[320 - 352]
 	processing begun of mesh:  Corp
 		animation processing begun
 			processing action 4up:  in[1 - 15], out[0 - 15]
@@ -183,4 +184,4 @@ Exporter version: 2.93.5, Blender version: 2.93.3
 	writing mesh:  Queue
 ========= Writing of JSON file completed =========
 ========= end of processing =========
-elapsed time:  0 min, 26.3162 secs
+elapsed time:  1 min, 16.4925 secs

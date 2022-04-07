@@ -220,13 +220,12 @@ export default class Pica {
 
 
     degat(degat){
-        this.life-=degat;
-        if(this.life<0){
-            //restart game
-        }else{
-            this.modifiemaxbar(this.lifebar,-degat);
-        }  
+        if(this.life>=0){
+            this.life-=degat;
+            this.modifiemaxbar(this.lifebar,-degat); 
+        }
     }
+
 
 
     modifiemaxbar(bar,incr){
@@ -399,7 +398,7 @@ export default class Pica {
             this.animationstate = number;
             let myanimation = Object.values(this.allanymation)[number];
             //wait end animation
-            if(number==2 || number == 3 || number == 6 || number == 7 || number == 8){
+            if(number==2 || number == 3 || number == 6 || number == 7 || number == 8 || number == 9){
                 this.notbloque = false;
                 setTimeout(async () => {
                     this.anim = scene.beginAnimation(this.armature, myanimation.from+2, myanimation.to, false);

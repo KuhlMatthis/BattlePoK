@@ -47,28 +47,25 @@ function startGame() {
                 picatchu.Pica.move(scene,inputStates,mymouse);
                 //console.log(picatchu.Pica.bounder.x);
                 if(picatchu.Pica.life <=0){
-                    const promise = createScene();
-                    while(!promise){
-
-                    }
-                    promise.then(() => {
-                    let picamesh = scene.pica.bounder;
-                    picamesh.position.x = salles[0].ox+50;
-                    picamesh.position.z = salles[0].oz+50;
-                    picamesh.position.y = 10;
-                    scene.activeCamera = createFollowCamera(scene,picamesh.position, scene.pica.vuecube);
+                picatchu.Pica.animation(scene,9);
+                setTimeout(() => {
+                        const promise = createScene();
+                        while(!promise){}
+                        promise.then(() => {
+                        let picamesh = scene.pica.bounder;
+                        scene.activeCamera = createFollowCamera(scene,picamesh.position, scene.pica.vuecube);
+                        modifySettings();
+                        });
+                    }, 1000 * 4)
                     
-            
-                    modifySettings();
-                    });
                 }
                 // when the picka is not on the ground he dies
-                /*if (picatchu.position.y <=0.1){
+                if (picatchu.position.y <=0.1){
                     setTimeout(() => {
                         if (picatchu.position.y <=0.1){
                             picatchu.Pica.degat(0.5);
                     }},5000);
-                }*/
+                }
             }
 
             actionEnemies();    
@@ -201,52 +198,6 @@ async function createScene () {
     scene.pica = new Pica(picatchu,armature,picaeclaireobj,rain, 2,scene);    
 
     createenv(vlight,marowakobj,scene);
-    // GUI
-    let advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
-    // Style
-    let style = advancedTexture.createStyle();
-    style.fontSize = 24;
-    style.fontStyle = "bold";
-
-    // Panel
-    let panel = new BABYLON.GUI.StackPanel();   
-    panel.isVertical = true; 
-    panel.left = -450;
-    panel.top = -250;
-    advancedTexture.addControl(panel);
-
-    // Text 
-    let text1 = new BABYLON.GUI.TextBlock();
-    text1.text = "Welcome to the Battel Champion !! ";
-    text1.color = "white";
-    text1.height = "30px";
-    text1.fontSize = 24;
-    text1.fontStyle = "bold";
-    panel.addControl(text1);
-
-    let button = BABYLON.GUI.Button.CreateSimpleButton("Btn", "Start Game");
-    button.width = 0.2;
-    button.height = "50px";
-    button.color = "blue";
-    button.background = "green";
-
-    button.onPointerDownObservable.add(function() {
-        text1.text = "Goooo";
-        panel.removeControl(text1);
-        panel.removeControl(button);
-    });
-
-    panel.addControl(button);
-
-    let buttonSound = BABYLON.GUI.Button.CreateSimpleButton("Btn", "Sound");
-    buttonSound.width = 0.1;
-    buttonSound.left = 550;
-    buttonSound.top = -300;
-    buttonSound.cornerRadius = 20;    
-    buttonSound.height = "30px";
-    buttonSound.color = "green";
-    buttonSound.background = "yellow";
-    advancedTexture.addControl(buttonSound);
 
     return scene;
 }
@@ -474,10 +425,7 @@ function modifySettings() {
             if(event.button==2){
                 inputStates.fight = true;
             }
-            
-            //console.log("wheel");
 
-            //console.log("Pointer already locked");
         }
     }
 
@@ -562,7 +510,6 @@ function modifySettings() {
     window.addEventListener('mousemove', (event) => {
         // fait varier la position de la souris en pourcentage entre -1 et 1 avec 0 le centre de l'ecran
         //if(event.movementX)
-        console.log(event.movementX);
         mymouse.x = event.movementX;
         mymouse.y = event.movementY;
         //mymouse.x = event.pageX/document.documentElement.clientWidth*2 -1;
@@ -576,45 +523,4 @@ function clear() {
   
   scene.actionManager.registerAction(new BABYLON.ExecuteCodeAction({
   }, clear));
-}
-
-function panelCreate(){
-    var scene = new BABYLON.Scene(engine);
-    
-    // GUI
-    let advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
-
-    // Style
-    let style = advancedTexture.createStyle();
-    style.fontSize = 24;
-    style.fontStyle = "bold";
-
-    // Panel
-    let panel = new BABYLON.GUI.StackPanel();   
-    panel.isVertical = true; 
-    advancedTexture.addControl(panel);
-
-    // Text 
-    let text1 = new BABYLON.GUI.TextBlock();
-    text1.text = "Welcome to the Battel Champion !! ";
-    text1.color = "white";
-    text1.height = "30px";
-    text1.fontSize = 24;
-    text1.fontStyle = "bold";
-    panel.addControl(text1);
-
-    let button = BABYLON.GUI.Button.CreateSimpleButton("Btn", "Start Game");
-    button.width = 0.2;
-    button.height = "50px";
-    button.color = "blue";
-    button.background = "green";
-
-    button.onPointerDownObservable.add(function() {
-        text1.text = "Goooo"
-        panel.removeControl(button);
-    });
-
-    panel.addControl(button);
-
-    return scene;
 }
