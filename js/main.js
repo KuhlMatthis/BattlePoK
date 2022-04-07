@@ -201,6 +201,52 @@ async function createScene () {
     scene.pica = new Pica(picatchu,armature,picaeclaireobj,rain, 2,scene);    
 
     createenv(vlight,marowakobj,scene);
+    // GUI
+    let advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+    // Style
+    let style = advancedTexture.createStyle();
+    style.fontSize = 24;
+    style.fontStyle = "bold";
+
+    // Panel
+    let panel = new BABYLON.GUI.StackPanel();   
+    panel.isVertical = true; 
+    panel.left = -450;
+    panel.top = -250;
+    advancedTexture.addControl(panel);
+
+    // Text 
+    let text1 = new BABYLON.GUI.TextBlock();
+    text1.text = "Welcome to the Battel Champion !! ";
+    text1.color = "white";
+    text1.height = "30px";
+    text1.fontSize = 24;
+    text1.fontStyle = "bold";
+    panel.addControl(text1);
+
+    let button = BABYLON.GUI.Button.CreateSimpleButton("Btn", "Start Game");
+    button.width = 0.2;
+    button.height = "50px";
+    button.color = "blue";
+    button.background = "green";
+
+    button.onPointerDownObservable.add(function() {
+        text1.text = "Goooo";
+        panel.removeControl(text1);
+        panel.removeControl(button);
+    });
+
+    panel.addControl(button);
+
+    let buttonSound = BABYLON.GUI.Button.CreateSimpleButton("Btn", "Sound");
+    buttonSound.width = 0.1;
+    buttonSound.left = 550;
+    buttonSound.top = -300;
+    buttonSound.cornerRadius = 20;    
+    buttonSound.height = "30px";
+    buttonSound.color = "green";
+    buttonSound.background = "yellow";
+    advancedTexture.addControl(buttonSound);
 
     return scene;
 }
@@ -530,4 +576,45 @@ function clear() {
   
   scene.actionManager.registerAction(new BABYLON.ExecuteCodeAction({
   }, clear));
+}
+
+function panelCreate(){
+    var scene = new BABYLON.Scene(engine);
+    
+    // GUI
+    let advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+
+    // Style
+    let style = advancedTexture.createStyle();
+    style.fontSize = 24;
+    style.fontStyle = "bold";
+
+    // Panel
+    let panel = new BABYLON.GUI.StackPanel();   
+    panel.isVertical = true; 
+    advancedTexture.addControl(panel);
+
+    // Text 
+    let text1 = new BABYLON.GUI.TextBlock();
+    text1.text = "Welcome to the Battel Champion !! ";
+    text1.color = "white";
+    text1.height = "30px";
+    text1.fontSize = 24;
+    text1.fontStyle = "bold";
+    panel.addControl(text1);
+
+    let button = BABYLON.GUI.Button.CreateSimpleButton("Btn", "Start Game");
+    button.width = 0.2;
+    button.height = "50px";
+    button.color = "blue";
+    button.background = "green";
+
+    button.onPointerDownObservable.add(function() {
+        text1.text = "Goooo"
+        panel.removeControl(button);
+    });
+
+    panel.addControl(button);
+
+    return scene;
 }
