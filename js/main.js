@@ -155,6 +155,9 @@ async function createScene () {
     const marowakobj = await BABYLON.SceneLoader.ImportMeshAsync("", "3dmodule/Marowak/", "marowak.babylon", scene);
     const picaeclaireobj = await BABYLON.SceneLoader.ImportMeshAsync("", "3dmodule/Picatchu/Picalightatac/", "picalightatc.babylon", scene); 
     const picamesh = await BABYLON.SceneLoader.ImportMeshAsync("", "3dmodule/Picatchu/", "picatchu5d.babylon", scene);
+    const labras = await BABYLON.SceneLoader.ImportMeshAsync("", "3dmodule/Labras/", "lapras.babylon", scene);
+    labras.meshes[0].position.x=-50;
+    labras.meshes[0].position.y=0;
     marowakobj.meshes[0].setEnabled(false);
     
     // Create and tweak the background material.
