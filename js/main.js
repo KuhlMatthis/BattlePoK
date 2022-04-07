@@ -235,6 +235,16 @@ async function createScene () {
 
     panel.addControl(button);
 
+    let buttonSound = BABYLON.GUI.Button.CreateSimpleButton("Btn", "Sound");
+    buttonSound.width = 0.1;
+    buttonSound.left = 550;
+    buttonSound.top = -300;
+    buttonSound.cornerRadius = 20;    
+    buttonSound.height = "30px";
+    buttonSound.color = "green";
+    buttonSound.background = "yellow";
+    advancedTexture.addControl(buttonSound);
+
     return scene;
 }
 
