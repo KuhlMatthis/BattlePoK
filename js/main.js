@@ -70,7 +70,6 @@ function startGame() {
 
             actionEnemies();    
             scene.render();
-            
         });
     });
     //scene.assetsManager.load();
@@ -309,6 +308,8 @@ function createenv(vlight,marowakobj,scene){
     )
     );
     chargenext.visibility = 0;
+    music();
+
 }
 
 function decalcub(cube,salle){
@@ -523,4 +524,9 @@ function clear() {
   
   scene.actionManager.registerAction(new BABYLON.ExecuteCodeAction({
   }, clear));
+}
+
+function music(){
+        //adding audio 
+  var music = new BABYLON.Sound("music","twostepsfromhell.mp3", scene, function(){music.play();},{loop:true, volume: 0.4});
 }
