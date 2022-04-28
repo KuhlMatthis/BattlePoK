@@ -309,7 +309,6 @@ function createenv(vlight,marowakobj,scene){
     );
     chargenext.visibility = 0;
     music();
-
 }
 
 function decalcub(cube,salle){
@@ -529,4 +528,56 @@ function clear() {
 function music(){
         //adding audio 
   var music = new BABYLON.Sound("music","twostepsfromhell.mp3", scene, function(){music.play();},{loop:true, volume: 0.4});
+}
+function gui(){
+    // GUI
+    var plane = BABYLON.Mesh.CreatePlane("plane", 10);
+    plane.position.y = 2;
+
+   plane.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
+
+    var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateForMesh(plane);
+    
+
+    var button1 = BABYLON.GUI.Button.CreateSimpleButton("but1", "Play!");
+    button1.width = 0.15;
+    button1.height = 0.05;
+    button1.top = -120;
+    button1.color = "white";
+    button1.fontSize = 12;
+    button1.background = "green";
+    button1.onPointerUpObservable.add(function() {
+        advancedTexture.removeControl(button1);
+    });
+    advancedTexture.addControl(button1);
+
+    var button2 = BABYLON.GUI.Button.CreateSimpleButton("but3", "Replay");
+    button2.width = 0.15;
+    button2.height = 0.05;
+    button2.top = -60;
+    button2.color = "white";
+    button2.fontSize = 12;
+    button2.background = "yellow";
+    button2.onPointerUpObservable.add(function() {
+        advancedTexture.removeControl(button1);
+        advancedTexture.removeControl(button2);
+        advancedTexture.removeControl(button3);
+        setTimeout(gui,1000);
+    });
+    advancedTexture.addControl(button2);
+
+    var button3 = BABYLON.GUI.Button.CreateSimpleButton("but2", "Exit");
+    button3.width = 0.15;
+    button3.height = 0.05;
+    button3.color = "white";
+    button3.fontSize = 12;
+    button3.background = "red";
+    button3.onPointerUpObservable.add(function() {
+        advancedTexture.removeControl(button1);
+        advancedTexture.removeControl(button2);
+        advancedTexture.removeControl(button3);
+        setTimeout(gui,3000);
+    });
+    advancedTexture.addControl(button3);
+
 }
