@@ -59,6 +59,7 @@ function startGame() {
                     }, 1000 * 4)
                     
                 }
+                effect();
                 // when the picka is not on the ground he dies
                 if (picatchu.position.y <=0.1){
                     setTimeout(() => {
@@ -308,7 +309,7 @@ function createenv(vlight,marowakobj,scene){
     )
     );
     chargenext.visibility = 0;
-    music();
+    //music();
 }
 
 function decalcub(cube,salle){
@@ -526,8 +527,8 @@ function clear() {
 }
 
 function music(){
-        //adding audio 
-  var music = new BABYLON.Sound("music","twostepsfromhell.mp3", scene, function(){music.play();},{loop:true, volume: 0.4});
+   //adding audio 
+  var music = new BABYLON.Sound("music","twostepsfromhell.mp3", scene, function(){music.play();},{loop:true, volume: 0.1});
 }
 function gui(){
     // GUI
@@ -580,4 +581,24 @@ function gui(){
     });
     advancedTexture.addControl(button3);
 
+}
+
+function spark(){
+    var spark = new BABYLON.Sound("spark","spark.mp3",scene, function(){spark.play();},{loop:false, volume : 0.1})
+}
+
+function effect(){
+    window.addEventListener("mousedown", function(evt) {
+		// left click to attack
+		if (evt.button === 0) {
+			spark();  
+		}
+	});
+	
+	window.addEventListener("keyGdown", function (evt) {
+        // Press g key to attack with spark
+        if (evt.keyCode === 71) {
+            spark();
+        }
+    });
 }
