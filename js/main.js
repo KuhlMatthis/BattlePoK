@@ -537,49 +537,70 @@ function gui(){
 
    plane.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
 
-    var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateForMesh(plane);
+   var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateForMesh(plane);
     
+   var paramettrebtn = BABYLON.GUI.Button.CreateSimpleButton("settings","settings")
+   paramettrebtn.width=0.08;
+   paramettrebtn.height=0.04;
+   paramettrebtn.top=-200;
+   paramettrebtn.left =450;
+   paramettrebtn.color = "white";
+   paramettrebtn.background ="#048ba8";
+   paramettrebtn.onPointerUpObservable.add(function(){
+       if(replaybtn.isVisible){
+           button1.isVisible=false;
+           replaybtn.isvisible=false;
+           exitbtn.isVisible=false;
+       }
+       else{
+           button1.isVisible=true;
+           replaybtn.isvisible=false;
+           exitbtn.isVisible=true;
+       }
+       console.log("hola");
+   });
+   advancedTexture.addControl(paramettrebtn);
 
-    var button1 = BABYLON.GUI.Button.CreateSimpleButton("but1", "Play!");
-    button1.width = 0.15;
-    button1.height = 0.05;
-    button1.top = -120;
-    button1.color = "white";
-    button1.fontSize = 12;
-    button1.background = "green";
-    button1.onPointerUpObservable.add(function() {
-        advancedTexture.removeControl(button1);
-    });
-    advancedTexture.addControl(button1);
+   var button1 = BABYLON.GUI.Button.CreateSimpleButton("but1", "Play!");
+   button1.width = 0.15;
+   button1.height = 0.05;
+   button1.top = -120;
+   button1.color = "white";
+   button1.fontSize = 12;
+   button1.background = "#16db93";
+   button1.onPointerUpObservable.add(function() {
+       advancedTexture.removeControl(button1);
+   });
+   advancedTexture.addControl(button1);
 
-    var button2 = BABYLON.GUI.Button.CreateSimpleButton("but3", "Replay");
-    button2.width = 0.15;
-    button2.height = 0.05;
-    button2.top = -60;
-    button2.color = "white";
-    button2.fontSize = 12;
-    button2.background = "yellow";
-    button2.onPointerUpObservable.add(function() {
-        advancedTexture.removeControl(button1);
-        advancedTexture.removeControl(button2);
-        advancedTexture.removeControl(button3);
-        setTimeout(gui,1000);
-    });
-    advancedTexture.addControl(button2);
+   var replaybtn = BABYLON.GUI.Button.CreateSimpleButton("but2", "Replay");
+   replaybtn.width = 0.15;
+   replaybtn.height = 0.05;
+   replaybtn.top = -60;
+   replaybtn.color = "white";
+   replaybtn.fontSize = 12;
+   replaybtn.background = "#f1c453";
+   replaybtn.onPointerUpObservable.add(function() {
+       advancedTexture.removeControl(button1);
+       advancedTexture.removeControl(replaybtn);
+       advancedTexture.removeControl(exitbtn);
+       setTimeout(gui,1000);
+   });
+   advancedTexture.addControl(replaybtn);
 
-    var button3 = BABYLON.GUI.Button.CreateSimpleButton("but2", "Exit");
-    button3.width = 0.15;
-    button3.height = 0.05;
-    button3.color = "white";
-    button3.fontSize = 12;
-    button3.background = "red";
-    button3.onPointerUpObservable.add(function() {
-        advancedTexture.removeControl(button1);
-        advancedTexture.removeControl(button2);
-        advancedTexture.removeControl(button3);
-        setTimeout(gui,3000);
-    });
-    advancedTexture.addControl(button3);
+   var exitbtn = BABYLON.GUI.Button.CreateSimpleButton("but3", "Exit");
+   exitbtn.width = 0.15;
+   exitbtn.height = 0.05;
+   exitbtn.color = "white";
+   exitbtn.fontSize = 12;
+   exitbtn.background = "#ee6055";
+   exitbtn.onPointerUpObservable.add(function() {
+       advancedTexture.removeControl(button1);
+       advancedTexture.removeControl(replaybtn);
+       advancedTexture.removeControl(exitbtn);
+       setTimeout(gui,3000);
+   });
+   advancedTexture.addControl(exitbtn);
 
 }
 
