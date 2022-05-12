@@ -54,6 +54,7 @@ export default class Enemi {
         this.dynamicTexture = new BABYLON.DynamicTexture("DynamicTexture", {width:30, height:30}, scene, false);
         var mat = new BABYLON.StandardMaterial("mat", scene);
         mat.diffuseTexture = this.dynamicTexture;
+        mat.specularColor = new BABYLON.Color3(0, 0, 0);
         //Set font
 	    
         this.dynamicTexture.drawText(""+this.level, null, null, "bold " + 16 + "px Arial", "#000000", "#ffffff", true);

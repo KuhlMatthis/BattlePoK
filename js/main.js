@@ -18,7 +18,7 @@ let salles = [];
 let chemin = [];
 let cubes = [];
 let chargecubes = [];
-let mystart = true;
+let mystart = false;
     
 
 window.onload = startGame;
@@ -27,6 +27,7 @@ function startGame() {
     canvas = document.querySelector("#myCanvas");
     engine = new BABYLON.Engine(canvas, true);
     engine.displayLoadingUI();
+    let scenestart = createscenevideo();
     const promise = createScene();
     promise.then(() => { 
         let picamesh = scene.pica.bounder;
@@ -34,7 +35,7 @@ function startGame() {
         //picamesh.position.z = salles[0].oz+50;
         picamesh.position.y = 10;
         scene.activeCamera = createFollowCamera(scene,picamesh.position, scene.pica.vuecube);
-        let scenestart = createscenevideo();
+        
 
         modifySettings();
 
@@ -46,6 +47,7 @@ function startGame() {
             if(mystart==true){
                 scenestart.render();
             }else{
+
                 let picatchu = scene.getMeshByName("mypicatchu");
                 if(picatchu){
                     picatchu.Pica.move(scene,inputStates,mymouse);
@@ -54,7 +56,12 @@ function startGame() {
                     //empesh une boucle
                         picatchu.Pica.life = 1;
                         picatchu.Pica.animation(scene,9);
-                    
+                        salles = [];
+                        chemin = [];
+                        cubes = [];
+                        chargecubes = [];
+                        scene.dispose();
+                        playground = [0,0,50,50];
                         const promise = createScene();
                         
                         promise.then(() => {
@@ -100,9 +107,9 @@ function createscenevideo() {
     };
     //let box = BABYLON.Mesh.CreateBox("Box1", 100, videoscene);
     //box.position = new BABYLON.Vector3(0, 50, 0);
-    let alllight = new BABYLON.HemisphericLight("myLight", new BABYLON.Vector3(0, 20, 0), videoscene);
-    alllight.intensity = 3;
-    alllight.diffuse = new BABYLON.Color3(1, 1, 1);
+    let alllightv = new BABYLON.HemisphericLight("myLight", new BABYLON.Vector3(0, 20, 0), videoscene);
+    alllightv.intensity = 3;
+    alllightv.diffuse = new BABYLON.Color3(1, 1, 1);
 
     var ANote0Video = BABYLON.MeshBuilder.CreatePlane("plane", planeOpts, videoscene);
     ANote0Video.position = new BABYLON.Vector3(0,0,0.1);
@@ -138,6 +145,7 @@ function createscenevideo() {
 
             videoEl.remove()
             music()
+            scenestart.dispose()
         }, 48000)
 
     };
