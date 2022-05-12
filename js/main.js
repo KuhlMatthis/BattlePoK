@@ -73,6 +73,7 @@ function startGame() {
                         }},5000);
                     }
                 }
+                effect();
             
                 actionEnemies();    
                 if(scene.activeCamera){
