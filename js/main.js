@@ -18,6 +18,7 @@ let salles = [];
 let chemin = [];
 let cubes = [];
 let chargecubes = [];
+let mystart = true;
     
 
 window.onload = startGame;
@@ -33,7 +34,7 @@ function startGame() {
         //picamesh.position.z = salles[0].oz+50;
         picamesh.position.y = 10;
         scene.activeCamera = createFollowCamera(scene,picamesh.position, scene.pica.vuecube);
-
+        let scenestart = createscenevideo();
 
         modifySettings();
 
@@ -42,39 +43,119 @@ function startGame() {
         }, 1000)
          // main animation loop 60 times/s
         engine.runRenderLoop(() => {
-            let picatchu = scene.getMeshByName("mypicatchu");
-            if(picatchu){
-                picatchu.Pica.move(scene,inputStates,mymouse);
-                //console.log(picatchu.Pica.bounder.x);
-                if(picatchu.Pica.life <=0){
-                picatchu.Pica.animation(scene,9);
-                setTimeout(() => {
-                        const promise = createScene();
-                        while(!promise){}
-                        promise.then(() => {
-                        let picamesh = scene.pica.bounder;
-                        scene.activeCamera = createFollowCamera(scene,picamesh.position, scene.pica.vuecube);
-                        modifySettings();
-                        });
-                    }, 1000 * 4)
+            if(mystart==true){
+                scenestart.render();
+            }else{
+                let picatchu = scene.getMeshByName("mypicatchu");
+                if(picatchu){
+                    picatchu.Pica.move(scene,inputStates,mymouse);
+                    //console.log(picatchu.Pica.bounder.x);
+                    if(picatchu.Pica.life <=0){
+                    //empesh une boucle
+                        picatchu.Pica.life = 1;
+                        picatchu.Pica.animation(scene,9);
                     
+                        const promise = createScene();
+                        
+                        promise.then(() => {
+                            let picamesh = scene.pica.bounder;
+                            scene.activeCamera = createFollowCamera(scene,picamesh.position, scene.pica.vuecube);
+                            modifySettings();
+                        })
+                        
+                        
+                    }
+                    // when the picka is not on the ground he dies
+                    if (picatchu.position.y <=0.1){
+                        setTimeout(() => {
+                            if (picatchu.position.y <=0.1){
+                                picatchu.Pica.degat(0.5);
+                        }},5000);
+                    }
                 }
-                effect();
-                // when the picka is not on the ground he dies
-                if (picatchu.position.y <=0.1){
-                    setTimeout(() => {
-                        if (picatchu.position.y <=0.1){
-                            picatchu.Pica.degat(0.5);
-                    }},5000);
+            
+                actionEnemies();    
+                if(scene.activeCamera){
+                    scene.render();
+                }else{
+                    scene.activeCamera = createFreeCamera(scene)
                 }
             }
-
-            actionEnemies();    
-            scene.render();
         });
-    });
-    //scene.assetsManager.load();
+    })
 }
+    //scene.assetsManager.load();
+
+
+
+function createscenevideo() {
+    let videoscene = new BABYLON.Scene(engine);
+    canvas = document.querySelector("#myCanvas");
+    var startvideo = new BABYLON.VideoTexture("video", "videos/departv2.mp4", videoscene, false);
+    var planeOpts = {
+        height: 100, 
+        width: 180, 
+        sideOrientation: BABYLON.Mesh.DOUBLESIDE
+    };
+    //let box = BABYLON.Mesh.CreateBox("Box1", 100, videoscene);
+    //box.position = new BABYLON.Vector3(0, 50, 0);
+    let alllight = new BABYLON.HemisphericLight("myLight", new BABYLON.Vector3(0, 20, 0), videoscene);
+    alllight.intensity = 3;
+    alllight.diffuse = new BABYLON.Color3(1, 1, 1);
+
+    var ANote0Video = BABYLON.MeshBuilder.CreatePlane("plane", planeOpts, videoscene);
+    ANote0Video.position = new BABYLON.Vector3(0,0,0.1);
+    var ANote0VideoMat = new BABYLON.StandardMaterial("m", videoscene);
+    ANote0VideoMat.diffuseTexture = startvideo;
+    ANote0VideoMat.roughness = 1;
+    //ANote0VideoMat.emissiveColor = new BABYLON.Color3.White();
+    ANote0Video.material = ANote0VideoMat;
+    videoscene.onPointerDown = function () {
+        startvideo.video.play();
+        videoscene.onPointerDown = null;
+        setTimeout(() => {
+            mystart = false;
+            const videoEl = startvideo.video 
+            // Dispose texture
+            startvideo.video.pause();
+            startvideo.dispose();
+
+
+            // Remove any <source> elements, etc.
+            while (videoEl.firstChild) {
+                videoEl.removeChild(videoEl.lastChild);
+            }
+
+            // Set a blank src
+            videoEl.src = ''
+
+            // Prevent non-important errors in some browsers
+            videoEl.removeAttribute('src')
+
+            // Get certain browsers to let go
+            videoEl.load()
+
+            videoEl.remove()
+        }, 48000)
+
+    };
+    startvideo.onended = function() {
+        alert("The audio has ended");
+      };
+
+    //let camera = createFreeCamera(videoscene) 
+    let camera = new BABYLON.FollowCamera("picatchuFollowCamera",new BABYLON.Vector3(0,0,0), videoscene, ANote0Video);
+    camera.radius = 125; // how far from the object to follow
+	camera.heightOffset = 0; // how high above the object to place the camera
+	camera.rotationOffset = 180; // the viewing angle
+	
+    camera.cameraAcceleration = 0.1; // how fast to move
+	camera.maxCameraSpeed = 1;
+    videoscene.camera = camera;
+    
+    return videoscene;
+}
+
 
 async function createScene () {
 
@@ -84,6 +165,9 @@ async function createScene () {
     scene.enemies = [];
     scene.blockMaterialDirtyMechanism = true;
     scene.blockfreeActiveMeshesAndRenderingGroups = true;
+    
+    
+
     var physicsEngine =  scene.getPhysicsEngine();
     //Get gravity
     var gravity = physicsEngine.gravity;
@@ -371,9 +455,9 @@ function createFreeCamera(scene) {
     let camera = new BABYLON.FreeCamera("freeCamera", new BABYLON.Vector3(0, 50, 0), scene);
     camera.attachControl(canvas);
     // prevent camera to cross ground
-    camera.checkCollisions = true; 
+    //camera.checkCollisions = true; 
     // avoid flying with the camera
-    camera.applyGravity = true;
+    //camera.applyGravity = true;
 
 
     // Add extra keys for camera movements
@@ -429,6 +513,8 @@ function modifySettings() {
 
         }
     }
+
+    
 
     document.addEventListener("pointerlockchange", () => {
         let element = document.pointerLockElement || null;
