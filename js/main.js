@@ -136,6 +136,7 @@ function createscenevideo() {
             videoEl.load()
 
             videoEl.remove()
+            music()
         }, 48000)
 
     };
