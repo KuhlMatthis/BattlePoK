@@ -3,6 +3,8 @@
 export default class Pica {
     
     constructor(picaMesh, armature ,picaeclaireobj,rain, speed,scene) {
+
+        
         this.picaMesh = picaMesh;
         this.armature = armature;
         this.allanymation = armature._ranges;
@@ -236,6 +238,7 @@ export default class Pica {
 
     
     move(scene,inputStates, mymouse) {
+        this.checkColisionAction(scene);
         this.rain.emitter = new BABYLON.Vector3(this.bounder.position.x,30,this.bounder.position.z);
         // bloque mouvement si bounder not ready
         if (!this.bounder) return;
@@ -437,4 +440,22 @@ export default class Pica {
             }  
 	    }
     }
+    checkColisionAction(scene){
+        let origin = new BABYLON.Vector3(this.picaMesh.position.x,this.picaMesh.position.y,this.picaMesh.position.z);
+        let direction = new BABYLON.Vector3(0, -90,0);
+        let ray = new BABYLON.Ray(origin, direction, 0.01);
+        let rayHelper = new BABYLON.RayHelper(ray);
+        rayHelper.show(scene, new BABYLON.Color3.Red);
+        var hit = scene.pickWithRay(ray, (mesh) => {
+           return (mesh.name.startsWith("LaveCopy"));
+        });
+
+        if (hit.pickedMesh){
+            console.log(hit.pickedMesh.name)
+            if(hit.pickedMesh.name.startsWith("LaveCopy")){
+                this.degat(0.1)
+            }
+	    }
+    }
+
 }

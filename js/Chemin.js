@@ -12,6 +12,19 @@ export default class Chemin {
         materialBox.diffuseTexture = texture;
         materialBox.specularColor = new BABYLON.Color3(0, 0, 0);
         materialBox.freeze();
+
+        this.lavecondition = false;
+        this.box2 = BABYLON.Mesh.CreateBox("Lave", 10.2, scene);
+        this.box2.setEnabled(false);
+        var lavaMaterial = new BABYLON.StandardMaterial("lava", scene);
+        lavaMaterial.noiseTexture = new BABYLON.Texture("img/lavacloud.png", scene); // Set the bump texture
+        lavaMaterial.diffuseTexture = new BABYLON.Texture("img/lavatile.jpg", scene);
+        lavaMaterial.emissiveColor = new BABYLON.Color3(0.1, 0, 0);
+        lavaMaterial.fogColor = new BABYLON.Color3(1, 0, 0);
+        lavaMaterial.speed = 1;
+        lavaMaterial.unlit = true;
+        this.box2.material = lavaMaterial
+
         this.box.material = materialBox;
         this.box.setEnabled(false);
         this.box.addLODLevel(500, null);
@@ -33,7 +46,7 @@ export default class Chemin {
         let found;
         let lastmouve = [this.pos[0],this.pos[1]];
         while(decale[0]!=0||decale[1]!=0){
-            
+            this.lavecondition = parseInt(Math.random()*20)==0;
             found = true;
             if(decale[0]!=0){
                 let d = this.isNegatifd(decale[0]);
@@ -73,7 +86,11 @@ export default class Chemin {
     }
 
     copyBox(mypos){
-        this.boxes[this.boxes.length+1] = this.box.createInstance("copyCheminbox");
+        if(this.lavecondition){
+            this.boxes[this.boxes.length+1] = this.box2.createInstance("LaveCopy");
+        } else{
+            this.boxes[this.boxes.length+1] = this.box.createInstance("copyCheminbox");
+        }  
         this.boxes[this.boxes.length-1].position.x = mypos[0]*10;
         this.boxes[this.boxes.length-1].position.z = mypos[1]*10;
         this.boxes[this.boxes.length-1].checkCollisions = true;

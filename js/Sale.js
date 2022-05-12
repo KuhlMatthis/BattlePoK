@@ -20,10 +20,21 @@ export default class Sale {
         this.loaded = 0;
         this.boxes;
         this.box1;
+        this.boxlav = BABYLON.Mesh.CreateBox("Box1", 10, scene);
+        var lavaMaterial = new BABYLON.StandardMaterial("lava", scene);
+        lavaMaterial.noiseTexture = new BABYLON.Texture("img/lavacloud.png", scene); // Set the bump texture
+        lavaMaterial.diffuseTexture = new BABYLON.Texture("img/lavatile.jpg", scene);
+        lavaMaterial.emissiveColor = new BABYLON.Color3(0.1, 0, 0);
+        lavaMaterial.fogColor = new BABYLON.Color3(1, 0, 0);
+        lavaMaterial.speed = 1;
+        lavaMaterial.unlit = true;
+        this.boxlav.material = lavaMaterial
+        this.roomtype = 1//parseInt(Math.random()*2)
         this.lights = []
         this.salleenv = []
         this.enemies = []
         this.scene = scene;
+
         
     }
 
@@ -94,6 +105,10 @@ export default class Sale {
         this.box1 = box1;
         //light of all copies are only affexted by cplight2
         
+
+        this.boxlav.position.y= this.oy;
+        this.boxlav.position.x= this.ox;
+        this.boxlav.position.z= this.oz;
 
 
         box1.Color = new BABYLON.Color3(1, 0, 0);
@@ -172,7 +187,16 @@ export default class Sale {
                         }
                     }
                 }else{
-                    boxes[nb] = this.box1.createInstance("copySaleSolebox"+nb);
+                    //type lave au sol
+                    if(this.roomtype==1){
+                        if(parseInt(Math.random()*7)==0){
+                            boxes[nb] = this.boxlav.createInstance("LaveCopy"+nb);
+                        }else{
+                            boxes[nb] = this.box1.createInstance("copySaleSolebox"+nb);
+                        }   
+                    }else{
+                        boxes[nb] = this.box1.createInstance("copySaleSolebox"+nb);
+                    }
                     boxes[nb].position.x += x*this.taille;
                     boxes[nb].position.z += z*this.taille;
                     boxes[nb].freezeWorldMatrix();
