@@ -224,8 +224,14 @@ async function createScene () {
     BABYLON.ParticleHelper.BaseAssetsUrl = "./particuleeffects"
     let Psystem = await BABYLON.ParticleHelper.CreateAsync("bluesmoke", scene);
     scene.bluesmoke = Psystem.systems[0];
+    let Pfire =  await BABYLON.ParticleHelper.CreateAsync("fire", scene);
+    scene.fire = Pfire.systems[0]
+    scene.fire.emitter = new BABYLON.Vector3(0,15,0);
+    scene.fire.start();
     let Prain = await BABYLON.ParticleHelper.CreateAsync("rain", scene);
     let rain = Prain.systems[0];
+    
+
     
     
     scene.fogMode = BABYLON.Scene.FOGMODE_EXP;
@@ -289,7 +295,7 @@ async function createScene () {
 
     let armature = picamesh.skeletons[0];
     picatchu.name = "mypicatchu";
-    scene.pica = new Pica(picatchu,armature,picaeclaireobj,rain, 2,scene);    
+    scene.pica = new Pica(picatchu,armature,picaeclaireobj,rain, 2,scene);  
 
     createenv(vlight,marowakobj,scene);
 

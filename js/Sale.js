@@ -47,7 +47,6 @@ export default class Sale {
             
         }else{
             this.portesmoke.emitter = new BABYLON.Vector3((this.porte[0])*this.taille+this.ox,5,(this.porte[1]+1)*this.taille+this.oz)
-            this.portesmoke.start();
         }
         this.portesmoke.start();
         //this.portesmoke.addLODLevel(500,null);
