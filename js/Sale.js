@@ -30,7 +30,7 @@ export default class Sale {
         lavaMaterial.speed = 1;
         lavaMaterial.unlit = true;
         this.boxlav.material = lavaMaterial
-        this.roomtype = 2//parseInt(Math.random()*2)
+        this.roomtype = parseInt(Math.random()*3);
         this.lights = []
         this.salleenv = []
         this.enemies = []
@@ -250,21 +250,21 @@ export default class Sale {
         this.salleenv.forEach(element => {
             element.setEnabled(true);
         });
-        /*let marowakmesh = this.doClone(marowakobj.meshes[0],  marowakobj.skeletons,1)
+        let marowakmesh = this.doClone(marowakobj.meshes[0],  marowakobj.skeletons,1)
         marowakmesh.setEnabled(true);
         marowakmesh.addLODLevel(200, null);
         marowakmesh.position = new BABYLON.Vector3(this.ox+100, 8, this.oz+100)
-        */
+        
         if(this.roomtype==2){
             this.createDragonRoom(scene)
         }
         
        
         
-        /*let marowak = new Enemi(marowakmesh,marowakmesh.skeleton,1,7,scene);
+        let marowak = new Enemi(marowakmesh,marowakmesh.skeleton,1,7,scene);
         scene.enemies.push(marowakmesh);
         this.enemies.push(marowakmesh);    
-        */
+        
     }
 
     createDragonRoom(scene){

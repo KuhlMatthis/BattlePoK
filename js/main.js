@@ -18,7 +18,7 @@ let salles = [];
 let chemin = [];
 let cubes = [];
 let chargecubes = [];
-let mystart = false;
+let mystart = true;
     
 
 window.onload = startGame;

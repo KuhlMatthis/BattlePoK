@@ -444,8 +444,8 @@ export default class Pica {
         let origin = new BABYLON.Vector3(this.picaMesh.position.x,this.picaMesh.position.y+7,this.picaMesh.position.z);
         let direction = new BABYLON.Vector3(0, -90,0);
         let ray = new BABYLON.Ray(origin, direction, 0.08);
-        let rayHelper = new BABYLON.RayHelper(ray);
-        rayHelper.show(scene, new BABYLON.Color3.Red);
+        //let rayHelper = new BABYLON.RayHelper(ray);
+        //rayHelper.show(scene, new BABYLON.Color3.Red);
         var hit = scene.pickWithRay(ray, (mesh) => {
             if(mesh.name.startsWith("LaveCopy")){
                 return (mesh.name.startsWith("LaveCopy"));
