@@ -1,5 +1,6 @@
 //import * as BABYLON from "@babylonjs/core";
 import Enemi from "./Enemi.js";
+import EnemiStatue from "./EnemiStatue.js";
 
 export default class Sale {
     constructor(x,z,y,length,width,height,taille,scene) {
@@ -29,7 +30,7 @@ export default class Sale {
         lavaMaterial.speed = 1;
         lavaMaterial.unlit = true;
         this.boxlav.material = lavaMaterial
-        this.roomtype = 1//parseInt(Math.random()*2)
+        this.roomtype = 2//parseInt(Math.random()*2)
         this.lights = []
         this.salleenv = []
         this.enemies = []
@@ -249,14 +250,44 @@ export default class Sale {
         this.salleenv.forEach(element => {
             element.setEnabled(true);
         });
-        let marowakmesh = this.doClone(marowakobj.meshes[0],  marowakobj.skeletons,1)
+        /*let marowakmesh = this.doClone(marowakobj.meshes[0],  marowakobj.skeletons,1)
         marowakmesh.setEnabled(true);
         marowakmesh.addLODLevel(200, null);
         marowakmesh.position = new BABYLON.Vector3(this.ox+100, 8, this.oz+100)
-        let marowak = new Enemi(marowakmesh,marowakmesh.skeleton,1,7,scene);
+        */
+        if(this.roomtype==2){
+            this.createDragonRoom(scene)
+        }
+        
+       
+        
+        /*let marowak = new Enemi(marowakmesh,marowakmesh.skeleton,1,7,scene);
         scene.enemies.push(marowakmesh);
         this.enemies.push(marowakmesh);    
+        */
     }
+
+    createDragonRoom(scene){
+        for (let i = 0; i < 4; i++) {
+            let xval = Math.random()*4;
+            let fires = [];
+            for (let z = 0; z < 15; z++) {
+                let fire2 = scene.fire.clone("fire");
+                fire2.particleTexture = new BABYLON.Texture("img/Fire_SpriteSheet1_8x8.png");
+                fire2.emitter = new BABYLON.Vector3(this.ox+40*i+15, 5, this.oz+30+10*z);
+                fires.push(fire2);
+            }
+            let statueDragon = scene.enemies.statuedragon.clone("Statue");
+            statueDragon.position = new BABYLON.Vector3(this.ox+40*i+10, 5, this.oz+5)
+            statueDragon.setEnabled(true);
+            let statueDragonp = new EnemiStatue(statueDragon,fires,scene);
+            this.enemies.push(statueDragon);
+            scene.enemies.push(statueDragon);
+        }
+
+    }
+
+
     disolveroom(scene){
         this.salleenv.forEach(element => {
             element.setEnabled(false);

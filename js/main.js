@@ -79,10 +79,11 @@ function startGame() {
                                 picatchu.Pica.degat(0.5);
                         }},5000);
                     }
-                }
-                effect();
+                    effect();
             
-                actionEnemies();    
+                    actionEnemies();
+                }
+                    
                 if(scene.activeCamera){
                     scene.render();
                 }else{
@@ -225,9 +226,7 @@ async function createScene () {
     let Psystem = await BABYLON.ParticleHelper.CreateAsync("bluesmoke", scene);
     scene.bluesmoke = Psystem.systems[0];
     let Pfire =  await BABYLON.ParticleHelper.CreateAsync("fire", scene);
-    scene.fire = Pfire.systems[0]
-    scene.fire.emitter = new BABYLON.Vector3(0,15,0);
-    scene.fire.start();
+    scene.fire = Pfire.systems[0];
     let Prain = await BABYLON.ParticleHelper.CreateAsync("rain", scene);
     let rain = Prain.systems[0];
     
@@ -253,8 +252,15 @@ async function createScene () {
     const picaeclaireobj = await BABYLON.SceneLoader.ImportMeshAsync("", "3dmodule/Picatchu/Picalightatac/", "picalightatc.babylon", scene); 
     const picamesh = await BABYLON.SceneLoader.ImportMeshAsync("", "3dmodule/Picatchu/", "picatchu5d.babylon", scene);
     const labras = await BABYLON.SceneLoader.ImportMeshAsync("", "3dmodule/Labras/", "lapras.babylon", scene);
+    const statuedragon = await BABYLON.SceneLoader.ImportMeshAsync("","3dmodule/StatueDragon/","StatueDragon.babylon",scene);
+    scene.enemies.statuedragon = statuedragon.meshes[0];
+    scene.enemies.statuedragon.scaling = new BABYLON.Vector3(0.2,0.2,0.2);
+    statuedragon.meshes[0].setEnabled(false);
     labras.meshes[0].position.x=-50;
     labras.meshes[0].position.y=0;
+    scene.enemies.marowakobj = marowakobj.meshes[0];
+    scene.enemies.labras = labras.meshes[0];
+    labras.meshes[0].setEnabled(false);
     marowakobj.meshes[0].setEnabled(false);
     
     // Create and tweak the background material.
