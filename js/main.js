@@ -254,6 +254,10 @@ async function createScene () {
     const labras = await BABYLON.SceneLoader.ImportMeshAsync("", "3dmodule/Labras/", "lapras.babylon", scene);
     const statuedragon = await BABYLON.SceneLoader.ImportMeshAsync("","3dmodule/StatueDragon/","StatueDragon.babylon",scene);
     const papillon = await BABYLON.SceneLoader.ImportMeshAsync("","3dmodule/Papillon/","papillon.babylon",scene);
+    const explosif = await BABYLON.SceneLoader.ImportMeshAsync("","3dmodule/Plosif/","pokemonexplosif.babylon");
+    explosif.meshes[0].setEnabled(false);
+    scene.enemies.explosif = explosif;
+
     scene.enemies.statuedragon = statuedragon.meshes[0];
     scene.enemies.statuedragon.scaling = new BABYLON.Vector3(0.2,0.2,0.2);
     papillon.meshes[0].setEnabled(false);
@@ -301,6 +305,7 @@ async function createScene () {
     let armature = picamesh.skeletons[0];
     picatchu.name = "mypicatchu";
     scene.pica = new Pica(picatchu,armature,picaeclaireobj,rain, 2,scene);  
+    scene.pica.bounder.position = new BABYLON.Vector3(0,15,0);
 
     createenv(vlight,marowakobj,scene);
 
@@ -467,7 +472,7 @@ function creerEnemieExterieure(scene){
                         }
                     }
                 }
-                let enemi2 = createur.creerEnemie(scene.enemies.papillon,new BABYLON.Vector3(origin.x,10,origin.z), 'p')
+                let enemi2 = createur.creerEnemie(scene.enemies.papillon,new BABYLON.Vector3(origin.x,15,origin.z), 'p')
                 externenmies.push(enemi2);
             }
             
@@ -501,9 +506,10 @@ function actionEnemies() {
             if(enemi.isEnabled()){
                 enemi.Enemi.action(scene);
                 //remove dead enemi from enemies list
-                if(enemi.Enemi.life<0){
+                if(enemi.Enemi.life<=0){
                     var enemiIndex = scene.enemies.indexOf(enemi);
                     scene.enemies.splice(enemiIndex, 1);
+                    
                 }
 
             }

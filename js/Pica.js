@@ -319,7 +319,7 @@ export default class Pica {
         if(this.notbloque){
             if(inputStates.space){
                 if(this.isrunning){
-                    this.jump=4;
+                    this.jump=3;
                     this.animation(scene,6)
                 }else{
                     this.jump=3;
@@ -403,7 +403,7 @@ export default class Pica {
             this.animationstate = number;
             let myanimation = Object.values(this.allanymation)[number];
             //wait end animation
-            if(number==2 || number == 3 || number == 6 || number == 7 || number == 8 || number == 9){
+            if(number==2 || number == 3 || number == 7 || number == 8 || number == 9){
                 this.notbloque = false;
                 setTimeout(async () => {
                     this.anim = scene.beginAnimation(this.armature, myanimation.from+2, myanimation.to, false);
@@ -506,7 +506,6 @@ export default class Pica {
             }else{
                 return (mesh.name.startsWith("fire"));
             }
-           
         });
 
         if (hit.pickedMesh){

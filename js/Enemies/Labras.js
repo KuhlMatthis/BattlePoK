@@ -76,7 +76,7 @@ export default class Labras extends Enemi {
               }, 
               () => {
                 if (scene.pica.bounder._isDisposed) return;
-                scene.pica.degat(1);
+                scene.pica.degat(0.5);
               }
             )
         );
