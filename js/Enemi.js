@@ -2,7 +2,7 @@
 
 
 export default class Enemi {
-    constructor(enemiMesh, armature , speed, height,scene) {
+    constructor(enemiMesh, armature , speed, height,live,nbenergie,scene) {
         this.enemiMesh = enemiMesh;
         this.armature = armature;
         this.allanymation = armature._ranges;
@@ -18,8 +18,8 @@ export default class Enemi {
 
         ///////////////////////         creer les affichage statistique       //////////////////////
 
-        this.life = 5;
-        this.maxlife=5;
+        this.life = live;
+        this.maxlife=live;
         this.lifebar = new BABYLON.MeshBuilder.CreateBox("enemilivebar", {height: 0.8, width: 1, depth: 0.4},scene);
         this.lifebar.parent = this.enemiMesh;
         this.lifebar.position.y += height + 1;
@@ -34,8 +34,8 @@ export default class Enemi {
         
 
         //creer bar d'energie
-        this.maxenergie=5;
-        this.energie = 5;
+        this.maxenergie=nbenergie;
+        this.energie = nbenergie;
         this.energiebar = new BABYLON.MeshBuilder.CreateBox("enemilivebar", {height: 0.4, width: 1, depth: 0.4},scene);
         this.energiebar.parent = this.enemiMesh;
         this.energiebar.position.y += height;
@@ -86,14 +86,12 @@ export default class Enemi {
 
 
     action(scene){
-
-
         if (!this.bounder) return;
         this.bounder.moveWithCollisions(new BABYLON.Vector3(0,-1,0));
         this.enemiMesh.position = new BABYLON.Vector3(
-        this.bounder.position.x,
-        this.bounder.position.y-this.height/2,
-        this.bounder.position.z
+            this.bounder.position.x,
+            this.bounder.position.y-this.height/2,
+            this.bounder.position.z
         );
         let player = scene.getMeshByName("mypicatchu");
         let direction = player.position.subtract(this.enemiMesh.position);
@@ -102,7 +100,7 @@ export default class Enemi {
         let alpha = Math.atan2(-dir.x, -dir.z);
         this.enemiMesh.rotation.y = alpha;
         if(this.notbloque){
-            if (distance > 50) {
+            if (distance > 80) {
                 this.animation(scene,0);
             } else if(distance > 10) {
                 this.animation(scene,1);
@@ -204,6 +202,7 @@ export default class Enemi {
         bar.scaling.x +=incr;
         bar.position.x+=incr/2;
     }
+   
 
     aplyataccolision(scene,hitpoint,length,direct){
         let origin = new BABYLON.Vector3(this.enemiMesh.position.x,this.enemiMesh.position.y+4,this.enemiMesh.position.z);

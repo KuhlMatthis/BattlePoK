@@ -347,28 +347,30 @@ export default class Pica {
                     }
                     
                 }
-            }else if(inputStates.fight2){
+            }else if(inputStates.fire){
                 if(this.energie>0){
-                    
-                    this.aplyshortataccolision(scene,1,10);
-                    this.animation(scene,8);
-                    this.energie-=1;
-                    this.modifiemaxbar(this.energiebar,-1); 
-                }
-            }else if(inputStates.fire2){
-                if(this.energie>0){
-                    
-                    this.visibilityeclairemesh(true);
-                    scene.beginAnimation(this.picaatarmature, 0, 32, false);
-                    this.notbloque = false;
-                    setTimeout(() => { 
-                        this.visibilityeclairemesh(false);
-                        this.notbloque = true;  
-                    }, 1000 * 1.5)
-                    this.aplyshortataccolision(scene,1,100);
-                    //this.animation(scene,8);
-                    this.energie-=1;
-                    this.modifiemaxbar(this.energiebar,-1); 
+                    if(this.attacstate){
+                        this.animation(scene,7)
+                        this.notbloque = false;
+                        setTimeout(() => {
+                            this.throwelectricball(scene);
+                            this.notbloque = true;
+                        }, 1000 * 1)
+                        this.energie-=1;
+                        this.modifiemaxbar(this.energiebar,-1);
+                    }else{
+                        this.visibilityeclairemesh(true);
+                        scene.beginAnimation(this.picaatarmature, 0, 32, false);
+                        this.notbloque = false;
+                        setTimeout(() => { 
+                            this.visibilityeclairemesh(false);
+                            this.notbloque = true;  
+                        }, 1000 * 1.5)
+                        this.aplyshortataccolision(scene,1,100);
+                        //this.animation(scene,8);
+                        this.energie-=1;
+                        this.modifiemaxbar(this.energiebar,-1);
+                    }   
                 }
             }else if(inputStates.up || inputStates.down || inputStates.left || inputStates.right){
                 if(this.isrunning){
@@ -440,6 +442,58 @@ export default class Pica {
             }  
 	    }
     }
+
+    throwelectricball(scene){
+        let sphere = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter: 4, segments: 32});
+        let sphereMaterial = new BABYLON.StandardMaterial("sphereMaterial", scene);
+        sphere.material = sphereMaterial;
+        sphereMaterial.emissiveColor = new BABYLON.Color3(0.05, 0.05, 0.05);
+        sphereMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
+        sphereMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+        sphereMaterial.emissiveTexture = new BABYLON.Texture("img/bouleelec.jpg", scene);
+
+        sphere.position = new BABYLON.Vector3(this.picaMesh.position.x,this.picaMesh.position.y+5,this.picaMesh.position.z);
+        sphere.position.addInPlace(this.picaMesh.frontVector.multiplyByFloats(7, 7, 7));
+        
+        sphere.physicsImpostor = new BABYLON.PhysicsImpostor(
+            sphere,
+            BABYLON.PhysicsImpostor.SphereImpostor,
+            { mass: 1 },
+            scene
+        );
+
+        let powerOfFire = 100;
+        let aimForceVector = new BABYLON.Vector3(
+            this.picaMesh.frontVector.x * powerOfFire,
+            0,
+            this.picaMesh.frontVector.z * powerOfFire
+        );
+        sphere.physicsImpostor.applyImpulse(aimForceVector, sphere.getAbsolutePosition());
+        sphere.actionManager = new BABYLON.ActionManager(scene);
+
+        scene.enemies.forEach(enemi => {
+            sphere.actionManager.registerAction(
+                new BABYLON.ExecuteCodeAction(
+                  {
+                    trigger: BABYLON.ActionManager.OnIntersectionEnterTrigger,
+                    parameter: enemi.Enemi.bounder,
+                  }, 
+                  () => {
+                    if (enemi.Enemi.bounder._isDisposed) return;
+                    enemi.Enemi.degat(2);
+                  }
+                )
+              );
+        });
+
+        setTimeout(() => { 
+            sphere.dispose();
+        },1000*3)
+        
+    }
+
+
+
     checkColisionAction(scene){
         let origin = new BABYLON.Vector3(this.picaMesh.position.x,this.picaMesh.position.y+7,this.picaMesh.position.z);
         let direction = new BABYLON.Vector3(0, -90,0);

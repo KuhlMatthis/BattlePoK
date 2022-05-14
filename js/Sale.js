@@ -1,6 +1,8 @@
 //import * as BABYLON from "@babylonjs/core";
 import Enemi from "./Enemi.js";
 import EnemiStatue from "./EnemiStatue.js";
+import Createur from "./Createur.js";
+
 
 export default class Sale {
     constructor(x,z,y,length,width,height,taille,scene) {
@@ -40,6 +42,7 @@ export default class Sale {
     }
 
     create(vlight,scene) {
+        this.createur = new Createur(scene);
         this.portesmoke = scene.bluesmoke.clone("system2");
         this.portesmoke.particleTexture = new BABYLON.Texture("img/Smoke_SpriteSheet_8x8.png");
         if(this.porte[0]-this.porte[2]!= 0){
@@ -250,21 +253,17 @@ export default class Sale {
         this.salleenv.forEach(element => {
             element.setEnabled(true);
         });
-        let marowakmesh = this.doClone(marowakobj.meshes[0],  marowakobj.skeletons,1)
-        marowakmesh.setEnabled(true);
-        marowakmesh.addLODLevel(200, null);
-        marowakmesh.position = new BABYLON.Vector3(this.ox+100, 8, this.oz+100)
-        
         if(this.roomtype==2){
             this.createDragonRoom(scene)
         }
         
-       
-        
-        let marowak = new Enemi(marowakmesh,marowakmesh.skeleton,1,7,scene);
-        scene.enemies.push(marowakmesh);
-        this.enemies.push(marowakmesh);    
-        
+        let marowakmesh = this.createur.creerEnemie(marowakobj,new BABYLON.Vector3(this.ox+100, 8, this.oz+100),'m');
+        this.enemies.push(marowakmesh);
+        /*let labrasobj = scene.enemies.labras
+        let labramesh = this.doClone(labrasobj.meshes[0], labrasobj.skeletons,1)
+        labramesh.setEnabled(true);
+        labramesh.addLODLevel(200,null);
+        */
     }
 
     createDragonRoom(scene){

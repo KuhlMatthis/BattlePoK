@@ -2,6 +2,7 @@
 import Pica from "./Pica.js";
 import Sale from "./Sale.js";
 import Chemin from "./Chemin.js";
+import Createur from "./Createur.js";
 import Enemi from "./Enemi.js";
 
 let canvas;
@@ -18,7 +19,7 @@ let salles = [];
 let chemin = [];
 let cubes = [];
 let chargecubes = [];
-let mystart = true;
+let mystart = false;
     
 
 window.onload = startGame;
@@ -47,7 +48,6 @@ function startGame() {
             if(mystart==true){
                 scenestart.render();
             }else{
-
                 let picatchu = scene.getMeshByName("mypicatchu");
                 if(picatchu){
                     picatchu.Pica.move(scene,inputStates,mymouse);
@@ -177,7 +177,6 @@ async function createScene () {
     scene.blockMaterialDirtyMechanism = true;
     scene.blockfreeActiveMeshesAndRenderingGroups = true;
     
-    
 
     var physicsEngine =  scene.getPhysicsEngine();
     //Get gravity
@@ -259,7 +258,7 @@ async function createScene () {
     labras.meshes[0].position.x=-50;
     labras.meshes[0].position.y=0;
     scene.enemies.marowakobj = marowakobj.meshes[0];
-    scene.enemies.labras = labras.meshes[0];
+    scene.enemies.labras = labras;
     labras.meshes[0].setEnabled(false);
     marowakobj.meshes[0].setEnabled(false);
     
@@ -269,9 +268,7 @@ async function createScene () {
     skybox.material = backgroundMaterial;
     */
     // background
-
     //let ground = BABYLON.MeshBuilder.CreateGround("myGround", {width: 60, height: 60}, scene);
-    
     scene.collisionsEnabled = true;
 
     
@@ -415,7 +412,41 @@ function createenv(vlight,marowakobj,scene){
     )
     );
     chargenext.visibility = 0;
-    //music();
+    creerEnemieExterieure(scene);
+}
+
+function creerEnemieExterieure(scene){
+    let createur = new Createur(scene);
+    for (let nblabrasy = 0; nblabrasy < 3; nblabrasy++) {
+        for(let nblabrasx=0; nblabrasx<3; nblabrasx++){
+            if(nblabrasx!=0 || nblabrasy!=0 ){
+                let noGround = false;
+            let origin = new BABYLON.Vector3( 0,0,0);
+            while(!noGround){
+                noGround=true;
+                origin = new BABYLON.Vector3( Math.random()*200+nblabrasx*220,0,Math.random()*200+nblabrasy*220);
+                let direction = new BABYLON.Vector3(0, -90,0);
+                let ray = new BABYLON.Ray(origin, direction, 0.2);
+                var hit = scene.pickWithRay(ray, (mesh) => {
+                    return (mesh.name.startsWith("copy"));   
+                });
+
+                if (hit.pickedMesh){
+                    if(hit.pickedMesh.name.startsWith("copy")){
+                        console.log("hit copy ", hit.pickedMesh.name);
+                        noGround= false;
+                    }
+                }
+            }
+            createur.creerEnemie(scene.enemies.labras, origin, 'l');
+            }
+            
+        }
+        //raycast to verify no ground;
+
+    }
+
+    
 }
 
 function decalcub(cube,salle){
@@ -524,7 +555,7 @@ function modifySettings() {
             console.log(event.button)
             //event.preventDefault();
             if(event.button==0){
-                inputStates.fire2 = true;
+                inputStates.fire = true;
             }
             if(event.button==1){
                 inputStates.switch = true;
@@ -556,8 +587,7 @@ function modifySettings() {
     inputStates.space = false;
     inputStates.run = false;
     inputStates.fight = false;
-    inputStates.fight2 = false;
-    inputStates.fire2 = false;
+    inputStates.fire = false;
     inputStates.switch = false;
     
 
@@ -577,13 +607,9 @@ function modifySettings() {
         } else if ((event.key === "ArrowDown")|| (event.key === "s")|| (event.key === "S")) {
            inputStates.down = true;
         } else if (event.key === "f") {
-            inputStates.fire1 = true;
+            inputStates.fire = true;
         } else if (event.key === "g"){
-            inputStates.fire2 = true;
-        } else if(event.key === "h"){
             inputStates.fight = true;
-        } else if(event.key === "j"){
-            inputStates.fight2 = true;
         } else if (event.key === " ") {
            inputStates.space = true;
         } else if (event.key === "r") {
@@ -602,13 +628,11 @@ function modifySettings() {
         } else if ((event.key === "ArrowDown")|| (event.key === "s")|| (event.key === "S")) {
            inputStates.down = false;
         }else if (event.key === "f") {
-            inputStates.fire1 = false;
+            inputStates.fire = false;
         }else if (event.key === "g"){
-            inputStates.fire2 = false;
-        }else if(event.key === "h"){
             inputStates.fight = false;
-        }else if(event.key === "j"){
-            inputStates.fight2 = false;
+        }else if(event.key === "h"){
+            inputStates.switch = true;
         }else if (event.key === " ") {
            inputStates.space = false;
         }else if (event.key === "r") {
@@ -709,7 +733,6 @@ function gui(){
        setTimeout(gui,3000);
    });
    advancedTexture.addControl(exitbtn);
-
 }
 
 function spark(){
