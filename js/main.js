@@ -20,6 +20,7 @@ let chemin = [];
 let cubes = [];
 let chargecubes = [];
 let mystart = false;
+let externenmies = [];
     
 
 window.onload = startGame;
@@ -252,13 +253,14 @@ async function createScene () {
     const picamesh = await BABYLON.SceneLoader.ImportMeshAsync("", "3dmodule/Picatchu/", "picatchu5d.babylon", scene);
     const labras = await BABYLON.SceneLoader.ImportMeshAsync("", "3dmodule/Labras/", "lapras.babylon", scene);
     const statuedragon = await BABYLON.SceneLoader.ImportMeshAsync("","3dmodule/StatueDragon/","StatueDragon.babylon",scene);
+    const papillon = await BABYLON.SceneLoader.ImportMeshAsync("","3dmodule/Papillon/","papillon.babylon",scene);
     scene.enemies.statuedragon = statuedragon.meshes[0];
     scene.enemies.statuedragon.scaling = new BABYLON.Vector3(0.2,0.2,0.2);
+    papillon.meshes[0].setEnabled(false);
     statuedragon.meshes[0].setEnabled(false);
-    labras.meshes[0].position.x=-50;
-    labras.meshes[0].position.y=0;
     scene.enemies.marowakobj = marowakobj.meshes[0];
     scene.enemies.labras = labras;
+    scene.enemies.papillon = papillon;
     labras.meshes[0].setEnabled(false);
     marowakobj.meshes[0].setEnabled(false);
     
@@ -340,7 +342,11 @@ function createenv(vlight,marowakobj,scene){
                     salles[i].portesmoke.stop();
                     salles[i].createroom(marowakobj, scene);
                     scene.pica.rain.stop();
-                    // boucles sur les autres salles est les décharger
+                    //Décharge les enemies extérieur
+                    externenmies.forEach(enemi => {
+                        
+                        enemi.setEnabled(false);
+                    });
                 }
             )
         );
@@ -354,7 +360,10 @@ function createenv(vlight,marowakobj,scene){
                     salles[i].portesmoke.start();
                     salles[i].disolveroom(scene);
                     scene.pica.rain.start();
-                    // boucles sur les autres salles est les décharger
+                    //recreez le monde exterieur
+                    externenmies.forEach(enemi => {
+                        enemi.setEnabled(true);
+                    });
                 }
             )
         );
@@ -421,24 +430,45 @@ function creerEnemieExterieure(scene){
         for(let nblabrasx=0; nblabrasx<3; nblabrasx++){
             if(nblabrasx!=0 || nblabrasy!=0 ){
                 let noGround = false;
-            let origin = new BABYLON.Vector3( 0,0,0);
-            while(!noGround){
-                noGround=true;
-                origin = new BABYLON.Vector3( Math.random()*200+nblabrasx*220,0,Math.random()*200+nblabrasy*220);
-                let direction = new BABYLON.Vector3(0, -90,0);
-                let ray = new BABYLON.Ray(origin, direction, 0.2);
-                var hit = scene.pickWithRay(ray, (mesh) => {
-                    return (mesh.name.startsWith("copy"));   
-                });
+                let origin = new BABYLON.Vector3( 0,0,0);
+                while(!noGround){
+                    noGround=true;
+                    origin = new BABYLON.Vector3( Math.random()*200+nblabrasx*220,0,Math.random()*200+nblabrasy*220);
+                    let direction = new BABYLON.Vector3(0, -90,0);
+                    let ray = new BABYLON.Ray(origin, direction, 0.2);
+                    var hit = scene.pickWithRay(ray, (mesh) => {
+                        return (mesh.name.startsWith("copy"));   
+                    });
 
-                if (hit.pickedMesh){
-                    if(hit.pickedMesh.name.startsWith("copy")){
-                        console.log("hit copy ", hit.pickedMesh.name);
-                        noGround= false;
+                    if (hit.pickedMesh){
+                        if(hit.pickedMesh.name.startsWith("copy")){
+                            console.log("hit copy ", hit.pickedMesh.name);
+                            noGround= false;
+                        }
                     }
                 }
-            }
-            createur.creerEnemie(scene.enemies.labras, origin, 'l');
+                let enemi = createur.creerEnemie(scene.enemies.labras, origin, 'l');
+                externenmies.push(enemi);
+                noGround = false;
+                origin = new BABYLON.Vector3( 0,0,0);
+                while(!noGround){
+                    noGround=true;
+                    origin = new BABYLON.Vector3( Math.random()*200+nblabrasx*220,0,Math.random()*200+nblabrasy*220);
+                    let direction = new BABYLON.Vector3(0, -90,0);
+                    let ray = new BABYLON.Ray(origin, direction, 0.2);
+                    var hit = scene.pickWithRay(ray, (mesh) => {
+                        return (mesh.name.startsWith("copy"));   
+                    });
+
+                    if (hit.pickedMesh){
+                        if(hit.pickedMesh.name.startsWith("copy")){
+                            console.log("hit copy ", hit.pickedMesh.name);
+                            noGround= false;
+                        }
+                    }
+                }
+                let enemi2 = createur.creerEnemie(scene.enemies.papillon,new BABYLON.Vector3(origin.x,10,origin.z), 'p')
+                externenmies.push(enemi2);
             }
             
         }
@@ -468,12 +498,16 @@ function actionEnemies() {
     if(scene.enemies) {
         
         scene.enemies.forEach(enemi => {
-            enemi.Enemi.action(scene);
-            //remove dead enemi from enemies list
-            if(enemi.Enemi.life<0){
-                var enemiIndex = scene.enemies.indexOf(enemi);
-                scene.enemies.splice(enemiIndex, 1);
+            if(enemi.isEnabled()){
+                enemi.Enemi.action(scene);
+                //remove dead enemi from enemies list
+                if(enemi.Enemi.life<0){
+                    var enemiIndex = scene.enemies.indexOf(enemi);
+                    scene.enemies.splice(enemiIndex, 1);
+                }
+
             }
+            
         });
 
     }    

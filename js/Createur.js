@@ -1,5 +1,6 @@
 import Enemi from "./Enemi.js";
 import Labras from "./Enemies/labras.js";
+import Papillon from "./Enemies/Papillon.js";
 /*
 
     Creer les enemies
@@ -15,7 +16,7 @@ export default class Createur {
      * 
      * @param {*} meshobj : le objet importer
      * @param {*} position : BABYLON.Vector3(x,y,z)
-     * @param {*} type : 'm'->marrowak 'l' -> labras
+     * @param {*} type : 'm'->marrowak 'l' -> labras 'p' -> papillon
      */
     creerEnemie(meshobj,position,type) {
         let mesh = this.doClone(meshobj.meshes[0],meshobj.skeletons,this.id);
@@ -25,9 +26,12 @@ export default class Createur {
         this.scene.enemies.push(mesh);
         this.id+=1;
         if(type=='m'){
-            new Enemi(mesh,mesh.skeleton,1,7,5,5,this.scene);
+            new Enemi(mesh,mesh.skeleton,1,7,3,3,this.scene);
         }else if(type=='l'){
-            new Labras(mesh,mesh.skeleton,2,20,5,5,this.scene) 
+            new Labras(mesh,mesh.skeleton,2,20,5,5,this.scene);
+        }else if(type=='p'){
+            new Papillon(mesh,mesh.skeleton,2,15,3,3,this.scene);
+            mesh.position.y+=10;
         }
         return mesh;
     }

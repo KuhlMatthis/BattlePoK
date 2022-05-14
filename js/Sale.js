@@ -256,14 +256,25 @@ export default class Sale {
         if(this.roomtype==2){
             this.createDragonRoom(scene)
         }
+        this.createEnemies(marowakobj,scene);
+    }
+
+
+    createEnemies(marowakobj,scene){
+        let nbval = scene.pica.level*2;
+        while(nbval>0){
+            let choice = parseInt(Math.random()*3);
+            if(choice==0){
+                let marowakmesh = this.createur.creerEnemie(marowakobj,new BABYLON.Vector3(this.ox+20+Math.random()*80, 8, this.oz+20+Math.random()*80),'m');
+                this.enemies.push(marowakmesh);
+                nbval-=1;
+            }else if(nbval>=2 && choice==1){
+                let  papillon = this.createur.creerEnemie(scene.enemies.papillon,new BABYLON.Vector3(this.ox+20+Math.random()*80, 15, this.oz+20+Math.random()*80),'p');
+                this.enemies.push(papillon);
+                nbval-=2;
+            }
+        }
         
-        let marowakmesh = this.createur.creerEnemie(marowakobj,new BABYLON.Vector3(this.ox+100, 8, this.oz+100),'m');
-        this.enemies.push(marowakmesh);
-        /*let labrasobj = scene.enemies.labras
-        let labramesh = this.doClone(labrasobj.meshes[0], labrasobj.skeletons,1)
-        labramesh.setEnabled(true);
-        labramesh.addLODLevel(200,null);
-        */
     }
 
     createDragonRoom(scene){
