@@ -732,14 +732,25 @@ function guiscene(){
     rectangle.addControl(image);
 
     let rectangleinfo = new BABYLON.GUI.Rectangle("info");
-    rectangleinfo.background = new BABYLON.Color3(0.50, 0.25, 0.40);
-    rectangleinfo.width = "60%";
+    rectangleinfo.background = "#B91372";
+    rectangleinfo.width = "40%";
     rectangleinfo.height = "40%";
 
+    var text1 = new BABYLON.GUI.TextBlock("text1");
+    
+    text1.fontFamily = "Helvetica";
+    text1.textWrapping = true;
+    
+    text1.text = "BattlePok: it's the pockemon revolution.\n\n Pica must survive and fight these enemies in this world to give humans a 2nd chance to live"+
+    "\n\n ¤ To launch the game, click on PLAY ."
+    + "\n ¤ To leave the game, click on Exit. "
+    +"\n\n\nJoin the adventure and make the world better. ";
+    text1.color = "white";
+    text1.fontSize = "20px";
 
    var informationbtn = BABYLON.GUI.Button.CreateSimpleButton("Informations","Informations")
-   informationbtn.width=0.08;
-   informationbtn.height=0.04;
+   informationbtn.width=0.1;
+   informationbtn.height=0.06;
    informationbtn.top=-200;
    informationbtn.cornerRadius = 20;
    informationbtn.left =450;
@@ -759,17 +770,18 @@ function guiscene(){
            advancedTexture.removeControl(replaybtn);
            advancedTexture.removeControl(exitbtn);
            advancedTexture.addControl(rectangleinfo);
+           rectangleinfo.addControl(text1);
        }
    });
    advancedTexture.addControl(informationbtn);
 
    var playbtn = BABYLON.GUI.Button.CreateSimpleButton("but1", "Play!");
    playbtn.width = 0.15;
-   playbtn.height = 0.05;
-   playbtn.top = -120;
+   playbtn.height = 0.06;
+   playbtn.top = -140;
    playbtn.cornerRadius = 20;
    playbtn.color = "white";
-   playbtn.fontSize = 12;
+   playbtn.fontSize = 14;
    playbtn.background = "#16db93";
    playbtn.onPointerUpObservable.add(function() {
     setTimeout(gamestart = false,2000);
@@ -778,11 +790,11 @@ function guiscene(){
 
    var replaybtn = BABYLON.GUI.Button.CreateSimpleButton("but2", "Replay");
    replaybtn.width = 0.15;
-   replaybtn.height = 0.05;
-   replaybtn.top = -60;
+   replaybtn.height = 0.06;
+   replaybtn.top = -70;
    replaybtn.cornerRadius = 20;
    replaybtn.color = "white";
-   replaybtn.fontSize = 12;
+   replaybtn.fontSize = 14;
    replaybtn.background = "#f1c453";
    replaybtn.onPointerUpObservable.add(function() {
        setTimeout(gamestart = false,2000);
@@ -791,10 +803,10 @@ function guiscene(){
 
    var exitbtn = BABYLON.GUI.Button.CreateSimpleButton("but3", "Exit");
    exitbtn.width = 0.15;
-   exitbtn.height = 0.05;
+   exitbtn.height = 0.06;
    exitbtn.cornerRadius = 20;
    exitbtn.color = "white";
-   exitbtn.fontSize = 12;
+   exitbtn.fontSize = 14;
    exitbtn.background = "#ee6055";
    exitbtn.onPointerUpObservable.add(function() {
         let lastscene = true; 
