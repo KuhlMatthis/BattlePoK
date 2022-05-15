@@ -686,6 +686,12 @@ function modifySettings() {
            inputStates.space = false;
         }else if (event.key === "r") {
            inputStates.run = false;
+        }else if (event.key === "p"){
+            if(gamestart){
+                gamestart =false; 
+            }else{
+                gamestart=true;
+            }
         }
     }, false);
 
@@ -744,6 +750,7 @@ function guiscene(){
     text1.text = "BattlePok: it's the pockemon revolution.\n\n Pica must survive and fight these enemies in this world to give humans a 2nd chance to live"+
     "\n\n ¤ To launch the game, click on PLAY ."
     + "\n ¤ To leave the game, click on Exit. "
+    +"\n ¤ To make a pause on the game, click 'Letter <P>'"
     +"\n\n\nJoin the adventure and make the world better. ";
     text1.color = "white";
     text1.fontSize = "20px";
