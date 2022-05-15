@@ -718,7 +718,7 @@ function guiscene(){
 
     // GUI
     var advancedTexture = new BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("GUI");
-    
+    var clic =0;
    var informationbtn = BABYLON.GUI.Button.CreateSimpleButton("settings","settings")
    informationbtn.width=0.08;
    informationbtn.height=0.04;
@@ -728,7 +728,17 @@ function guiscene(){
    informationbtn.color = "white";
    informationbtn.background ="#048ba8";
    informationbtn.onPointerUpObservable.add(function(){
-       console.log("je vais mettre les information ici et l'acces vers cette scene ce ferais avec les touches du clavier");
+       //console.log("je vais mettre les information ici et l'acces vers cette scene ce ferais avec les touches du clavier");
+       clic+=1;
+       if(clic %2 ==0){
+           advancedTexture.addControl(playbtn);
+           advancedTexture.addControl(replaybtn);
+           advancedTexture.addControl(exitbtn);
+       } else{
+           advancedTexture.removeControl(playbtn);
+           advancedTexture.removeControl(replaybtn);
+           advancedTexture.removeControl(exitbtn);
+       }
    });
    advancedTexture.addControl(informationbtn);
 
@@ -767,6 +777,7 @@ function guiscene(){
    exitbtn.background = "#ee6055";
    exitbtn.onPointerUpObservable.add(function() {
         let lastscene = true; 
+        setTimeout(window.close(),10000)
    });
    advancedTexture.addControl(exitbtn);
 
