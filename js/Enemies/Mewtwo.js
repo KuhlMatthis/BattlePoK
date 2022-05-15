@@ -85,6 +85,9 @@ export default class Mewtwo extends Enemi {
         }  
     }
 
+    mort(){
+        this.scene.endgame = true; 
+    }
 
     hpositionrayon(radius,l){
         return Math.sqrt(radius*radius - l*l);

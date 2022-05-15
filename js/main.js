@@ -20,9 +20,10 @@ let chemin = [];
 let cubes = [];
 let chargecubes = [];
 let mystart = false;
-let gamestart = false;
+let gamestart = true;
 let endgame = false;
 let externenmies = [];
+let first =true; 
     
 
 window.onload = startGame;
@@ -50,15 +51,19 @@ function startGame() {
         }, 1000)
          // main animation loop 60 times/s
         engine.runRenderLoop(() => {
-            if(mystart!=true){
+            if(mystart){
                 scenestart.render();
-                setTimeout(gamestart = true,1000)
-                mystart=true;
+                //setTimeout(gamestart = true,1000)
+                //mystart=true;
             }else if(gamestart){
                 guigame.render();
             }else if(endgame){
                 guigame.dispose();
                 last.render();
+            }else if(scene.endgame){
+                guigame.dispose();
+                last.dispose();
+                //gongrat.render();
             }else{
                 let picatchu = scene.getMeshByName("mypicatchu");
                 if(picatchu){
@@ -66,9 +71,10 @@ function startGame() {
                     //console.log(picatchu.Pica.bounder.x);
                     if(picatchu.Pica.life <=0){
                     //empesh une boucle
-                        picatchu.Pica.life = 10;
-                        picatchu.Pica.animation(scene,9);
-                        salles = [];
+                       // picatchu.Pica.life = 10;
+                       //picatchu.Pica.animation(scene,9);
+                       gamestart=true; 
+                       salles = [];
                         chemin = [];
                         cubes = [];
                         chargecubes = [];
@@ -79,10 +85,13 @@ function startGame() {
                         promise.then(() => {
                             let picamesh = scene.pica.bounder;
                             scene.activeCamera = createFollowCamera(scene,picamesh.position, scene.pica.vuecube);
-                            modifySettings();
+                           pointerlog();
                         })
                         
                         
+                    }
+                    if(scene.endgame){
+                        last.render();
                     }
                     // when the picka is not on the ground he dies
                     if (picatchu.position.y <=0.1){
@@ -94,9 +103,6 @@ function startGame() {
                     effect();
             
                     actionEnemies();
-                }else if(!picatchu && !gamestart){
-                   setTimeout (gamestart=true,10000);
-
                 }
                     
                 if(scene.activeCamera){
@@ -134,7 +140,7 @@ function createscenevideo() {
     ANote0VideoMat.roughness = 1;
     //ANote0VideoMat.emissiveColor = new BABYLON.Color3.White();
     ANote0Video.material = ANote0VideoMat;
-    videoscene.onPointerDown = function () {
+    //videoscene.onPointerDown = function () {
         startvideo.video.play();
         videoscene.onPointerDown = null;
         setTimeout(() => {
@@ -164,7 +170,7 @@ function createscenevideo() {
             scenestart.dispose()
         }, 48000)
 
-    };
+    //};
     startvideo.onended = function() {
         alert("The audio has ended");
       };
@@ -281,7 +287,7 @@ async function createScene () {
     scene.enemies.papillon = papillon;
     labras.meshes[0].setEnabled(false);
     marowakobj.meshes[0].setEnabled(false);
-    
+    scene.endgame = false;
     // Create and tweak the background material.
     /*backgroundMaterial.reflectionTexture = new BABYLON.CubeTexture("textures/TropicalSunnyDay", scene);
     backgroundMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
@@ -597,29 +603,36 @@ function createFollowCamera(scene, pos, target) {
     return camera;
 }
 
+function pointerlog(){
+    scene.onPointerDown = (event) => {
+        if(!gamestart){
+            if(!scene.alreadyLocked) {
+                console.log("requesting pointer lock");
+                canvas.requestPointerLock();
+            } else {
+                console.log(event.button)
+                //event.preventDefault();
+                if(event.button==0){
+                    inputStates.fire = true;
+                }
+                if(event.button==1){
+                    inputStates.switch = true;
+                }
+                if(event.button==2){
+                    inputStates.fight = true;
+                }
+    
+            }
+
+        }
+
+    }
+}
 function modifySettings() {
     // as soon as we click on the game window, the mouse pointer is "locked"
     // you will have to press ESC to unlock it
     
-    scene.onPointerDown = (event) => {
-        if(!scene.alreadyLocked) {
-            console.log("requesting pointer lock");
-            canvas.requestPointerLock();
-        } else {
-            console.log(event.button)
-            //event.preventDefault();
-            if(event.button==0){
-                inputStates.fire = true;
-            }
-            if(event.button==1){
-                inputStates.switch = true;
-            }
-            if(event.button==2){
-                inputStates.fight = true;
-            }
-
-        }
-    }
+    pointerlog();
 
     
 
@@ -770,21 +783,23 @@ function guiscene(){
    informationbtn.color = "white";
    informationbtn.background ="#048ba8";
    informationbtn.onPointerUpObservable.add(function(){
-       //console.log("je vais mettre les information ici et l'acces vers cette scene ce ferais avec les touches du clavier");
-       clic+=1;
-       if(clic %2 ==0){
-           advancedTexture.addControl(playbtn);
-           advancedTexture.addControl(replaybtn);
-           advancedTexture.addControl(exitbtn);
-           advancedTexture.removeControl(rectangleinfo);
-
-       } else{
-           advancedTexture.removeControl(playbtn);
-           advancedTexture.removeControl(replaybtn);
-           advancedTexture.removeControl(exitbtn);
-           advancedTexture.addControl(rectangleinfo);
-           rectangleinfo.addControl(text1);
+       if(gamestart){
+        clic+=1;
+        if(clic %2 ==0){
+            advancedTexture.addControl(playbtn);
+            advancedTexture.addControl(replaybtn);
+            advancedTexture.addControl(exitbtn);
+            advancedTexture.removeControl(rectangleinfo);
+ 
+        } else{
+            advancedTexture.removeControl(playbtn);
+            advancedTexture.removeControl(replaybtn);
+            advancedTexture.removeControl(exitbtn);
+            advancedTexture.addControl(rectangleinfo);
+            rectangleinfo.addControl(text1);
+        }
        }
+
    });
    advancedTexture.addControl(informationbtn);
 
@@ -797,7 +812,13 @@ function guiscene(){
    playbtn.fontSize = 14;
    playbtn.background = "#16db93";
    playbtn.onPointerUpObservable.add(function() {
-    setTimeout(gamestart = false,2000);
+       if(gamestart){
+           if(!first){
+                first=false;
+                mystart = true;
+           }
+         setTimeout(gamestart = false,2000);
+        }
    });
    advancedTexture.addControl(playbtn);
 
@@ -810,7 +831,24 @@ function guiscene(){
    replaybtn.fontSize = 14;
    replaybtn.background = "#f1c453";
    replaybtn.onPointerUpObservable.add(function() {
-       setTimeout(gamestart = false,2000);
+       if(gamestart){
+        salles = [];
+        chemin = [];
+        cubes = [];
+        chargecubes = [];
+        scene.dispose();
+        playground = [0,0,50,50];
+        const promise = createScene();
+        
+        promise.then(() => {
+            let picamesh = scene.pica.bounder;
+            scene.activeCamera = createFollowCamera(scene,picamesh.position, scene.pica.vuecube);
+           // modifySettings();
+           gamestart=false;
+           pointerlog();
+        })
+
+       }
    });
    advancedTexture.addControl(replaybtn);
 
@@ -822,8 +860,10 @@ function guiscene(){
    exitbtn.fontSize = 14;
    exitbtn.background = "#ee6055";
    exitbtn.onPointerUpObservable.add(function() {
+       if(gamestart){
         endgame = true; 
         gamestart = false
+       }
         //setTimeout(window.close(),10000)
    });
    advancedTexture.addControl(exitbtn);
