@@ -789,8 +789,8 @@ function guiscene(){
 
     let rectangleinfo = new BABYLON.GUI.Rectangle("info");
     rectangleinfo.background = "#B91372";
-    rectangleinfo.width = "40%";
-    rectangleinfo.height = "40%";
+    rectangleinfo.width = "45%";
+    rectangleinfo.height = "55%";
 
     var text1 = new BABYLON.GUI.TextBlock("text1");
     
@@ -801,9 +801,13 @@ function guiscene(){
     "\n\n ¤ To launch the game, click on PLAY ."
     + "\n ¤ To leave the game, click on Exit. "
     +"\n ¤ To make a pause on the game, click 'Letter <P>'"
+    +"\n ¤ To Jump in the game, click on <Space>"
+    +"\n ¤ To run in the game, click 'Lettre <R>'"
+    +"\n ¤ To make a rotation attack, click 'Lettre <G>' or 'Left mouseclick'"
+    +"\n ¤ To make a distant attack, click 'Lettre <F>' or 'Right mouseclick'"
     +"\n\n\nJoin the adventure and make the world better. ";
     text1.color = "white";
-    text1.fontSize = "20px";
+    text1.fontSize = "22px";
 
    var informationbtn = BABYLON.GUI.Button.CreateSimpleButton("Informations","Informations")
    informationbtn.width=0.1;
@@ -883,7 +887,7 @@ function guiscene(){
    });
    advancedTexture.addControl(replaybtn);
 
-   var exitbtn = BABYLON.GUI.Button.CreateSimpleButton("but3", "quit");
+   var exitbtn = BABYLON.GUI.Button.CreateSimpleButton("but3", "Quit ?");
    exitbtn.width = 0.15;
    exitbtn.height = 0.06;
    exitbtn.cornerRadius = 20;
