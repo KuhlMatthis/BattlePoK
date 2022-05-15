@@ -877,6 +877,7 @@ function guiscene(){
            // modifySettings();
            gamestart=false;
            pointerlog();
+           music();
         })
 
        }
