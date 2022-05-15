@@ -60,12 +60,11 @@ function startGame() {
                 guigame.render();
             }else if(endgame){
                 guigame.dispose();
-                //last.render();
-                win.render();
+                last.render();
             }else if(scene.endgame){
                 guigame.dispose();
                 last.dispose();
-                //gongrat.render();
+                win.render();
             }else{
                 let picatchu = scene.getMeshByName("mypicatchu");
                 if(picatchu){
