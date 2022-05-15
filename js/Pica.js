@@ -253,14 +253,18 @@ export default class Pica {
         }
         if(this.boolincrenergie){
             this.boolincrenergie = false;
+            this.degat(-0.3)
             if(this.energie<this.maxenergie){
                 this.energie += 1;
                 this.modifiemaxbar(this.energiebar,1);
+                
             }
             setTimeout(() => {
                 this.boolincrenergie=true;   
-            }, 1000 * 5)
+            }, 1000 *4)
         }
+        
+
 
         if(inputStates.switch){
             
