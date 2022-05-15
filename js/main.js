@@ -20,6 +20,7 @@ let chemin = [];
 let cubes = [];
 let chargecubes = [];
 let mystart = false;
+let gamestart = false;
 let externenmies = [];
     
 
@@ -30,6 +31,7 @@ function startGame() {
     engine = new BABYLON.Engine(canvas, true);
     engine.displayLoadingUI();
     let scenestart = createscenevideo();
+    let guigame = guiscene();
     const promise = createScene();
     promise.then(() => { 
         let picamesh = scene.pica.bounder;
@@ -46,8 +48,12 @@ function startGame() {
         }, 1000)
          // main animation loop 60 times/s
         engine.runRenderLoop(() => {
-            if(mystart==true){
+            if(mystart!=true){
                 scenestart.render();
+                setTimeout(gamestart = true,1000)
+                mystart=true;
+            }else if(gamestart){
+                guigame.render();
             }else{
                 let picatchu = scene.getMeshByName("mypicatchu");
                 if(picatchu){
@@ -83,6 +89,8 @@ function startGame() {
                     effect();
             
                     actionEnemies();
+                }else{
+                    gamestart=true;
                 }
                     
                 if(scene.activeCamera){
@@ -301,7 +309,6 @@ async function createScene () {
     let armature = picamesh.skeletons[0];
     picatchu.name = "mypicatchu";
     scene.pica = new Pica(picatchu,armature,picaeclaireobj,rain, 2,scene);  
-
     createenv(vlight,marowakobj,scene);
 
     return scene;
@@ -696,48 +703,37 @@ function music(){
    //adding audio 
   var music = new BABYLON.Sound("music","twostepsfromhell.mp3", scene, function(){music.play();},{loop:true, volume: 0.1});
 }
-function gui(){
+function guiscene(){
+    // This creates a basic Babylon Scene object (non-mesh)
+    let scene = new BABYLON.Scene(engine);
+    canvas = document.querySelector("#myCanvas");
+
     // GUI
-    var plane = BABYLON.Mesh.CreatePlane("plane", 10);
-    plane.position.y = 2;
-
-   plane.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
-
-   var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateForMesh(plane);
+    var advancedTexture = new BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("GUI");
     
-   var paramettrebtn = BABYLON.GUI.Button.CreateSimpleButton("settings","settings")
-   paramettrebtn.width=0.08;
-   paramettrebtn.height=0.04;
-   paramettrebtn.top=-200;
-   paramettrebtn.left =450;
-   paramettrebtn.color = "white";
-   paramettrebtn.background ="#048ba8";
-   paramettrebtn.onPointerUpObservable.add(function(){
-       if(replaybtn.isVisible){
-           button1.isVisible=false;
-           replaybtn.isvisible=false;
-           exitbtn.isVisible=false;
-       }
-       else{
-           button1.isVisible=true;
-           replaybtn.isvisible=false;
-           exitbtn.isVisible=true;
-       }
-       console.log("hola");
+   var informationbtn = BABYLON.GUI.Button.CreateSimpleButton("settings","settings")
+   informationbtn.width=0.08;
+   informationbtn.height=0.04;
+   informationbtn.top=-200;
+   informationbtn.left =450;
+   informationbtn.color = "white";
+   informationbtn.background ="#048ba8";
+   informationbtn.onPointerUpObservable.add(function(){
+       console.log("je vais mettre les information ici et l'acces vers cette scene ce ferais avec les touches du clavier");
    });
-   advancedTexture.addControl(paramettrebtn);
+   advancedTexture.addControl(informationbtn);
 
-   var button1 = BABYLON.GUI.Button.CreateSimpleButton("but1", "Play!");
-   button1.width = 0.15;
-   button1.height = 0.05;
-   button1.top = -120;
-   button1.color = "white";
-   button1.fontSize = 12;
-   button1.background = "#16db93";
-   button1.onPointerUpObservable.add(function() {
-       advancedTexture.removeControl(button1);
+   var playbtn = BABYLON.GUI.Button.CreateSimpleButton("but1", "Play!");
+   playbtn.width = 0.15;
+   playbtn.height = 0.05;
+   playbtn.top = -120;
+   playbtn.color = "white";
+   playbtn.fontSize = 12;
+   playbtn.background = "#16db93";
+   playbtn.onPointerUpObservable.add(function() {
+    setTimeout(gamestart = false,2000);
    });
-   advancedTexture.addControl(button1);
+   advancedTexture.addControl(playbtn);
 
    var replaybtn = BABYLON.GUI.Button.CreateSimpleButton("but2", "Replay");
    replaybtn.width = 0.15;
@@ -747,10 +743,7 @@ function gui(){
    replaybtn.fontSize = 12;
    replaybtn.background = "#f1c453";
    replaybtn.onPointerUpObservable.add(function() {
-       advancedTexture.removeControl(button1);
-       advancedTexture.removeControl(replaybtn);
-       advancedTexture.removeControl(exitbtn);
-       setTimeout(gui,1000);
+       setTimeout(gamestart = false,2000);
    });
    advancedTexture.addControl(replaybtn);
 
@@ -761,12 +754,20 @@ function gui(){
    exitbtn.fontSize = 12;
    exitbtn.background = "#ee6055";
    exitbtn.onPointerUpObservable.add(function() {
-       advancedTexture.removeControl(button1);
-       advancedTexture.removeControl(replaybtn);
-       advancedTexture.removeControl(exitbtn);
-       setTimeout(gui,3000);
+        let lastscene = true; 
    });
    advancedTexture.addControl(exitbtn);
+
+   let camera = new BABYLON.FollowCamera("picatchuFollowCamera",new BABYLON.Vector3(0,0,0), scene);
+   camera.radius = 125; // how far from the object to follow
+   camera.heightOffset = 0; // how high above the object to place the camera
+   camera.rotationOffset = 180; // the viewing angle
+   
+   camera.cameraAcceleration = 0.1; // how fast to move
+   camera.maxCameraSpeed = 1;
+   scene.camera = camera;
+
+   return scene;
 }
 
 function spark(){
@@ -787,4 +788,75 @@ function effect(){
             spark();
         }
     });
+}
+
+var gui = function () {
+
+    // GUI
+   var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("GUI");
+    
+   var informationbtn = BABYLON.GUI.Button.CreateSimpleButton("settings","settings")
+   informationbtn.width=0.08;
+   informationbtn.height=0.04;
+   informationbtn.top=-200;
+   informationbtn.left =450;
+   informationbtn.color = "white";
+   informationbtn.background ="#048ba8";
+   informationbtn.onPointerUpObservable.add(function(){
+       if(replaybtn.isVisible){
+           playbtn.isVisible=false;
+           replaybtn.isvisible=false;
+           exitbtn.isVisible=false;
+       }
+       else{
+           playbtn.isVisible=true;
+           replaybtn.isvisible=false;
+           exitbtn.isVisible=true;
+       }
+   });
+   advancedTexture.addControl(informationbtn);
+
+   var playbtn = BABYLON.GUI.Button.CreateSimpleButton("but1", "Play!");
+   playbtn.width = 0.15;
+   playbtn.height = 0.05;
+   playbtn.top = -120;
+   playbtn.color = "white";
+   playbtn.fontSize = 12;
+   playbtn.background = "#16db93";
+   playbtn.onPointerUpObservable.add(function() {
+       advancedTexture.removeControl(playbtn);
+   });
+   advancedTexture.addControl(playbtn);
+
+   var replaybtn = BABYLON.GUI.Button.CreateSimpleButton("but2", "Replay");
+   replaybtn.width = 0.15;
+   replaybtn.height = 0.05;
+   replaybtn.top = -60;
+   replaybtn.color = "white";
+   replaybtn.fontSize = 12;
+   replaybtn.background = "#f1c453";
+   replaybtn.onPointerUpObservable.add(function() {
+       advancedTexture.removeControl(playbtn);
+       advancedTexture.removeControl(replaybtn);
+       advancedTexture.removeControl(exitbtn);
+       setTimeout(gui,1000);
+   });
+   advancedTexture.addControl(replaybtn);
+
+   var exitbtn = BABYLON.GUI.Button.CreateSimpleButton("but3", "Exit");
+   exitbtn.width = 0.15;
+   exitbtn.height = 0.05;
+   exitbtn.color = "white";
+   exitbtn.fontSize = 12;
+   exitbtn.background = "#ee6055";
+   exitbtn.onPointerUpObservable.add(function() {
+       advancedTexture.removeControl(playbtn);
+       advancedTexture.removeControl(replaybtn);
+       advancedTexture.removeControl(exitbtn);
+       setTimeout(gui,3000);
+   });
+   advancedTexture.addControl(exitbtn); 
+
+    return scene;
+
 }
