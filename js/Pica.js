@@ -511,9 +511,9 @@ export default class Pica {
         if (hit.pickedMesh){
             console.log(hit.pickedMesh.name)
             if(hit.pickedMesh.name.startsWith("LaveCopy")){
-                this.degat(0.1)
+                this.degat(0.05)
             }else if(hit.pickedMesh.name.startsWith("fire")){
-                this.degat(0.2)
+                this.degat(0.1)
             }
 	    }
     }
