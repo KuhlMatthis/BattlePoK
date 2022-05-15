@@ -35,6 +35,7 @@ function startGame() {
     let scenestart = createscenevideo();
     let guigame = guiscene();
     let last = lastscene();
+    let win = winscene();
     const promise = createScene();
     promise.then(() => { 
         let picamesh = scene.pica.bounder;
@@ -59,7 +60,8 @@ function startGame() {
                 guigame.render();
             }else if(endgame){
                 guigame.dispose();
-                last.render();
+                //last.render();
+                win.render();
             }else if(scene.endgame){
                 guigame.dispose();
                 last.dispose();
@@ -1051,4 +1053,50 @@ function lastscene(){
     lastscene.camera = camera;
 
     return lastscene;
+}
+
+function winscene(){
+    // This creates a basic Babylon Scene object (non-mesh)
+    let winscene = new BABYLON.Scene(engine);
+    // GUI
+    var advancedTexture = new BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("winGUI");
+
+    var rectangle = new BABYLON.GUI.Rectangle("rect");
+   rectangle.background = "black";
+   rectangle.color = "yellow";
+   rectangle.width = "100%";
+   rectangle.height = "100%";
+   advancedTexture.addControl(rectangle);
+
+   var image = new BABYLON.GUI.Image("but", "img/picabattleroom.PNG");
+   image.width = 1;
+   image.height = 1;
+
+   rectangle.addControl(image);
+
+   var quitbtn = BABYLON.GUI.Button.CreateSimpleButton("but3", "CLOSE GAME");
+   quitbtn.width = 0.15;
+   quitbtn.height = 0.06;
+   quitbtn.top = 220;
+   quitbtn.left = 350;
+   quitbtn.cornerRadius = 20;
+   quitbtn.color = "white";
+   quitbtn.fontSize = 14;
+   quitbtn.background = "#ee6055";
+   quitbtn.onPointerUpObservable.add(function() {
+        //endgame = true; 
+        setTimeout(window.close(),10000)
+   });
+   advancedTexture.addControl(quitbtn);
+
+   let camera = new BABYLON.FollowCamera("picatchuFollowCamera",new BABYLON.Vector3(0,0,0), winscene);
+   camera.radius = 125; // how far from the object to follow
+   camera.heightOffset = 0; // how high above the object to place the camera
+   camera.rotationOffset = 180; // the viewing angle
+  
+   camera.cameraAcceleration = 0.1; // how fast to move
+   camera.maxCameraSpeed = 1;
+   winscene.camera = camera;
+
+   return winscene;
 }
