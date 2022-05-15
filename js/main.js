@@ -89,8 +89,9 @@ function startGame() {
                     effect();
             
                     actionEnemies();
-                }else{
-                    gamestart=true;
+                }else if(!picatchu && !gamestart){
+                   setTimeout (gamestart=true,10000);
+
                 }
                     
                 if(scene.activeCamera){
@@ -722,6 +723,7 @@ function guiscene(){
    informationbtn.width=0.08;
    informationbtn.height=0.04;
    informationbtn.top=-200;
+   informationbtn.cornerRadius = 20;
    informationbtn.left =450;
    informationbtn.color = "white";
    informationbtn.background ="#048ba8";
@@ -734,6 +736,7 @@ function guiscene(){
    playbtn.width = 0.15;
    playbtn.height = 0.05;
    playbtn.top = -120;
+   playbtn.cornerRadius = 20;
    playbtn.color = "white";
    playbtn.fontSize = 12;
    playbtn.background = "#16db93";
@@ -746,6 +749,7 @@ function guiscene(){
    replaybtn.width = 0.15;
    replaybtn.height = 0.05;
    replaybtn.top = -60;
+   replaybtn.cornerRadius = 20;
    replaybtn.color = "white";
    replaybtn.fontSize = 12;
    replaybtn.background = "#f1c453";
@@ -757,6 +761,7 @@ function guiscene(){
    var exitbtn = BABYLON.GUI.Button.CreateSimpleButton("but3", "Exit");
    exitbtn.width = 0.15;
    exitbtn.height = 0.05;
+   exitbtn.cornerRadius = 20;
    exitbtn.color = "white";
    exitbtn.fontSize = 12;
    exitbtn.background = "#ee6055";
