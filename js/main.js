@@ -61,7 +61,7 @@ function startGame() {
                     //console.log(picatchu.Pica.bounder.x);
                     if(picatchu.Pica.life <=0){
                     //empesh une boucle
-                        picatchu.Pica.life = 1;
+                        picatchu.Pica.life = 10;
                         picatchu.Pica.animation(scene,9);
                         salles = [];
                         chemin = [];
@@ -713,13 +713,31 @@ function music(){
 }
 function guiscene(){
     // This creates a basic Babylon Scene object (non-mesh)
-    let scene = new BABYLON.Scene(engine);
-    canvas = document.querySelector("#myCanvas");
-
+    let scene1 = new BABYLON.Scene(engine);
     // GUI
     var advancedTexture = new BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("GUI");
     var clic =0;
-   var informationbtn = BABYLON.GUI.Button.CreateSimpleButton("settings","settings")
+
+    var rectangle = new BABYLON.GUI.Rectangle("rect");
+    rectangle.background = "black";
+    rectangle.color = "yellow";
+    rectangle.width = "100%";
+    rectangle.height = "100%";
+    advancedTexture.addControl(rectangle);
+
+    var image = new BABYLON.GUI.Image("but", "img/picabackground.PNG");
+    image.width = 1;
+    image.height = 1;
+
+    rectangle.addControl(image);
+
+    let rectangleinfo = new BABYLON.GUI.Rectangle("info");
+    rectangleinfo.background = new BABYLON.Color3(0.50, 0.25, 0.40);
+    rectangleinfo.width = "60%";
+    rectangleinfo.height = "40%";
+
+
+   var informationbtn = BABYLON.GUI.Button.CreateSimpleButton("Informations","Informations")
    informationbtn.width=0.08;
    informationbtn.height=0.04;
    informationbtn.top=-200;
@@ -734,10 +752,13 @@ function guiscene(){
            advancedTexture.addControl(playbtn);
            advancedTexture.addControl(replaybtn);
            advancedTexture.addControl(exitbtn);
+           advancedTexture.removeControl(rectangleinfo);
+
        } else{
            advancedTexture.removeControl(playbtn);
            advancedTexture.removeControl(replaybtn);
            advancedTexture.removeControl(exitbtn);
+           advancedTexture.addControl(rectangleinfo);
        }
    });
    advancedTexture.addControl(informationbtn);
@@ -781,16 +802,16 @@ function guiscene(){
    });
    advancedTexture.addControl(exitbtn);
 
-   let camera = new BABYLON.FollowCamera("picatchuFollowCamera",new BABYLON.Vector3(0,0,0), scene);
+   let camera = new BABYLON.FollowCamera("picatchuFollowCamera",new BABYLON.Vector3(0,0,0), scene1);
    camera.radius = 125; // how far from the object to follow
    camera.heightOffset = 0; // how high above the object to place the camera
    camera.rotationOffset = 180; // the viewing angle
    
    camera.cameraAcceleration = 0.1; // how fast to move
    camera.maxCameraSpeed = 1;
-   scene.camera = camera;
+   scene1.camera = camera;
 
-   return scene;
+   return scene1;
 }
 
 function spark(){
