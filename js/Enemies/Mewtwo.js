@@ -145,7 +145,25 @@ export default class Mewtwo extends Enemi {
         this.enemiMesh.rotation.y = alpha;
         this.enemiMesh.frontVector = new BABYLON.Vector3(-1*Math.sin(this.enemiMesh.rotation.y), 0,-1*Math.cos(this.enemiMesh.rotation.y));
 
-        let sphere = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter: 4, segments: 32});
+        let sphere = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter: 6, segments: 32});
+        this.bouildsphere(sphere,this.enemiMesh.frontVector.multiplyByFloats(15, 0, 15),scene)
+        let powerOfFire = 40;
+
+        let aimForceVector = new BABYLON.Vector3(
+            this.enemiMesh.frontVector.x * powerOfFire,
+            (dir.y-0.1)*powerOfFire,
+            this.enemiMesh.frontVector.z * powerOfFire
+        );
+        this.bouldamage(sphere,scene,1);
+        sphere.physicsImpostor.applyImpulse(aimForceVector, sphere.getAbsolutePosition());
+       
+
+        setTimeout(() => { 
+            sphere.dispose();
+        },1000*2)
+    }
+
+    bouildsphere(sphere,position,scene){
         let sphereMaterial = new BABYLON.StandardMaterial("sphereMaterial", scene);
         sphere.material = sphereMaterial;
         sphereMaterial.emissiveColor = new BABYLON.Color3(0.05, 0.05, 0.05);
@@ -154,21 +172,16 @@ export default class Mewtwo extends Enemi {
         sphereMaterial.emissiveTexture = new BABYLON.Texture("img/water.jpg", scene);
 
         sphere.position = new BABYLON.Vector3(this.enemiMesh.position.x,this.enemiMesh.position.y+10,this.enemiMesh.position.z);
-        sphere.position.addInPlace(this.enemiMesh.frontVector.multiplyByFloats(15, 0, 15));
+        sphere.position.addInPlace(position);
         sphere.physicsImpostor = new BABYLON.PhysicsImpostor(
             sphere,
             BABYLON.PhysicsImpostor.SphereImpostor,
             { mass: 1 },
             scene
         );
-        let powerOfFire = 40;
+    }
 
-        let aimForceVector = new BABYLON.Vector3(
-            this.enemiMesh.frontVector.x * powerOfFire,
-            (dir.y-0.1)*powerOfFire,
-            this.enemiMesh.frontVector.z * powerOfFire
-        );
-        sphere.physicsImpostor.applyImpulse(aimForceVector, sphere.getAbsolutePosition());
+    bouldamage(sphere,scene,degat){
         sphere.actionManager = new BABYLON.ActionManager(scene);
         sphere.actionManager.registerAction(
             new BABYLON.ExecuteCodeAction(
@@ -182,10 +195,6 @@ export default class Mewtwo extends Enemi {
               }
             )
         );
-
-        setTimeout(() => { 
-            sphere.dispose();
-        },1000*2)
     }
 
     createBoundingBox() {
