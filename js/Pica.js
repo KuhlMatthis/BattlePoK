@@ -91,7 +91,7 @@ export default class Pica {
 
 
         this.level = 1;
-        this.maxlevel = 15;
+        this.maxlevel = 8;
         this.dynamicTexture = new BABYLON.DynamicTexture("DynamicTexture", {width:30, height:30}, scene, false);
         var mat = new BABYLON.StandardMaterial("mat", scene);
         mat.diffuseTexture = this.dynamicTexture;
@@ -203,6 +203,9 @@ export default class Pica {
 
     incrlevel(){
         this.level+=1;
+        this.maxlife+=0.5;
+        this.maxenergie+=0.5;
+        this.nextlevelexperience+=2;
         this.dynamicTexture.drawText(""+this.level, null, null, "bold " + 16 + "px Arial", "#000000", "#ffffff", true);
         //full live
         this.degat(-1*(this.maxlife-this.life));
@@ -224,7 +227,7 @@ export default class Pica {
 
 
     degat(degat){
-        if(this.life>=0){
+        if(this.life>=0  && this.life - degat <= this.maxlife){
             this.life-=degat;
             this.modifiemaxbar(this.lifebar,-degat); 
         }
@@ -253,7 +256,7 @@ export default class Pica {
         }
         if(this.boolincrenergie){
             this.boolincrenergie = false;
-            this.degat(-0.3)
+            this.degat(-0.1)
             if(this.energie<this.maxenergie){
                 this.energie += 1;
                 this.modifiemaxbar(this.energiebar,1);
@@ -394,8 +397,7 @@ export default class Pica {
         }
         
         inputStates.fight = false;
-        inputStates.fight2 = false;
-        inputStates.fire2 = false;
+        inputStates.fire = false;
         inputStates.space = false;
         mymouse.x = 0;
         mymouse.y = 0;
