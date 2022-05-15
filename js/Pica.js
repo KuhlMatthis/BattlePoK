@@ -317,7 +317,7 @@ export default class Pica {
         }
         
         if(this.notbloque){
-            if(inputStates.space){
+            if(inputStates.space && this.picaMesh.position.y<10){
                 if(this.isrunning){
                     this.jump=3;
                     this.animation(scene,6)
