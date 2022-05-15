@@ -148,7 +148,7 @@ export default class Mewtwo extends Enemi {
         this.enemiMesh.rotation.y = alpha;
         this.enemiMesh.frontVector = new BABYLON.Vector3(-1*Math.sin(this.enemiMesh.rotation.y), 0,-1*Math.cos(this.enemiMesh.rotation.y));
 
-        let sphere = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter: 6, segments: 32});
+        let sphere = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter: 8, segments: 32});
         this.bouildsphere(sphere,this.enemiMesh.frontVector.multiplyByFloats(15, 0, 15),scene)
         let powerOfFire = 40;
 

@@ -206,7 +206,7 @@ async function createScene () {
     //Set gravity
     physicsEngine.setGravity(new BABYLON.Vector3(0, 0, 0))
     
-    let ground = BABYLON.MeshBuilder.CreateGround("myGround", {width: 1500, height: 1500, segments:1000}, scene);
+    let ground = BABYLON.MeshBuilder.CreateGround("myGround", {width: 2000, height: 2000, segments:1000}, scene);
     ground.position = new BABYLON.Vector3(250,-1,250);
     ground.checkCollisions = true;
     //ground.physicsImpostor = new BABYLON.PhysicsImpostor(ground, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, friction: 0.5, restitution: 0.7 }, scene);
@@ -216,7 +216,8 @@ async function createScene () {
     ground.material = groundMaterial;
     scene.ground = ground;
 
-    var skybox = BABYLON.Mesh.CreateBox("BackgroundSkybox", 1500, scene, undefined, BABYLON.Mesh.BACKSIDE);
+    var skybox = BABYLON.Mesh.CreateBox("BackgroundSkybox", 2000, scene, undefined, BABYLON.Mesh.BACKSIDE);
+    skybox.checkCollisions = true;
     var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
 	skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("img/skybox/skybox", scene);
 	skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
@@ -227,7 +228,7 @@ async function createScene () {
     skyboxMaterial.luminance = 100;
     scene.skybox = skybox;
 
-    var waterMesh = BABYLON.Mesh.CreateGround("waterMesh", 1500, 1500, 32, scene, false);
+    var waterMesh = BABYLON.Mesh.CreateGround("waterMesh", 2000, 2000, 32, scene, false);
 	var water = new BABYLON.WaterMaterial("water", scene, new BABYLON.Vector2(512, 512));
 	water.bumpTexture = new BABYLON.Texture("img/waterbump.png", scene);
 	water.windForce = -15;
@@ -249,7 +250,7 @@ async function createScene () {
     scene.fire = Pfire.systems[0];
     let Prain = await BABYLON.ParticleHelper.CreateAsync("rain", scene);
     let rain = Prain.systems[0];
-    
+    rain.particleTexture = new BABYLON.Texture("img/Rain.png");
 
     
     
@@ -275,6 +276,16 @@ async function createScene () {
     const statuedragon = await BABYLON.SceneLoader.ImportMeshAsync("","3dmodule/StatueDragon/","StatueDragon.babylon",scene);
     const papillon = await BABYLON.SceneLoader.ImportMeshAsync("","3dmodule/Papillon/","papillon.babylon",scene);
     const explosif = await BABYLON.SceneLoader.ImportMeshAsync("","3dmodule/Plosif/","pokemonexplosif.babylon");
+    const arena = await BABYLON.SceneLoader.ImportMeshAsync("","3dmodule/Arena/","arene.babylon",scene);
+    const mewtwo = await BABYLON.SceneLoader.ImportMeshAsync("","3dmodule/Mewtwo/","mewtwo.babylon",scene);
+    scene.enemies.mewtwo = mewtwo;
+    mewtwo.meshes[0].scaling = new BABYLON.Vector3(4,4,4);
+    mewtwo.meshes[0].setEnabled(false);
+    arena.meshes[0].scaling = new BABYLON.Vector3(10,10,10);
+    arena.meshes[0].position = new BABYLON.Vector3(800,30,700);
+    arena.meshes[0].rotation.y +=3.2;
+    arena.meshes[0].checkCollisions = true;
+
     explosif.meshes[0].setEnabled(false);
     scene.enemies.explosif = explosif;
 
@@ -288,6 +299,17 @@ async function createScene () {
     labras.meshes[0].setEnabled(false);
     marowakobj.meshes[0].setEnabled(false);
     scene.endgame = false;
+
+     //creer box départ pour ne pas étre dans le feut des le départ
+     var box1 = BABYLON.Mesh.CreateBox("Box1",10,scene);
+     var materialBox = new BABYLON.StandardMaterial("mat", scene);
+     var texture = new BABYLON.Texture("img/sole2.jpg", scene);
+     box1.position = new BABYLON.Vector3(0, 0.5, 0);
+     materialBox.diffuseTexture = texture;
+     box1.material = materialBox;
+     box1.checkCollisions = true;
+     box1.addLODLevel(500, null);
+
     // Create and tweak the background material.
     /*backgroundMaterial.reflectionTexture = new BABYLON.CubeTexture("textures/TropicalSunnyDay", scene);
     backgroundMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
@@ -416,8 +438,8 @@ function createenv(vlight,marowakobj,scene){
     fin = [debutsalle.porte[0]+debutsalle.gx,debutsalle.porte[1]+debutsalle.gz,debutsalle.porte[0]+debutsalle.gx,debutsalle.porte[1]+debutsalle.gz]
     fin  = decalcub(fin, debutsalle);
     chemin[chemin.length] = new Chemin([debut],debut,fin,salles);
-    let chargenext = new BABYLON.Mesh.CreateBox("cobesi",30,scene);
-    chargenext.position = new BABYLON.Vector3((playground[2]+20)*taille,10,(playground[3]+20)*taille);
+    let chargenext = new BABYLON.Mesh.CreateBox("cobesi",60,scene);
+    chargenext.position = new BABYLON.Vector3((playground[2]+30)*taille,50,(playground[3]+20)*taille);
     chargenext.actionManager = new BABYLON.ActionManager(scene);
     chargenext.actionManager.registerAction(
     new BABYLON.ExecuteCodeAction(
@@ -436,12 +458,21 @@ function createenv(vlight,marowakobj,scene){
             chargecubes.forEach(chargecube => {
                 chargecube.dispose();
             });
-            
+            externenmies.forEach(enemi => {
+                scene.enemies.pop(enemi);
+                enemi.Enemi.bounder.dispose()
+                enemi.dispose();
+            })
+            scene.pica.rain.stop();
+            let createur = new Createur(scene);
+            createur.creerEnemie(scene.enemies.mewtwo,new BABYLON.Vector3(800,20,700),'b');
+            /*
             playground=[playground[2]+20,playground[3]+20,playground[2]+70,playground[3]+70]
             scene.ground.position = new BABYLON.Vector3((playground[2]+playground[2]/2)*5,0,(playground[3]+playground[3]/2)*5);
             scene.skybox.position = new BABYLON.Vector3((playground[2]+playground[2]/2)*5,0,(playground[3]+playground[3]/2)*5);
             scene.waterground.position = new BABYLON.Vector3((playground[2]+playground[2]/2)*5,0,(playground[3]+playground[3]/2)*5);
-            createenv(vlight,marowakobj,scene);      
+            createenv(vlight,marowakobj,scene);
+            */ 
         }
     )
     );
