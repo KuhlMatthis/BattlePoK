@@ -25,7 +25,7 @@ export default class Explosif extends Enemi {
         scene.enemies.pop(this.enemiMesh);
         this.enemiMesh.dispose();
         this.bounder.dispose();
-        scene.pica.degat(3);
+        scene.pica.degat(2);
     }
 
     mort(){

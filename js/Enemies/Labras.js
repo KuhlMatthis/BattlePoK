@@ -29,7 +29,7 @@ export default class Labras extends Enemi {
                 this.myfire(scene,dir);
                 setTimeout(() => { 
                     this.fireball=true;
-                }, 1000 * 4)
+                }, 1000 * 5)
             }
             if(distance<20){
                 this.bounder.moveWithCollisions(dir.multiplyByFloats(-1*this.speed, 0, -1*this.speed))
@@ -85,6 +85,6 @@ export default class Labras extends Enemi {
 
         setTimeout(() => { 
             sphere.dispose();
-        },1000*3)
+        },1000*2)
     }
 }

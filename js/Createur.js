@@ -30,14 +30,14 @@ export default class Createur {
         if(type=='m'){
             new Enemi(mesh,mesh.skeleton,1,7,2,3,this.scene);
         }else if(type=='l'){
-            new Labras(mesh,mesh.skeleton,2,20,4,3,this.scene);
+            new Labras(mesh,mesh.skeleton,1,20,4,3,this.scene);
         }else if(type=='p'){
             new Papillon(mesh,mesh.skeleton,1,7,2,3,this.scene);
             mesh.Enemi.bounder.position = position;
         }else if(type=='e'){
-            new Explosif(mesh,mesh.skeleton,3,7,1,0,this.scene);
+            new Explosif(mesh,mesh.skeleton,2,7,1,0,this.scene);
         }else if(type=='b'){
-            new Mewtwo(mesh,mesh.skeleton,3,4,10,10,this.scene);
+            new Mewtwo(mesh,mesh.skeleton,2,4,10,10,this.scene);
         }
         return mesh;
     }

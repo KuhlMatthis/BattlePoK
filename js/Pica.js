@@ -204,6 +204,8 @@ export default class Pica {
     incrlevel(){
         this.level+=1;
         this.dynamicTexture.drawText(""+this.level, null, null, "bold " + 16 + "px Arial", "#000000", "#ffffff", true);
+        //full live
+        this.degat(-1*(this.maxlife-this.life));
     }
 
     increxperience(val){

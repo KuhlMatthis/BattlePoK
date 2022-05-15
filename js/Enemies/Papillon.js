@@ -27,7 +27,7 @@ export default class Papillon extends Enemi {
                 this.myfire(scene,dir);
                 setTimeout(() => { 
                     this.fireball=true;
-                }, 1000 * 4)
+                }, 1000 * 5)
             }
         }
     }
@@ -73,7 +73,7 @@ export default class Papillon extends Enemi {
         );
         setTimeout(() => { 
             sphere.dispose();
-        },1000*3)
+        },1000*2)
     }
 
     mort(){
