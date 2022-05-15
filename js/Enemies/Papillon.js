@@ -8,6 +8,7 @@ export default class Papillon extends Enemi {
     }
 
     action(scene){
+        this.animation(scene,0);
         this.enemiMesh.position = new BABYLON.Vector3(
             this.bounder.position.x,
             this.bounder.position.y-this.height/2,
@@ -20,7 +21,7 @@ export default class Papillon extends Enemi {
         let alpha = Math.atan2(-dir.x, -dir.z);
         this.enemiMesh.rotation.y = alpha;
         this.enemiMesh.frontVector = new BABYLON.Vector3(-1*Math.sin(this.enemiMesh.rotation.y), 0,-1*Math.cos(this.enemiMesh.rotation.y));
-        if(distance<200){
+        if(distance<100){
             if(this.fireball){
                 this.fireball=false;
                 this.myfire(scene,dir);
@@ -41,7 +42,7 @@ export default class Papillon extends Enemi {
         sphereMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
         sphereMaterial.emissiveTexture = new BABYLON.Texture("img/star.jpg", scene);
 
-        sphere.position = new BABYLON.Vector3(this.enemiMesh.position.x,this.enemiMesh.position.y+17,this.enemiMesh.position.z);
+        sphere.position = new BABYLON.Vector3(this.enemiMesh.position.x,this.enemiMesh.position.y,this.enemiMesh.position.z);
         sphere.position.addInPlace(this.enemiMesh.frontVector.multiplyByFloats(15, 0, 15));
         sphere.physicsImpostor = new BABYLON.PhysicsImpostor(
             sphere,
@@ -73,5 +74,15 @@ export default class Papillon extends Enemi {
         setTimeout(() => { 
             sphere.dispose();
         },1000*3)
+    }
+
+    mort(){
+        let player = this.scene.getMeshByName("mypicatchu");  
+        player.Pica.increxperience(2);
+        this.animation(this.scene,1);
+        setTimeout(() => {
+            this.enemiMesh.dispose();
+            this.bounder.dispose();
+        }, 1000 * 3)
     }
 }

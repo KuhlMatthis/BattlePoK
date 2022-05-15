@@ -261,17 +261,29 @@ export default class Sale {
 
 
     createEnemies(marowakobj,scene){
-        let nbval = scene.pica.level*2;
+        let nbval;
+        if(this.roomtype==0){
+            nbval = scene.pica.level*2;
+        }else if(this.roomtype==1){
+            nbval = scene.pica.level;
+        }else if(this.roomtype==2){
+            nbval = scene.pica.level;
+        }
         while(nbval>0){
-            let choice = parseInt(Math.random()*3);
+            let choice = 2//parseInt(Math.random()*3);
+            let position = new BABYLON.Vector3(this.ox+20+Math.random()*80, 15, this.oz+20+Math.random()*80)
             if(choice==0){
-                let marowakmesh = this.createur.creerEnemie(marowakobj,new BABYLON.Vector3(this.ox+20+Math.random()*80, 8, this.oz+20+Math.random()*80),'m');
+                let marowakmesh = this.createur.creerEnemie(marowakobj,position,'m');
                 this.enemies.push(marowakmesh);
                 nbval-=1;
             }else if(nbval>=2 && choice==1){
-                let  papillon = this.createur.creerEnemie(scene.enemies.papillon,new BABYLON.Vector3(this.ox+20+Math.random()*80, 15, this.oz+20+Math.random()*80),'p');
+                let  papillon = this.createur.creerEnemie(scene.enemies.papillon,position,'p');
                 this.enemies.push(papillon);
                 nbval-=2;
+            }else if(choice == 2){
+                let explosifmesh = this.createur.creerEnemie(scene.enemies.explosif,position,'e');
+                this.enemies.push(explosifmesh);
+                nbval-=1;
             }
         }
         
@@ -279,7 +291,6 @@ export default class Sale {
 
     createDragonRoom(scene){
         for (let i = 0; i < 4; i++) {
-            let xval = Math.random()*4;
             let fires = [];
             for (let z = 0; z < 15; z++) {
                 let fire2 = scene.fire.clone("fire");

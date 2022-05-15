@@ -24,6 +24,7 @@ export default class Enemi {
         this.lifebar.parent = this.enemiMesh;
         this.lifebar.position.y += height + 1;
         this.lifebar.scaling.x = this.life;
+        this.lifebar.addLODLevel(200, null);
 
         const lifemat = new BABYLON.StandardMaterial("mat");
         lifemat.Color = new BABYLON.Color3(1, 0, 0);
@@ -46,6 +47,7 @@ export default class Enemi {
         energiemat.diffuseColor = new BABYLON.Color3(0, 1, 1);
         energiemat.specularColor  = new BABYLON.Color3(0, 0, 0);
         this.energiebar.material = energiemat;
+        this.energiebar.addLODLevel(200, null);
 
 
 
@@ -66,6 +68,7 @@ export default class Enemi {
         this.planelevel.position.y += height + 0.7;
         this.planelevel.position.x -= 3.5;
         this.planelevel.material = mat;
+        this.planelevel.addLODLevel(200, null);
 
         /////////////////////////                 coloision controle           /////////////
 
@@ -184,18 +187,20 @@ export default class Enemi {
 
       degat(degat){
         this.life-=degat;
-        if(this.life<0){
-            let player = this.scene.getMeshByName("mypicatchu");
-            player.Pica.increxperience(2);
-            this.animation(this.scene,3);
-            setTimeout(() => {
-                this.enemiMesh.dispose();
-                this.bounder.dispose();
-            }, 1000 * 4)
-            
+        if(this.life<=0){
+            this.mort();
         }else{
             this.modifiemaxbar(this.lifebar,-degat);
         }  
+      }
+      mort(){
+        let player = this.scene.getMeshByName("mypicatchu");  
+        player.Pica.increxperience(2);
+        this.animation(this.scene,3);
+        setTimeout(() => {
+            this.enemiMesh.dispose();
+            this.bounder.dispose();
+        }, 1000 * 3)
       }
 
       modifiemaxbar(bar,incr){
