@@ -21,6 +21,7 @@ let cubes = [];
 let chargecubes = [];
 let mystart = false;
 let gamestart = false;
+let endgame = false;
 let externenmies = [];
     
 
@@ -32,6 +33,7 @@ function startGame() {
     engine.displayLoadingUI();
     let scenestart = createscenevideo();
     let guigame = guiscene();
+    let last = lastscene();
     const promise = createScene();
     promise.then(() => { 
         let picamesh = scene.pica.bounder;
@@ -54,6 +56,9 @@ function startGame() {
                 mystart=true;
             }else if(gamestart){
                 guigame.render();
+            }else if(endgame){
+                guigame.dispose();
+                last.render();
             }else{
                 let picatchu = scene.getMeshByName("mypicatchu");
                 if(picatchu){
@@ -657,6 +662,7 @@ function modifySettings() {
            inputStates.down = true;
         } else if (event.key === "f") {
             inputStates.fire = true;
+            spark();
         } else if (event.key === "g"){
             inputStates.fight = true;
         } else if (event.key === " ") {
@@ -808,7 +814,7 @@ function guiscene(){
    });
    advancedTexture.addControl(replaybtn);
 
-   var exitbtn = BABYLON.GUI.Button.CreateSimpleButton("but3", "Exit");
+   var exitbtn = BABYLON.GUI.Button.CreateSimpleButton("but3", "quit");
    exitbtn.width = 0.15;
    exitbtn.height = 0.06;
    exitbtn.cornerRadius = 20;
@@ -816,8 +822,9 @@ function guiscene(){
    exitbtn.fontSize = 14;
    exitbtn.background = "#ee6055";
    exitbtn.onPointerUpObservable.add(function() {
-        let lastscene = true; 
-        setTimeout(window.close(),10000)
+        endgame = true; 
+        gamestart = false
+        //setTimeout(window.close(),10000)
    });
    advancedTexture.addControl(exitbtn);
 
@@ -922,4 +929,50 @@ var gui = function () {
 
     return scene;
 
+}
+
+function lastscene(){
+     // This creates a basic Babylon Scene object (non-mesh)
+     let lastscene = new BABYLON.Scene(engine);
+     // GUI
+     var advancedTexture = new BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("LastGUI");
+
+     var rectangle = new BABYLON.GUI.Rectangle("rect");
+    rectangle.background = "black";
+    rectangle.color = "yellow";
+    rectangle.width = "100%";
+    rectangle.height = "100%";
+    advancedTexture.addControl(rectangle);
+
+    var image = new BABYLON.GUI.Image("but", "img/picabattleroom.PNG");
+    image.width = 1;
+    image.height = 1;
+
+    rectangle.addControl(image);
+
+    var quitbtn = BABYLON.GUI.Button.CreateSimpleButton("but3", "EXIT GAME");
+   quitbtn.width = 0.15;
+   quitbtn.height = 0.06;
+   quitbtn.top = 160;
+   quitbtn.cornerRadius = 20;
+   quitbtn.color = "white";
+   quitbtn.fontSize = 14;
+   quitbtn.background = "#ee6055";
+   quitbtn.onPointerUpObservable.add(function() {
+        //endgame = true; 
+        setTimeout(window.close(),10000)
+   });
+   advancedTexture.addControl(quitbtn);
+
+
+    let camera = new BABYLON.FollowCamera("picatchuFollowCamera",new BABYLON.Vector3(0,0,0), lastscene);
+    camera.radius = 125; // how far from the object to follow
+    camera.heightOffset = 0; // how high above the object to place the camera
+    camera.rotationOffset = 180; // the viewing angle
+   
+    camera.cameraAcceleration = 0.1; // how fast to move
+    camera.maxCameraSpeed = 1;
+    lastscene.camera = camera;
+
+    return lastscene;
 }
