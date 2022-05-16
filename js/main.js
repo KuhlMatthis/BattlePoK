@@ -185,9 +185,9 @@ function createscenevideo() {
                 // modifySettings();
                 gamestart=false;
                 pointerlog();
-            
+                music()
             })
-            music()
+            
         }, 48000)
 
     //};
