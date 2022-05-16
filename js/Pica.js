@@ -120,11 +120,11 @@ export default class Pica {
         if(speed)
             this.speed = speed;
         else
-            this.speed = 1;
+            this.speed = 0.75;
         if(speed)
             this.runspeed = speed*2;
         else
-            this.runspeed = 2;
+            this.runspeed = 1.5;
         // in case, attach the instance to the mesh itself, in case we need to retrieve
         // it after a scene.getMeshByName that would return the Mesh
         // SEE IN RENDER LOOP !

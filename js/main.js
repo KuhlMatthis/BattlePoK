@@ -347,8 +347,8 @@ async function createScene () {
 
     let armature = picamesh.skeletons[0];
     picatchu.name = "mypicatchu";
-    scene.pica = new Pica(picatchu,armature,picaeclaireobj,rain, 2,scene);  
-    scene.pica.bounder.position = new BABYLON.Vector3(0,15,0);
+    scene.pica = new Pica(picatchu,armature,picaeclaireobj,rain, 1,scene);  
+    scene.pica.bounder.position = new BABYLON.Vector3(700,15,700);
 
     createenv(vlight,marowakobj,scene);
 
