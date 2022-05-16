@@ -194,6 +194,7 @@ export default class Enemi {
       degat(degat){
         this.life-=degat;
         if(this.life<=0){
+            this.modifiemaxbar(this.lifebar,-degat);
             this.mort();
         }else{
             this.modifiemaxbar(this.lifebar,-degat);
@@ -210,8 +211,14 @@ export default class Enemi {
       }
 
     modifiemaxbar(bar,incr){
-        bar.scaling.x +=incr;
-        bar.position.x+=incr/2;
+        if(bar.scaling.x+incr>=0){
+            bar.scaling.x +=incr;
+            bar.position.x+=incr/2;
+        }else{
+            if(bar.scaling.x>0){
+                bar.scaling.x-=bar.scaling.x;
+            }
+        }
     }
    
 

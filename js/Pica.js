@@ -344,15 +344,13 @@ export default class Pica {
             }else if(inputStates.fight){
                 if(this.energie>0){
                     if(this.attacstate){
-                        this.aplyshortataccolision(scene,1,10)
+                        this.aplyshortataccolision(scene,3,20)
                         this.energie-=1;
                         this.modifiemaxbar(this.energiebar,-1);
                         this.animation(scene,7)
                     }else{
-                        this.aplyshortataccolision(scene,1,10);
+                        this.aplyshortataccolision(scene,1,20);
                         this.animation(scene,8);
-                        this.energie-=1;
-                        this.modifiemaxbar(this.energiebar,-1);
                     }
                     
                 }
@@ -374,11 +372,11 @@ export default class Pica {
                         setTimeout(() => { 
                             this.visibilityeclairemesh(false);
                             this.notbloque = true;  
-                        }, 1000 * 1.5)
-                        this.aplyshortataccolision(scene,1,100);
+                        }, 1000 * 1)
+                        this.aplyshortataccolision(scene,2,200);
                         //this.animation(scene,8);
-                        this.energie-=1;
-                        this.modifiemaxbar(this.energiebar,-1);
+                        this.energie-=2;
+                        this.modifiemaxbar(this.energiebar,-2);
                     }   
                 }
             }else if(inputStates.up || inputStates.down || inputStates.left || inputStates.right){
