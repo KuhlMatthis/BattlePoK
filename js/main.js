@@ -797,7 +797,7 @@ function guiscene(){
     let rectangleinfo = new BABYLON.GUI.Rectangle("info");
     rectangleinfo.background = "#B91372";
     rectangleinfo.width = "45%";
-    rectangleinfo.height = "55%";
+    rectangleinfo.height = "60%";
 
     var text1 = new BABYLON.GUI.TextBlock("text1");
     
@@ -812,6 +812,7 @@ function guiscene(){
     +"\n ¤ To run in the game, click 'Lettre <R>'"
     +"\n ¤ To make a rotation attack, click 'Lettre <G>' or 'Left mouseclick'"
     +"\n ¤ To make a distant attack, click 'Lettre <F>' or 'Right mouseclick'"
+    +"\n ¤ To switch attack types, click 'h' or 'wheelclick'  "
     +"\n\n\nJoin the adventure and make the world better. ";
     text1.color = "white";
     text1.fontSize = "22px";
@@ -858,8 +859,10 @@ function guiscene(){
            if(!first){
                 first=false;
                 mystart = true;
-           }
-         setTimeout(gamestart = false,2000);
+           }else{
+                music();
+            }
+        setTimeout(gamestart = false,2000);
         }
    });
    advancedTexture.addControl(playbtn);
