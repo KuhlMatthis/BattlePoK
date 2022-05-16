@@ -1,9 +1,9 @@
 import Enemi from "./Enemi.js";
-import Labras from "./Enemies/labras.js";
-import Papillon from "./Enemies/Papillon.js";
-import Explosif from "./Enemies/Explosif.js";
-import Mewtwo from "./Enemies/mewtwo.js";
-import Epona from "./Enemies/Epona.js";
+import Labras from "./labras.js";
+import Papillon from "./Papillon.js";
+import Explosif from "./Explosif.js";
+import Mewtwo from "./mewtwo.js";
+import Epona from "./Epona.js";
 /*
 
     Creer les enemies

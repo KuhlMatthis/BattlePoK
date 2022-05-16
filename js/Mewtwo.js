@@ -1,5 +1,5 @@
 
-import Enemi from "../Enemi.js";
+import Enemi from "./Enemi.js";
 
 export default class Mewtwo extends Enemi {
     constructor(enemiMesh, armature , speed, height,live,nbenergie,scene) {

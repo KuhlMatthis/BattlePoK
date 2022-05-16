@@ -1,15 +1,14 @@
-import Enemi from "../Enemi.js";
+import Enemi from "./Enemi.js";
 
-export default class Labras extends Enemi {
+export default class Papillon extends Enemi {
     constructor(enemiMesh, armature , speed, height,live,nbenergie,scene) {
         super(enemiMesh, armature , speed, height,live,nbenergie,scene);
-        this.fireball = true;
         this.enemiMesh.frontVector=new BABYLON.Vector3(0,0,0);
+        this.fireball=true;
     }
 
     action(scene){
-        if (!this.bounder) return;
-        this.bounder.moveWithCollisions(new BABYLON.Vector3(0,-1,0));
+        this.animation(scene,0);
         this.enemiMesh.position = new BABYLON.Vector3(
             this.bounder.position.x,
             this.bounder.position.y-this.height/2,
@@ -22,36 +21,28 @@ export default class Labras extends Enemi {
         let alpha = Math.atan2(-dir.x, -dir.z);
         this.enemiMesh.rotation.y = alpha;
         this.enemiMesh.frontVector = new BABYLON.Vector3(-1*Math.sin(this.enemiMesh.rotation.y), 0,-1*Math.cos(this.enemiMesh.rotation.y));
-        
         if(distance<100){
             if(this.fireball){
                 this.fireball=false;
                 this.myfire(scene,dir);
                 setTimeout(() => { 
                     this.fireball=true;
-                }, 1000 * 8)
+                }, 1000 * 5)
             }
-            if(distance<20){
-                this.bounder.moveWithCollisions(dir.multiplyByFloats(-1*this.speed, 0, -1*this.speed))
-            }else{
-                this.bounder.moveWithCollisions(new BABYLON.Vector3((Math.random()-0.5)*2*5, 0, (Math.random()-0.5)*2*5))
-            }
-        }else if(distance<150){
-            this.bounder.moveWithCollisions(dir.multiplyByFloats(this.speed, 0, this.speed))
         }
-        
     }
 
     myfire(scene,dir){
+        
         let sphere = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter: 4, segments: 32});
         let sphereMaterial = new BABYLON.StandardMaterial("sphereMaterial", scene);
         sphere.material = sphereMaterial;
         sphereMaterial.emissiveColor = new BABYLON.Color3(0.05, 0.05, 0.05);
         sphereMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
         sphereMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
-        sphereMaterial.emissiveTexture = new BABYLON.Texture("img/water.jpg", scene);
+        sphereMaterial.emissiveTexture = new BABYLON.Texture("img/star.jpg", scene);
 
-        sphere.position = new BABYLON.Vector3(this.enemiMesh.position.x,this.enemiMesh.position.y+17,this.enemiMesh.position.z);
+        sphere.position = new BABYLON.Vector3(this.enemiMesh.position.x,this.enemiMesh.position.y,this.enemiMesh.position.z);
         sphere.position.addInPlace(this.enemiMesh.frontVector.multiplyByFloats(15, 0, 15));
         sphere.physicsImpostor = new BABYLON.PhysicsImpostor(
             sphere,
@@ -59,7 +50,7 @@ export default class Labras extends Enemi {
             { mass: 1 },
             scene
         );
-        let powerOfFire = 30;
+        let powerOfFire = 20;
 
         let aimForceVector = new BABYLON.Vector3(
             this.enemiMesh.frontVector.x * powerOfFire,
@@ -80,11 +71,18 @@ export default class Labras extends Enemi {
               }
             )
         );
-        
-
-
         setTimeout(() => { 
             sphere.dispose();
         },1000*2)
+    }
+
+    mort(){
+        let player = this.scene.getMeshByName("mypicatchu");  
+        player.Pica.increxperience(2);
+        this.animation(this.scene,2);
+        setTimeout(() => {
+            this.enemiMesh.dispose();
+            this.bounder.dispose();
+        }, 1000 * 1)
     }
 }

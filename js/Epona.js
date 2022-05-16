@@ -1,4 +1,4 @@
-import Enemi from "../Enemi.js";
+import Enemi from "./Enemi.js";
 
 export default class Epona extends Enemi {
     constructor(enemiMesh, armature , speed, height,live,nbenergie,scene) {
