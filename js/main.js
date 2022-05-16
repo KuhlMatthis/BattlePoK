@@ -169,7 +169,7 @@ function createscenevideo() {
             videoEl.load()
 
             videoEl.remove()
-            music()
+            
             scenestart.dispose()
             salles = [];
             chemin = [];
@@ -187,6 +187,7 @@ function createscenevideo() {
                 pointerlog();
             
             })
+            music()
         }, 48000)
 
     //};
