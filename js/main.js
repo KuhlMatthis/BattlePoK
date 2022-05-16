@@ -38,6 +38,7 @@ function startGame() {
     let last = lastscene();
     let win = winscene();
     const promise = createScene();
+    
     promise.then(() => { 
         let picamesh = scene.pica.bounder;
         //picamesh.position.x = salles[0].ox+50;
@@ -170,6 +171,22 @@ function createscenevideo() {
             videoEl.remove()
             music()
             scenestart.dispose()
+            salles = [];
+            chemin = [];
+            cubes = [];
+            chargecubes = [];
+            scene.dispose();
+            playground = [0,0,50,50];
+            const promise = createScene();
+        
+            promise.then(() => {
+                let picamesh = scene.pica.bounder;
+                scene.activeCamera = createFollowCamera(scene,picamesh.position, scene.pica.vuecube);
+                // modifySettings();
+                gamestart=false;
+                pointerlog();
+            
+            })
         }, 48000)
 
     //};
