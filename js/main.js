@@ -23,7 +23,8 @@ let mystart = false;
 let gamestart = true;
 let endgame = false;
 let externenmies = [];
-let first =true; 
+let first =true;
+let scenestart;
     
 
 window.onload = startGame;
@@ -32,7 +33,7 @@ function startGame() {
     canvas = document.querySelector("#myCanvas");
     engine = new BABYLON.Engine(canvas, true);
     engine.displayLoadingUI();
-    let scenestart = createscenevideo();
+    
     let guigame = guiscene();
     let last = lastscene();
     let win = winscene();
@@ -860,7 +861,8 @@ function guiscene(){
    playbtn.background = "#16db93";
    playbtn.onPointerUpObservable.add(function() {
        if(gamestart){
-           if(!first){
+           if(first){
+                scenestart = createscenevideo();
                 first=false;
                 mystart = true;
            }else{
