@@ -178,7 +178,7 @@ export default class Enemi {
           "bounderMaterial",
           this.scene
         );
-        bounderMaterial.alpha = 0.4;
+        bounderMaterial.alpha = 0
         bounder.material = bounderMaterial;
         bounder.checkCollisions = true;
     

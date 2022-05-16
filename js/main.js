@@ -98,8 +98,8 @@ function startGame() {
                     if (picatchu.position.y <=0.1){
                         setTimeout(() => {
                             if (picatchu.position.y <=0.1){
-                                picatchu.Pica.degat(0.02);
-                        }},5000);
+                                picatchu.Pica.degat(0.1);
+                        }},2000);
                     }
                     effect();
             
@@ -279,6 +279,8 @@ async function createScene () {
     const explosif = await BABYLON.SceneLoader.ImportMeshAsync("","3dmodule/Plosif/","pokemonexplosif.babylon");
     const arena = await BABYLON.SceneLoader.ImportMeshAsync("","3dmodule/Arena/","arene.babylon",scene);
     const mewtwo = await BABYLON.SceneLoader.ImportMeshAsync("","3dmodule/Mewtwo/","mewtwo.babylon",scene);
+    const epona = await BABYLON.SceneLoader.ImportMeshAsync("","3dmodule/Epona/","epona.babylon",scene);
+    
     scene.enemies.mewtwo = mewtwo;
     mewtwo.meshes[0].scaling = new BABYLON.Vector3(4,4,4);
     mewtwo.meshes[0].setEnabled(false);
@@ -286,6 +288,10 @@ async function createScene () {
     arena.meshes[0].position = new BABYLON.Vector3(800,30,700);
     arena.meshes[0].rotation.y +=3.2;
     arena.meshes[0].checkCollisions = true;
+
+    epona.meshes[0].setEnabled(false);
+    scene.enemies.epona = epona;
+    scene.enemies.epona.meshes[0].scaling = new BABYLON.Vector3(8,8,8);
 
     explosif.meshes[0].setEnabled(false);
     scene.enemies.explosif = explosif;
@@ -347,8 +353,8 @@ async function createScene () {
 
     let armature = picamesh.skeletons[0];
     picatchu.name = "mypicatchu";
-    scene.pica = new Pica(picatchu,armature,picaeclaireobj,rain, 1,scene);  
-    scene.pica.bounder.position = new BABYLON.Vector3(700,15,700);
+    scene.pica = new Pica(picatchu,armature,picaeclaireobj,rain, 2,scene);  
+    scene.pica.bounder.position = new BABYLON.Vector3(0,15,0);
 
     createenv(vlight,marowakobj,scene);
 

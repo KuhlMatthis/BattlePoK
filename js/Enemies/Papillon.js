@@ -79,10 +79,10 @@ export default class Papillon extends Enemi {
     mort(){
         let player = this.scene.getMeshByName("mypicatchu");  
         player.Pica.increxperience(2);
-        this.animation(this.scene,1);
+        this.animation(this.scene,2);
         setTimeout(() => {
             this.enemiMesh.dispose();
             this.bounder.dispose();
-        }, 1000 * 3)
+        }, 1000 * 1)
     }
 }

@@ -270,7 +270,7 @@ export default class Sale {
             nbval = scene.pica.level;
         }
         while(nbval>0){
-            let choice = 2//parseInt(Math.random()*3);
+            let choice = parseInt(Math.random()*4);
             let position = new BABYLON.Vector3(this.ox+20+Math.random()*80, 15, this.oz+20+Math.random()*80)
             if(choice==0){
                 let marowakmesh = this.createur.creerEnemie(marowakobj,position,'m');
@@ -284,6 +284,10 @@ export default class Sale {
                 let explosifmesh = this.createur.creerEnemie(scene.enemies.explosif,position,'e');
                 this.enemies.push(explosifmesh);
                 nbval-=1;
+            }else if(nbval>2 && choice == 3){
+                let eponamesh = this.createur.creerEnemie(scene.enemies.epona,position,'h');
+                this.enemies.push(eponamesh);
+                nbval-=2;
             }
         }
         

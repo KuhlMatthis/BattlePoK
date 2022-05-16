@@ -27,44 +27,28 @@ Exporter version: 2.93.5, Blender version: 2.93.3
 		processing action 3end:  in[1 - 32], out[120 - 152]
 	processing begun of mesh:  cuerpo
 		processing begun of material:  Body
-
-ERROR: UN-EXCEPTED NODE TYPE(SHADERNODENORMALMAP).  CANNOT CONTINUE.
-
 		processing begun of material:  Hair
-
-ERROR: UN-EXCEPTED NODE TYPE(SHADERNODENORMALMAP).  CANNOT CONTINUE.
-
-			WARNING: Metal channel baking required, but not possible, ignored
-			WARNING: Roughness channel baking required, but not possible, ignored
-			WARNING: Refraction channel baking required, but not possible, ignored
-			Baking texture, type: DIFFUSE, mapped using: BakingUV
-			processing texture cuerpo_baked_DIFFUSE
-				texture type:  diffuseTexture, mapped using: "BakingUV"
-			Diffuse / albeto channel baked
-			Baking texture, type: EMIT, mapped using: BakingUV
-			processing texture cuerpo_baked_EMIT
-				texture type:  emissiveTexture, mapped using: "BakingUV"
-			emissive channel baked
-			Baking texture, type: GLOSSY, mapped using: BakingUV
-			processing texture cuerpo_baked_GLOSSY
-				texture type:  specularTexture, mapped using: "BakingUV"
-			specular channel baked
-			bake time:  0 min, 35.4925 secs
+			processing texture Body_Texture
+				texture type:  diffuseTexture, mapped using: "UVMap"
+			processing texture FireHair_Texture
+				texture type:  diffuseTexture, mapped using: "UVMap"
+		processing begun of multimaterial:  epona.Multimaterial#0
 		Custom split normals with tangents being used
-		num positions      :  24662
-		num normals        :  24662
-		num tangents       :  98648
-		num uvs            :  49324
+		num positions      :  11669
+		num normals        :  11669
+		num tangents       :  46676
+		num uvs            :  23338
 		num uvs2           :  0
 		num colors         :  0
 		num triangles      :  17294
 		Skeleton stats:  
-			Total Influencers:  36820
-			Avg # of influencers per vertex:  1.493
+			Total Influencers:  17672
+			Avg # of influencers per vertex:  1.5144
 			Highest # of influencers observed:  5, num vertices with this:  21
 			exported as 5 influencers
-			num skeletonWeights and skeletonIndices:  197296
-	processing begun of light (DIRECTIONAL):  Sun
-	Output cancelled due to data error
+			num skeletonWeights and skeletonIndices:  93352
+========= Writing of JSON file started =========
+	writing mesh:  cuerpo
+========= Writing of JSON file completed =========
 ========= end of processing =========
-elapsed time:  0 min, 41.0308 secs
+elapsed time:  0 min, 9.7865 secs
