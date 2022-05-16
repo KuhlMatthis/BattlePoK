@@ -284,7 +284,7 @@ export default class Sale {
                 let explosifmesh = this.createur.creerEnemie(scene.enemies.explosif,position,'e');
                 this.enemies.push(explosifmesh);
                 nbval-=1;
-            }else if(nbval>2 && choice == 3){
+            }else if(nbval>=2 && choice == 3){
                 let eponamesh = this.createur.creerEnemie(scene.enemies.epona,position,'h');
                 this.enemies.push(eponamesh);
                 nbval-=2;

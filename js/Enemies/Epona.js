@@ -30,7 +30,7 @@ export default class Epona extends Enemi {
               () => {
                 if (this.scene.pica.bounder._isDisposed) return;
                 if(this.run){
-                        this.scene.pica.degat(0.5);
+                        this.scene.pica.degat(0.3);
                     }
               }
             )
@@ -61,7 +61,7 @@ export default class Epona extends Enemi {
                 this.makeaction = true;
             }, 3000);
         }else{
-            this.bounder.moveWithCollisions(this.laststande.multiplyByFloats(5, 0, 5));
+            this.bounder.moveWithCollisions(this.laststande.multiplyByFloats(0.7, 0, 0.7));
         }
         
     

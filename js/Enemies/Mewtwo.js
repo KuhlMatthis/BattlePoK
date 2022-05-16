@@ -105,7 +105,7 @@ export default class Mewtwo extends Enemi {
                 this.strategie2start = false;
                 setTimeout(() => {
                     this.strategie2start = true;
-                }, 2000)
+                }, 2500)
                 
             }  
             this.strategieattac(scene,this.laststande);
@@ -192,7 +192,7 @@ export default class Mewtwo extends Enemi {
                     this.enemiMesh.position = new BABYLON.Vector3(this.center.x+teleportvector[0],20,this.center.z+teleportvector[1]);
                       
                 }
-            },1600)
+            },2500)
         }
         
     }
@@ -206,13 +206,13 @@ export default class Mewtwo extends Enemi {
                 let player = scene.getMeshByName("mypicatchu");
                 var teleportvector = this.randompositionrayon(Math.random()*7);
                 let sphere = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter: 10, segments: 32});
-                this.bouildsphere(sphere,new BABYLON.Vector3(player.position.x+teleportvector[0],55,player.position.z+teleportvector[1]),scene);
-                sphere.physicsImpostor.applyImpulse(new BABYLON.Vector3(0,-30,0), sphere.getAbsolutePosition());
-                this.bouldamage(sphere,scene,0.5)
+                this.bouildsphere(sphere,new BABYLON.Vector3(player.position.x+teleportvector[0],60,player.position.z+teleportvector[1]),scene);
+                sphere.physicsImpostor.applyImpulse(new BABYLON.Vector3(0,-20,0), sphere.getAbsolutePosition());
+                this.bouldamage(sphere,scene,0.2)
                 setTimeout(() => { 
                     sphere.dispose();
-                },2000)
-            },100)
+                },2500)
+            },200)
         }
     }
 
@@ -220,7 +220,7 @@ export default class Mewtwo extends Enemi {
 
     strategieattac(scene,laststande){
         this.bounder.moveWithCollisions(
-            laststande.multiplyByFloats(1, 0, 1)
+            laststande.multiplyByFloats(0.7, 0, 0.7)
         );
     }
     
@@ -254,13 +254,13 @@ export default class Mewtwo extends Enemi {
             { mass: 1 },
             scene
         );
-        let powerOfFire = 40;
+        let powerOfFire = 20;
         let aimForceVector = new BABYLON.Vector3(
             this.enemiMesh.frontVector.x * powerOfFire,
             (dir.y-0.1)*powerOfFire,
             this.enemiMesh.frontVector.z * powerOfFire
         );
-        this.bouldamage(sphere,scene,1);
+        this.bouldamage(sphere,scene,0.5);
         sphere.physicsImpostor.applyImpulse(aimForceVector, sphere.getAbsolutePosition());
        
 

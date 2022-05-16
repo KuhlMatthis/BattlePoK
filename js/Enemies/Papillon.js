@@ -50,7 +50,7 @@ export default class Papillon extends Enemi {
             { mass: 1 },
             scene
         );
-        let powerOfFire = 30;
+        let powerOfFire = 20;
 
         let aimForceVector = new BABYLON.Vector3(
             this.enemiMesh.frontVector.x * powerOfFire,
@@ -67,7 +67,7 @@ export default class Papillon extends Enemi {
               }, 
               () => {
                 if (scene.pica.bounder._isDisposed) return;
-                scene.pica.degat(1);
+                scene.pica.degat(0.5);
               }
             )
         );

@@ -353,7 +353,7 @@ async function createScene () {
 
     let armature = picamesh.skeletons[0];
     picatchu.name = "mypicatchu";
-    scene.pica = new Pica(picatchu,armature,picaeclaireobj,rain, 2,scene);  
+    scene.pica = new Pica(picatchu,armature,picaeclaireobj,rain, 1.3,scene);  
     scene.pica.bounder.position = new BABYLON.Vector3(0,15,0);
 
     createenv(vlight,marowakobj,scene);
@@ -493,26 +493,29 @@ function creerEnemieExterieure(scene){
         for(let nblabrasx=0; nblabrasx<3; nblabrasx++){
             if(nblabrasx!=0 || nblabrasy!=0 ){
                 let noGround = false;
+                let choix = parseInt(Math.random()*2);
                 let origin = new BABYLON.Vector3( 0,0,0);
-                while(!noGround){
-                    noGround=true;
-                    origin = new BABYLON.Vector3( Math.random()*200+nblabrasx*220,0,Math.random()*200+nblabrasy*220);
-                    let direction = new BABYLON.Vector3(0, -90,0);
-                    let ray = new BABYLON.Ray(origin, direction, 0.2);
-                    var hit = scene.pickWithRay(ray, (mesh) => {
-                        return (mesh.name.startsWith("copy"));   
-                    });
-
-                    if (hit.pickedMesh){
-                        if(hit.pickedMesh.name.startsWith("copy")){
-                            console.log("hit copy ", hit.pickedMesh.name);
-                            noGround= false;
+                if(choix == 0){
+                    while(!noGround){
+                        noGround=true;
+                        origin = new BABYLON.Vector3( Math.random()*200+nblabrasx*220,0,Math.random()*200+nblabrasy*220);
+                        let direction = new BABYLON.Vector3(0, -90,0);
+                        let ray = new BABYLON.Ray(origin, direction, 0.2);
+                        var hit = scene.pickWithRay(ray, (mesh) => {
+                            return (mesh.name.startsWith("copy"));   
+                        });
+    
+                        if (hit.pickedMesh){
+                            if(hit.pickedMesh.name.startsWith("copy")){
+                                console.log("hit copy ", hit.pickedMesh.name);
+                                noGround= false;
+                            }
                         }
                     }
-                }
-                let enemi = createur.creerEnemie(scene.enemies.labras, origin, 'l');
-                externenmies.push(enemi);
-                noGround = false;
+                    let enemi = createur.creerEnemie(scene.enemies.labras, origin, 'l');
+                    externenmies.push(enemi);
+                }else{
+                    noGround = false;
                 origin = new BABYLON.Vector3( 0,0,0);
                 while(!noGround){
                     noGround=true;
@@ -532,6 +535,7 @@ function creerEnemieExterieure(scene){
                 }
                 let enemi2 = createur.creerEnemie(scene.enemies.papillon,new BABYLON.Vector3(origin.x,15,origin.z), 'p')
                 externenmies.push(enemi2);
+                }
             }
             
         }

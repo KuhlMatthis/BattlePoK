@@ -256,7 +256,7 @@ export default class Pica {
         }
         if(this.boolincrenergie){
             this.boolincrenergie = false;
-            this.degat(-0.1)
+            this.degat(-0.3)
             if(this.energie<this.maxenergie){
                 this.energie += 1;
                 this.modifiemaxbar(this.energiebar,1);
@@ -496,7 +496,7 @@ export default class Pica {
 
         setTimeout(() => { 
             sphere.dispose();
-        },1000*3)
+        },1000*2)
         
     }
 
@@ -519,9 +519,9 @@ export default class Pica {
         if (hit.pickedMesh){
             console.log(hit.pickedMesh.name)
             if(hit.pickedMesh.name.startsWith("LaveCopy")){
-                this.degat(0.05)
+                this.degat(0.03)
             }else if(hit.pickedMesh.name.startsWith("fire")){
-                this.degat(0.1)
+                this.degat(0.03)
             }
 	    }
     }
