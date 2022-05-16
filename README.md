@@ -33,8 +33,15 @@ Changement Attaque 1 à 3 et Attaque 2 à 4 avec click milieux souris.
 
 info: C'est une version primaire tous n'est pas encore impléménté.
 
+Pour la création de terrain on utilise un algorithme qui genere plusieurs sale qu hasard sur une map d'une taille donné.
+Pour creer les salles on verifie à chaque fois que l'on posse une qu'il y en avais pas déjat une autre.
+Par la suite en rellis chaque salle au prochain en contournant les salles intermédiares entre les bouts.
+Les portes sont random sur un coté et sur la longeur.
+Il y a deux points fixe 0 départ jeut et 700 700 mode boss.
 
-
+Pour les meshes une partie et récuperer sur internet cgtrader.com/ puis souvent repain  puis skeletisé et animé en blender par nous meme.*
+Puis exporté.
+Les points les plus difficile etais la lumiere les exportation importation les chutes de frames à cause de beaucoup de mesh donc il fallais rechargé les salles et deschargé les enemis etc.
 
 
 
