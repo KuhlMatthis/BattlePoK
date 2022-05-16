@@ -1,8 +1,8 @@
 import Enemi from "./Enemi.js";
-import Labras from "./labras.js";
+import Labras from "./Labras.js";
 import Papillon from "./Papillon.js";
 import Explosif from "./Explosif.js";
-import Mewtwo from "./mewtwo.js";
+import Mewtwo from "./Mewtwo.js";
 import Epona from "./Epona.js";
 /*
 
