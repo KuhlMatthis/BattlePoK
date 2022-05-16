@@ -1076,7 +1076,7 @@ function winscene(){
    rectangle.height = "100%";
    advancedTexture.addControl(rectangle);
 
-   var image = new BABYLON.GUI.Image("but", "img/picabattleroom.PNG");
+   var image = new BABYLON.GUI.Image("but", "img/youdidit.png");
    image.width = 1;
    image.height = 1;
 
@@ -1086,7 +1086,7 @@ function winscene(){
    quitbtn.width = 0.15;
    quitbtn.height = 0.06;
    quitbtn.top = 220;
-   quitbtn.left = 350;
+   quitbtn.left = 450;
    quitbtn.cornerRadius = 20;
    quitbtn.color = "white";
    quitbtn.fontSize = 14;
