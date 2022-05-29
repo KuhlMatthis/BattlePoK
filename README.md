@@ -1,9 +1,11 @@
 
-                        # BattlePoc
-                    Game Concours Babylonjs
+                                                     # BattlePoc
+                                                Game Concours Babylonjs
+
 
 Créateurs:
 Matthis Kuhl, Ahmed El Hanafi Si Dehbi
+
 
 ![Screenshot](readmeimage/menu.png)
 
@@ -82,32 +84,95 @@ Il y a des particules fummés devant l'entree qui disparaise et reapparaise lors
 Plus concrétement j'ai une box de la taile de salle avec alpha = 0 donc invisible.
 Cette box a un actionmanager qui trigger lors de l'entrée ou sortis de cette box et donc va executer plusieur chose:
 1: desactive ou active le systeme de particule devant l'entrée.
-2: desactive ou active le systeme de particule de la plui sur picatchu (suite)
+2: desactive ou active le systeme de particule de la plui sur picatchu
 3: disable tous les enemies éxtérieure
 4: genere le sol et ellement d'environnement et ennemie de la salle (suite)
-
-
 
 
 Salle et Ennemi:
 ![Screenshot](readmeimage/fullsale.png)
 
+La salle en elle meme est générer que à l'entreer de picatchu ce qui augemente les preformances.
+Il existe trois types de salles:
+Salles normale avec le double d'ennemie.
+Salles avec de la lave sur le sol.
+Salles avec des statues dragons crachant du feut sur une longeur.
 
+Pour detecter la colision de picatchu avec le sol de lave à chaque frame on lance un rayon du centre de picatchu vers le sol.
+Le rayon est d'une distance à juste toucher un peut le sol comme ca si on sotte par dessus pas de probleme.
+Si le rayon touche un objet "lave" il prend des dégats.
+L'avantage est que nous controlons la colision du coté mobil (picatchu) et non du coté du sole lave ce qui reduit fortement le nombre de vérification de colision.
+Pour le feut cracher par le dragon c'est un systme de particule pour chaque careuax et une box invisible generer à chaque attaque.
+Cette box est prise en compte aussi par le raycast de picatchu pour prendre des dégats.
 
+Pour la génération des enemies une salle calcule une valeur par rapport au niveau de picatchu cette valeur est des ennemi de la salle. 
+Concretement en boucle tant que valeur n'est pas égale à 0 et on génere un ennemi au hasard et à un endroit hasard dans la salle.
+Chaque enemi enleve un nombre précis à cette valeur qui peut varier en fonction de ca puissance.
+
+Il y a dans les salles 4 types d'ennemi:
+Le marowak(nb: 1) attack proche l'ennemi de base
+Le pappillon(nb: 2) identité volant qui lance des balles sur le picatchu (les balles on un actionmanager on intersect avec box de picatchu).
+La bombe(nb: 3) lorsque cette identité est trop proche elle explose et vous donnes un packet dégats
+Le cheval (nb: 4) elle courts sur vous mais remais sont mouvement et vision que certaine fois à jours emets de dégats lors de la colision avec lui.
+
+A l'éxtérieure il existe un pokemon d'eau qui ressemble au papillon par contre ce lui si bouge completement aléatoirement sur le terrain.
 
 
 
 Lumiere:
 ![Screenshot](readmeimage/fireandlight.png)
+Il existe plusieur type de lumiere dans le jeut le sollei la lumiere jaune.
+Une lumiere de point suivant picatchu amene effet de profendeur.
+Et les lumiere dans les salles qui sont un mesh avec animation et fais avec blender et un point lumiere soit vert,bleu ou rouge.
+De plus il y a un GlowLayer appliqué sur les meshes (fais briller).
 
+Picatchu:
+Pour la vision du jeut on utilise une FollowCamera celle si suit non pas picatchu mais une boit invisible paranthé à picatchu qui est on peut plus loin et plus en hauteur que picatchu.
+Picatchu à des annimation il peut marché, courir, attaque, sauter, perdre.
+Il a aussi des bares (rectangle couleur différant) de vie, experiance et d'energie pour les modifier j'utilise leur scaling et je les déplace un peut (1/2 vers la gauche).
+De plus c'est bares sont parenthé à picatchu.
+(Pour les ennemi c'est pareille).
+Pour l'attque d'eclaire j'ai un objet qui a une animation d'extension fais sous blender qui appariat à chaque attaque.
+Les attaques sont variers coute pas d'énérgie, font plus de dégats, sont instantané (ray casting) ou une boule ce propagant etc.
+Pour la plui elle est attaché à picatchue emmet dans un rectangle autour de picatchu.
+Le saut ne sont que autorisé depuis une certaine hauteur celui du sol.
+Il y a beaucoup de timing pour incrementer la vie et l'energie et gerer les attacs.
 
 Mesh et video:
 ![Screenshot](readmeimage/blender.png)
 
+Pour les meshes une partie et récuperer sur internet cgtrader.com/ puis souvent repain puis skeletisé et animé en blender par nous meme.*
+Puis transformer en fichier babylon.
+Puis par la suite pour faire la vidéo j'ai importer tous les pokemon dans un dokument plainder j'ai creer l'ariere fon avec deux planes puis les animation par la suite j'ai render chaque scene.
+Pour assemblé j'ai reimporter chaque render rajouter l'écriture et la music puis re render la video complette.
+La derniere étape consisté à transformais la vidéo sous forme mp4 l'importer comme VideoTexture dans une plan de taille de l'ecran puis il fallais juste fixé la camera a la bonne position.
+Lors du switch du menu à la vidéo on render la scene de la video à la fin on dispose la video et on render la scene du jeu.
+
+
 Boss:
 ![Screenshot](readmeimage/Boss.png)
 
+Pour aller au bosse faut monter l'arene entierement mon fais sous blender est exporté.
+Probleme qu'on a eu des interface non parfaitement droite au sol pour un effet visuelle en creer des collision dérangant.
+Le boss est un ennemi classique avec plus de vie et plus de comportement speciale:
+Il a trois comportement:
 
-Pour les meshes une partie et récuperer sur internet cgtrader.com/ puis souvent repain  puis skeletisé et animé en blender par nous meme.*
-Puis exporté.
-Les points les plus difficile etais la lumiere les exportation importation les chutes de frames à cause de beaucoup de mesh donc il fallais rechargé les salles et deschargé les enemis etc.
+1: Ce teleporte au hasard sur un rayon pour faire cella on calcule une val x sur le diametre puis on utilise pitagore pour trouver ca positon y sachant que le rayon est donc le coté le plus long est statique.
+A chaque deuxieme téléportation balance une balle vers picatchu
+
+2:
+Ce mets or porté de picatchu est fais tombé des balles du cielle d'eau dessus de picatchu.
+(Faut rester on mouvement pour les évité)
+
+3:
+Ce teleport sur un rayon plus large et on hauteur puis vole en ligne droit sur picatchu en le touchant emets des dégats plusieurs fois.
+
+Mewtwo n'est que attacable lors de la stategie 1 et il altaire entre strategie 1 puis strategie 2 ou 3 puis restrategie 1 ...
+
+
+Soucis et possible amélioration:
+
+Les enemies à l'exterieur peuve aparaitre dans les salles et peuve bisarement resté inactif qu'elle que fois.
+Donc faut verifier la manipulation des liste des ennemis active et bloqué le spon d'ennemi vers les salles.
+La vision de la camera peut etre caché par les rectangle et d'autre element du jeut.
+Une solution cerrais de creer on grand cube deriere la camera qui a un actionmanager et reduit l'alpha à l'entree dans ce cube et le reaugemente à la sortis des objets.
