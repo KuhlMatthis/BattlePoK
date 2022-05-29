@@ -8,7 +8,7 @@ export default class Pica {
         this.picaMesh = picaMesh;
         this.armature = armature;
         this.allanymation = armature._ranges;
-        console.log(this.allanymation)
+        //console.log(this.allanymation)
         this.picaMesh.frontVector = new BABYLON.Vector3(0, 0, 1);
         //initialiser la vision with a cube in front of the player
         this.vuecube = new BABYLON.Mesh.CreateBox("picavue",2,scene);
@@ -189,7 +189,7 @@ export default class Pica {
         this.cplight.intensity = 2;
         
         
-        console.log(rain.emitter);
+        //console.log(rain.emitter);
         rain.start();
         this.rain = rain;
     }
@@ -204,11 +204,15 @@ export default class Pica {
     incrlevel(){
         this.level+=1;
         this.maxlife+=0.5;
+        this.modifiemaxbar(this.lifeblackbar,0.5);
         this.maxenergie+=0.5;
+        this.modifiemaxbar(this.energieblackbar,0.5);
         this.nextlevelexperience+=2;
+        this.modifiemaxbar(this.expblackbar,2);
         this.dynamicTexture.drawText(""+this.level, null, null, "bold " + 16 + "px Arial", "#000000", "#ffffff", true);
         //full live
         this.degat(-1*(this.maxlife-this.life));
+        
     }
 
     increxperience(val){
@@ -272,7 +276,7 @@ export default class Pica {
         if(inputStates.switch){
             
             this.attacstate = !this.attacstate;
-            console.log("switch",this.attacstate)
+            //console.log("switch",this.attacstate)
             inputStates.switch = false;
         }
             
@@ -439,7 +443,7 @@ export default class Pica {
         });
 
         if (hit.pickedMesh){
-            console.log(hit.pickedMesh.name)
+            //console.log(hit.pickedMesh.name)
             if(hit.pickedMesh.name.startsWith("enemy")){
                 let enemibounder = hit.pickedMesh;
                 let enemi = enemibounder.enemiMesh.Enemi;
@@ -515,7 +519,7 @@ export default class Pica {
         });
 
         if (hit.pickedMesh){
-            console.log(hit.pickedMesh.name)
+            //console.log(hit.pickedMesh.name)
             if(hit.pickedMesh.name.startsWith("LaveCopy")){
                 this.degat(0.03)
             }else if(hit.pickedMesh.name.startsWith("fire")){

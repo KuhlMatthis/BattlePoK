@@ -1,15 +1,18 @@
-# BattlePoc
-Game Concours Babylonjs
+
+                        # BattlePoc
+                    Game Concours Babylonjs
 
 Créateurs:
 Matthis Kuhl, Ahmed El Hanafi Si Dehbi
 
-Concept de jeut:
+![Screenshot](readmeimage/menu.png)
 
-Le jeut s'inspire du monde pokemon. C'est un jeut mode un joueuer pikatchu avec combat.
+Concept de jeu:
+
+Le jeu s'inspire du monde pokemon. C'est un jeu mode un joueuer et vous été pikatchu vous devez vous battre contre les autres pokemon et sur tous contre le redutable pokemon et boss Mewtwo.
 La map est générer aléatoirement avec un algorithme reliant les salles positioner au hasard avec des chemins.
-Il y a plusieurs type de salle et d'enemy quand peut retrouver.
-Tous cella permet une experiance de jeut unique.
+Il y a plusieurs type de salle et d'enemy qu'on peut retrouver les salles ce recharge à chaque fois que vous y entrer de dans.
+De plus la difficulté des salles augemante avec le gain de niveau.
 
 L'histoire:
 
@@ -42,12 +45,3 @@ Il y a deux points fixe 0 départ jeut et 700 700 mode boss.
 Pour les meshes une partie et récuperer sur internet cgtrader.com/ puis souvent repain  puis skeletisé et animé en blender par nous meme.*
 Puis exporté.
 Les points les plus difficile etais la lumiere les exportation importation les chutes de frames à cause de beaucoup de mesh donc il fallais rechargé les salles et deschargé les enemis etc.
-
-
-
-
-
-
-
-
-

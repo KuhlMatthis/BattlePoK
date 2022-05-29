@@ -7,7 +7,7 @@ export default class Enemi {
         this.enemiMesh = enemiMesh;
         this.armature = armature;
         this.allanymation = armature._ranges;
-        console.log(this.allanymation)
+        //console.log(this.allanymation)
         if (speed) this.speed = speed;
         else this.speed = 1;
         enemiMesh.Enemi = this;
@@ -237,9 +237,9 @@ export default class Enemi {
         var hit = scene.pickWithRay(ray);
 
         if (hit.pickedMesh){
-            console.log(hit.pickedMesh.name);
+            //console.log(hit.pickedMesh.name);
             if(hit.pickedMesh.name == "bounderpica"){
-                console.log(hit.pickedMesh.name);
+                //console.log(hit.pickedMesh.name);
                 let enemibounder = hit.pickedMesh;
                 let player = enemibounder.picaMesh.Pica;
                 //console.log(enemi.life);

@@ -25,7 +25,7 @@ let endgame = false;
 let externenmies = [];
 let first =true;
 let scenestart;
-    
+let actuelimput = true;    
 
 window.onload = startGame;
 
@@ -124,10 +124,10 @@ function startGame() {
 function createscenevideo() {
     let videoscene = new BABYLON.Scene(engine);
     canvas = document.querySelector("#myCanvas");
-    var startvideo = new BABYLON.VideoTexture("video", "videos/departv2.mp4", videoscene, false);
+    var startvideo = new BABYLON.VideoTexture("video", "videos/depart.mp4", videoscene, false);
     var planeOpts = {
-        height: 100, 
-        width: 180, 
+        height: 120, 
+        width: 240, 
         sideOrientation: BABYLON.Mesh.DOUBLESIDE
     };
     //let box = BABYLON.Mesh.CreateBox("Box1", 100, videoscene);
@@ -170,6 +170,7 @@ function createscenevideo() {
 
             videoEl.remove()
             
+            engine.displayLoadingUI();
             scenestart.dispose()
             salles = [];
             chemin = [];
@@ -180,6 +181,9 @@ function createscenevideo() {
             const promise = createScene();
         
             promise.then(() => {
+                setTimeout(() => {
+                    engine.hideLoadingUI() 
+                }, 500)
                 let picamesh = scene.pica.bounder;
                 scene.activeCamera = createFollowCamera(scene,picamesh.position, scene.pica.vuecube);
                 // modifySettings();
@@ -526,7 +530,7 @@ function creerEnemieExterieure(scene){
     
                         if (hit.pickedMesh){
                             if(hit.pickedMesh.name.startsWith("copy")){
-                                console.log("hit copy ", hit.pickedMesh.name);
+                                //console.log("hit copy ", hit.pickedMesh.name);
                                 noGround= false;
                             }
                         }
@@ -547,7 +551,7 @@ function creerEnemieExterieure(scene){
 
                     if (hit.pickedMesh){
                         if(hit.pickedMesh.name.startsWith("copy")){
-                            console.log("hit copy ", hit.pickedMesh.name);
+                            //console.log("hit copy ", hit.pickedMesh.name);
                             noGround= false;
                         }
                     }
@@ -667,11 +671,19 @@ function createFollowCamera(scene, pos, target) {
 function pointerlog(){
     scene.onPointerDown = (event) => {
         if(!gamestart){
+            if(actuelimput){
+                actuelimput =false;
+                setTimeout(() => { 
+                    actuelimput= true;
+                },150)
+            }else{
+                return;
+            }
             if(!scene.alreadyLocked) {
-                console.log("requesting pointer lock");
+                //console.log("requesting pointer lock");
                 canvas.requestPointerLock();
             } else {
-                console.log(event.button)
+                //console.log(event.button)
                 //event.preventDefault();
                 if(event.button==0){
                     inputStates.fire = true;
@@ -907,6 +919,7 @@ function guiscene(){
         chargecubes = [];
         scene.dispose();
         playground = [0,0,50,50];
+        engine.displayLoadingUI();
         const promise = createScene();
         
         promise.then(() => {
@@ -916,6 +929,7 @@ function guiscene(){
            gamestart=false;
            pointerlog();
            music();
+           engine.hideLoadingUI()
         })
 
        }
@@ -1019,7 +1033,7 @@ var gui = function () {
        advancedTexture.removeControl(playbtn);
        advancedTexture.removeControl(replaybtn);
        advancedTexture.removeControl(exitbtn);
-       setTimeout(gui,1000);
+       setTimeout(gui,500);
    });
    advancedTexture.addControl(replaybtn);
 
@@ -1033,7 +1047,7 @@ var gui = function () {
        advancedTexture.removeControl(playbtn);
        advancedTexture.removeControl(replaybtn);
        advancedTexture.removeControl(exitbtn);
-       setTimeout(gui,3000);
+       setTimeout(gui,1000);
    });
    advancedTexture.addControl(exitbtn); 
 

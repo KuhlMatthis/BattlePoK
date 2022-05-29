@@ -202,7 +202,7 @@ export default class Mewtwo extends Enemi {
             this.firereg = false;
             setTimeout(() => {
                 this.firereg=true;
-                console.log("createball")
+                //console.log("createball")
                 let player = scene.getMeshByName("mypicatchu");
                 var teleportvector = this.randompositionrayon(Math.random()*7);
                 let sphere = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter: 10, segments: 32});
