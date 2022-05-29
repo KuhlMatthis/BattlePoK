@@ -840,15 +840,14 @@ function guiscene(){
     text1.textWrapping = true;
     
     text1.text = "BattlePok: it's the pockemon revolution.\n\n Pica must survive and fight these enemies in this world to give humans a 2nd chance to live"+
-    "\n\n ¤ To launch the game, click on PLAY ."
-    + "\n ¤ To leave the game, click on Exit. "
-    +"\n ¤ To make a pause on the game, click 'Letter <P>'"
-    +"\n ¤ To Jump in the game, click on <Space>"
-    +"\n ¤ To run in the game, click 'Lettre <R>'"
-    +"\n ¤ To make a rotation attack, click 'Lettre <G>' or 'Left mouseclick'"
-    +"\n ¤ To make a distant attack, click 'Lettre <F>' or 'Right mouseclick'"
-    +"\n ¤ To switch attack types, click 'h' or 'wheelclick'  "
-    +"\n\n\nJoin the adventure and make the world better. ";
+    "\n\n ¤ <P>   -> make a pause                                 "
+    +"\n ¤ <Space> -> Jump                                         "
+    +"\n ¤ <R> -> switch beetween walk and run         "
+    +"\n ¤ <G> or <Left mouseclick> -> short  attack   "
+    +"\n ¤ <F> or <Right mouseclick> -> distant attack"
+    +"\n ¤ <h> or <wheelclick>  -> switch attack types "
+    +"\n\n\nJoin the adventure and make the world better. \n(click informations button to come back to start menu)";
+
     text1.color = "white";
     text1.fontSize = "22px";
 
